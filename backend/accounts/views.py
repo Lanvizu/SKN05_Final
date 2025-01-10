@@ -76,39 +76,8 @@ class GoogleLogin(BaseSocialLoginView):
     def simple_registration(self, email):
         return self.user.objects.get_or_create(email=email)
 
-
-class KakaoLogin(BaseSocialLoginView):
-    platform = "kakao"
-    token_url = getattr(settings, "kakao_token_api")
-
-    def post(self, request):
-        return super().post(request)
-
-    def request_user_profile(self, access_token):
-        headers = {"Authorization": f"Bearer {access_token}"}
-        return requests.post(self.token_url, headers=headers)
-
-    def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
-        return f"{user_info_response.get('id')}@kakao.com", user_info_response.get("id")
-
-    def simple_registration(self, uid):
-        return self.user.objects.get_or_create(email=uid)
-
-
-class NaverLogin(BaseSocialLoginView):
-    platform = "naver"
-    token_url = getattr(settings, "naver_token_api")
-
-    def post(self, request):
-        return super().post(request)
-
-    def request_user_profile(self, access_token):
-        headers = {"Authorization": f"Bearer {access_token}"}
-        return requests.post(self.token_url, headers=headers)
-
-    def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
-        response = user_info_response.get("response")
-        return response.get("email"), response.get("id")
-
-    def simple_registration(self, email):
-        return self.user.objects.get_or_create(email=email)
+# 프론트 연결 테스트
+class SimpleDataView(APIView):
+    def get(self, request):
+        data = {"message": "Hello from Django!"}
+        return Response(data, status=status.HTTP_200_OK)
