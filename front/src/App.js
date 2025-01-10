@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/SignUpPage';
 
-function App() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/accounts/api/data/')
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
+const App = () => {
   return (
-    <div>
-      <h1>Data from Django:</h1>
-      {data ? <p>{data.message}</p> : <p>Loading...</p>}
-    </div>
+    <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
-}
+};
 
 export default App;
