@@ -4,12 +4,19 @@ import axios from 'axios';
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
 
   const handleRegister = async () => {
+    if (password !== password2) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:8000/api/register/', {
+      const response = await axios.post('http://localhost:8000/accounts/register/', {
         email,
         password,
+        password2
       });
       alert('Registration successful!');
       console.log(response.data);
@@ -21,23 +28,30 @@ const RegisterPage = () => {
 
   return (
     <div style={styles.container}>
-      <h1>Register</h1>
+      <h1>회원가입</h1>
       <input
         type="email"
-        placeholder="Email"
+        placeholder="이메일"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         style={styles.input}
       />
       <input
         type="password"
-        placeholder="Password"
+        placeholder="비밀번호"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         style={styles.input}
       />
+      <input
+        type="password"
+        placeholder="비밀번호 확인"
+        value={password2}
+        onChange={(e) => setPassword2(e.target.value)}
+        style={styles.input}
+      />
       <button style={styles.registerButton} onClick={handleRegister}>
-        Register
+        가입하기
       </button>
     </div>
   );
