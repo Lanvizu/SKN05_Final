@@ -158,6 +158,22 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 REST_USE_JWT = True
 CORS_ALLOW_ALL_ORIGINS = True
 
+JWT_AUTH_COOKIE = True
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# CORS allow methods -> note: add baerer token
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
