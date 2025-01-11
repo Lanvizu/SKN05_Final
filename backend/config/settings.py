@@ -12,11 +12,11 @@ current_module = sys.modules[__name__]
 Initialize_env_variables(SECRET_JSON, current_module)
 
 SECRET_KEY = getattr(current_module, "secret_key")
-DEBUG = True
+DEBUG = True # 프로덕션 환경에서는 False 설정
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"] # 프로덕션 환경에서는 특정 호스트만 허용하도록 설정
 
-# Application definition
+# Application definition 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,8 +61,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
 ]
-
-CORS_ALLOW_ALL_ORIGINS = True  # 개발 환경에서만 사용. 프로덕션에서는 특정 도메인만 허용
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -165,7 +163,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 REST_USE_JWT = True
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True # 개발 환경에서만 사용. 프로덕션에서는 특정 도메인만 허용
 
 JWT_AUTH_COOKIE = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
