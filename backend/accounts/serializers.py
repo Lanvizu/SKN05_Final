@@ -104,3 +104,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(msg, code="authorization")
         attrs["user"] = user
         return attrs
+    
+# MyPage용 serializer 추후 추가가능
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'date_joined', 'last_login']
+        read_only_fields = ['date_joined', 'last_login']

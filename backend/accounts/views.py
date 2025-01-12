@@ -14,6 +14,11 @@ from . import services
 from .models import CustomUser
 from config import settings
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializers import UserProfileSerializer
+
 
 class BaseSocialLoginView(APIView):
     permission_classes = (AllowAny,)
@@ -75,9 +80,19 @@ class GoogleLogin(BaseSocialLoginView):
 
     def simple_registration(self, email):
         return self.user.objects.get_or_create(email=email)
+    
 
-# 프론트 연결 테스트
-class SimpleDataView(APIView):
+class MyPageView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        data = {"message": "Hello from Django!"}
-        return Response(data, status=status.HTTP_200_OK)
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

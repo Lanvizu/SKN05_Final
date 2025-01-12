@@ -68,7 +68,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -82,6 +83,7 @@ REST_AUTH = {
     "JWT_AUTH_RETURN_EXPIRATION": True,
     "LOGIN_SERIALIZER": "accounts.serializers.UserLoginSerializer",
     "REGISTER_SERIALIZER": "accounts.serializers.UserRegistrationSerializer",
+    # 'SESSION_LOGIN': True,
 }
 
 ROOT_URLCONF = 'config.urls'
