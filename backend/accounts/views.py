@@ -22,49 +22,75 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from dj_rest_auth.views import LoginView
 from django.utils import timezone
-
-
+    
 class BaseSocialLoginView(APIView):
     permission_classes = (AllowAny,)
     user: CustomUser = get_user_model()
 
-    @csrf_exempt  # note : if postman testing needs csrftoken
+    @csrf_exempt
     def post(self, request: Request):
         access_token: str = request.data.get("access_token")
         user_profile_request: Response = self.request_user_profile(access_token)
-        print(f"request: {user_profile_request}")
         user_profile_response: Dict[str, Any] = services.access_token_is_valid(user_profile_request)
-        print(f"response: {user_profile_response}")
+
+        if not user_profile_response:
+            return Response({"error": "Invalid access token"}, status=status.HTTP_400_BAD_REQUEST)
+
         user_key, registration_params = self.get_account_user_primary_key(user_profile_response)
 
-        print(f"user key:{user_key}\nregister: {registration_params}")
         try:
+            # 사용자 및 소셜 계정 확인
             user: CustomUser = self.user.objects.get(email=user_key)
             social_user: SocialAccount = SocialAccount.objects.get(user=user)
-            print(social_user)
 
             if social_user.provider != self.platform:
-                response_message = {"error": "no matching social type"}
-                return Response(response_message, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "No matching social type"}, status=status.HTTP_400_BAD_REQUEST)
 
-            if social_user:
-                return services.social_user_login(user)
+            # 로그인 처리
+            return self.handle_successful_login(user)
 
         except self.user.DoesNotExist:
+            # 사용자 등록 및 로그인 처리
             user, created = self.simple_registration(user_key)
             return services.user_does_not_exist(user, created, self.platform, registration_params)
 
         except SocialAccount.DoesNotExist:
-            response_message = {"error": "소셜로그인 유저가 아닙니다."}
-            return Response(response_message, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "소셜로그인 유저가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-    def request_user_profile(self):
+    def handle_successful_login(self, user):
+        """로그인 성공 시 JWT 토큰 발급 및 쿠키 설정"""
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+
+        response = Response({"detail": "Login successful"}, status=status.HTTP_200_OK)
+        response.set_cookie(
+            settings.REST_AUTH['JWT_AUTH_COOKIE'],
+            access_token,
+            expires=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            httponly=settings.REST_AUTH['JWT_AUTH_HTTPONLY'],
+            samesite=settings.REST_AUTH['JWT_AUTH_SAMESITE'],
+            secure=settings.REST_AUTH['JWT_AUTH_SECURE']
+        )
+        response.set_cookie(
+            settings.REST_AUTH['JWT_AUTH_REFRESH_COOKIE'],
+            str(refresh),
+            expires=timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            httponly=settings.REST_AUTH['JWT_AUTH_HTTPONLY'],
+            samesite=settings.REST_AUTH['JWT_AUTH_SAMESITE'],
+            secure=settings.REST_AUTH['JWT_AUTH_SECURE']
+        )
+        return response
+
+    def request_user_profile(self, access_token: str) -> Request:
+        """구현 필요"""
         pass
 
-    def get_account_user_primary_key(self):
+    def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
+        """구현 필요"""
         pass
 
-    def simple_registration(self):
+    def simple_registration(self, email):
+        """구현 필요"""
         pass
 
 
@@ -72,19 +98,19 @@ class GoogleLogin(BaseSocialLoginView):
     platform = "google"
     token_url = getattr(settings, "google_token_api")
 
-    def post(self, request: Request):
-        return super().post(request)
-
     def request_user_profile(self, access_token: str) -> Request:
-        print(f"{self.token_url}?access_token={access_token}")
+        """Google API를 통해 사용자 프로필 요청"""
         return requests.get(f"{self.token_url}?access_token={access_token}")
 
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
-        return user_info_response.get("email"), user_info_response.get("user_id")
+        """Google 사용자 정보에서 이메일 및 ID 추출"""
+        return user_info_response.get("email"), {"user_id": user_info_response.get("id")}
 
     def simple_registration(self, email):
+        """새로운 사용자 생성"""
         return self.user.objects.get_or_create(email=email)
-    
+
+ 
 class CustomLoginView(LoginView):
     def get_response(self):
         response = super().get_response()
