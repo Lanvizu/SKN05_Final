@@ -108,50 +108,69 @@ class CustomLoginView(LoginView):
             response.data.pop('refresh', None)  # Optionally remove refresh token from JSON response
 
         return response
+    
+class CookieJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        access_token = request.COOKIES.get(settings.REST_AUTH['JWT_AUTH_COOKIE'])
+        if not access_token:
+            return None
+        
+        validated_token = self.get_validated_token(access_token)
+        user = self.get_user(validated_token)
 
+        return (user, validated_token)
+    
+class CheckAuthView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        return Response({'detail': 'Authenticated'}, status=200)
+    
 class MyPageView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data)
-
-    def put(self, request):
-        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
+    
+    # def put(self, request):
+    #     serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=400)
+        
 class LogoutView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
-            # 요청 헤더에서 access token 추출
-            auth_header = request.headers.get('Authorization')
-            if not auth_header or not auth_header.startswith('Bearer '):
-                return Response({'error': 'Invalid token format'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            access_token = auth_header.split(' ')[1]
+            # 쿠키에서 access token 추출
+            access_token = request.COOKIES.get(settings.REST_AUTH['JWT_AUTH_COOKIE'])
+            if not access_token:
+                return Response({'error': 'No token found'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Access token 디코딩
+            # Access token 디코딩 및 사용자 확인
             token = AccessToken(access_token)
-            user = token.payload.get('user_id')
+            user_id = token.payload.get('user_id')
 
-            # 해당 access token과 연결된 refresh token 찾기
-            outstanding_tokens = OutstandingToken.objects.filter(user_id=user)
-
-            # 사용자의 모든 유효한 refresh token 찾기
+            # Refresh Token 블랙리스트 처리
+            outstanding_tokens = OutstandingToken.objects.filter(user_id=user_id)
             for outstanding_token in outstanding_tokens:
-                if not BlacklistedToken.objects.filter(token=outstanding_token).exists():
-                    # 아직 블랙리스트에 없는 토큰만 블랙리스트에 추가
+                try:
                     RefreshToken(outstanding_token.token).blacklist()
+                except TokenError:
+                    continue  # 이미 블랙리스트에 있는 경우 무시
 
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            # 응답 객체 생성 및 쿠키 삭제
+            response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            response.delete_cookie(settings.REST_AUTH['JWT_AUTH_COOKIE'], path='/')
+            response.delete_cookie(settings.REST_AUTH['JWT_AUTH_REFRESH_COOKIE'], path='/')
+
+            return response
+
         except TokenError:
             return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

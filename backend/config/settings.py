@@ -65,11 +65,8 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-        # "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -78,12 +75,11 @@ REST_FRAMEWORK = {
 REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "access_token",
-    # "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
+    "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
     "JWT_AUTH_HTTPONLY": True,
     "JWT_AUTH_RETURN_EXPIRATION": True,
     "JWT_AUTH_SECURE": True,  # HTTPS 연결에서만 쿠키 전송
     "JWT_AUTH_SAMESITE": "Lax",  # CSRF 보호를 위한 SameSite 설정
-    "JWT_AUTH_RETURN_EXPIRATION": True,
     "LOGIN_SERIALIZER": "accounts.serializers.UserLoginSerializer",
     "REGISTER_SERIALIZER": "accounts.serializers.UserRegistrationSerializer",
     'SESSION_LOGIN' : False
@@ -162,23 +158,20 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 REST_USE_JWT = True
-CORS_ALLOW_ALL_ORIGINS = True # 개발 환경에서만 사용. 프로덕션에서는 특정 도메인만 허용
-
-JWT_AUTH_COOKIE = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# CORS allow methods -> note: add baerer token
-# CORS_ALLOW_HEADERS = [
-#     'accept',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-requested-with',
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # 허용할 클라이언트 도메인
+]
+CORS_ALLOW_HEADERS = [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "Origin",
+    "Access-Control-Allow-Origin",
+]
+CORS_ALLOW_CREDENTIALS = True  # credentials: 'include' 요청 허용
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
