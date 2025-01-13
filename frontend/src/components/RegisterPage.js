@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 초기화
 
   const handleRegister = async () => {
     if (password !== password2) {
@@ -16,13 +18,14 @@ const RegisterPage = () => {
       const response = await axios.post('http://localhost:8000/accounts/register/', {
         email,
         password,
-        password2
+        password2,
       });
-      alert('Registration successful!');
+      alert('회원가입 성공!');
       console.log(response.data);
+      navigate('/'); // 회원가입 성공 후 로그인 페이지로 이동
     } catch (err) {
-      console.error('Error during registration:', err);
-      alert('Registration failed!');
+      console.error('회원가입 중 오류 발생:', err);
+      alert('회원가입 실패!');
     }
   };
 
