@@ -64,8 +64,8 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        # "rest_framework.permissions.IsAuthenticated",
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # 'rest_framework.authentication.SessionAuthentication',
@@ -78,12 +78,15 @@ REST_FRAMEWORK = {
 REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_COOKIE": "access_token",
-    "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
-    "JWT_AUTH_HTTPONLY": False,
+    # "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
+    "JWT_AUTH_HTTPONLY": True,
+    "JWT_AUTH_RETURN_EXPIRATION": True,
+    "JWT_AUTH_SECURE": True,  # HTTPS 연결에서만 쿠키 전송
+    "JWT_AUTH_SAMESITE": "Lax",  # CSRF 보호를 위한 SameSite 설정
     "JWT_AUTH_RETURN_EXPIRATION": True,
     "LOGIN_SERIALIZER": "accounts.serializers.UserLoginSerializer",
     "REGISTER_SERIALIZER": "accounts.serializers.UserRegistrationSerializer",
-    # 'SESSION_LOGIN': True,
+    'SESSION_LOGIN' : False
 }
 
 ROOT_URLCONF = 'config.urls'
@@ -110,12 +113,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default' : {
         'ENGINE': 'django.db.backends.mysql',

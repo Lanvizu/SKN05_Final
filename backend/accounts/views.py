@@ -20,6 +20,8 @@ from .serializers import UserProfileSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+from dj_rest_auth.views import LoginView
+from django.utils import timezone
 
 
 class BaseSocialLoginView(APIView):
@@ -83,6 +85,30 @@ class GoogleLogin(BaseSocialLoginView):
     def simple_registration(self, email):
         return self.user.objects.get_or_create(email=email)
     
+class CustomLoginView(LoginView):
+    def get_response(self):
+        response = super().get_response()
+
+        if self.user.is_authenticated:
+            access_token = response.data.get('access')
+
+            if access_token:
+                # Set Access Token in HttpOnly cookie
+                response.set_cookie(
+                    settings.REST_AUTH['JWT_AUTH_COOKIE'],
+                    access_token,
+                    expires=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+                    httponly=settings.REST_AUTH['JWT_AUTH_HTTPONLY'],
+                    samesite=settings.REST_AUTH['JWT_AUTH_SAMESITE'],
+                    secure=settings.REST_AUTH['JWT_AUTH_SECURE']
+                )
+                response.data.pop('access', None)  # Remove Access Token from response data
+
+            # Do not handle refresh token here (remove related code)
+            response.data.pop('refresh', None)  # Optionally remove refresh token from JSON response
+
+        return response
+
 
 class MyPageView(APIView):
     authentication_classes = [JWTAuthentication]
