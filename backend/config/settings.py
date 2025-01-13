@@ -32,7 +32,7 @@ THIRD_PARTY = [
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
-    # "rest_framework_simplejwt.token_blacklist",
+    "rest_framework_simplejwt.token_blacklist",
     "rest_framework.authtoken",
     "dj_rest_auth",
     "dj_rest_auth.registration",
