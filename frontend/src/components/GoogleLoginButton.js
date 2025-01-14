@@ -11,7 +11,7 @@ const GoogleLoginButton = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (response) => {
       try {
-        const res = await axios.post('http://localhost:8000/accounts/google/login-request/', {
+        const res = await axios.post('http://localhost:8000/api/accounts/google/login-request/', {
           access_token: response.access_token,
         }, {
           withCredentials: true,

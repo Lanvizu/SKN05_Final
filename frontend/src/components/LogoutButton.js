@@ -9,7 +9,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:8000/accounts/logout/', {
+      const response = await fetch('http://localhost:8000/api/accounts/logout/', {
         method: 'POST',
         credentials: 'include',
       });

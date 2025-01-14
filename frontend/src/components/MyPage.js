@@ -7,7 +7,7 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/accounts/mypage/', {
+        const response = await fetch('http://localhost:8000/api/accounts/mypage/', {
           method: 'GET', // POST 요청 사용
           headers: {
             'Content-Type': 'application/json',
