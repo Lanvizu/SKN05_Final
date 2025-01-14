@@ -19,7 +19,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import UserProfileSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from dj_rest_auth.views import LoginView
 from django.utils import timezone
     
@@ -82,15 +82,12 @@ class BaseSocialLoginView(APIView):
         return response
 
     def request_user_profile(self, access_token: str) -> Request:
-        """구현 필요"""
         pass
 
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
-        """구현 필요"""
         pass
 
     def simple_registration(self, email):
-        """구현 필요"""
         pass
 
 
@@ -99,17 +96,13 @@ class GoogleLogin(BaseSocialLoginView):
     token_url = getattr(settings, "google_token_api")
 
     def request_user_profile(self, access_token: str) -> Request:
-        """Google API를 통해 사용자 프로필 요청"""
         return requests.get(f"{self.token_url}?access_token={access_token}")
 
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
-        """Google 사용자 정보에서 이메일 및 ID 추출"""
         return user_info_response.get("email"), {"user_id": user_info_response.get("id")}
 
     def simple_registration(self, email):
-        """새로운 사용자 생성"""
         return self.user.objects.get_or_create(email=email)
-
  
 class CustomLoginView(LoginView):
     def get_response(self):

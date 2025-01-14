@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'NAME': 'skn0502', # 연동할 mysql db 이름
 #         'USER': 'root', # db 접속 계정명
 #         'PASSWORD': getattr(current_module, "mysql_password"), # 해당 계정 비밀번호
-#         'HOST': 'db', # 로컬은 127.0.0.1
+#         'HOST': '127.0.0.1',
 #         'PORT': '3306',
 #     }
 # }
