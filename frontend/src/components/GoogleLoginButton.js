@@ -3,6 +3,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import googleIcon from '../assets/google_icon.png'
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
@@ -41,10 +42,47 @@ const GoogleLoginButton = () => {
   });
 
   return (
-    <button onClick={() => googleLogin()}>
-      Sign in with Google
+    // <button onClick={() => googleLogin()}>
+    //   Sign in with Google
+    // </button>
+
+    <button 
+      onClick={googleLogin}
+      style={styles.googleButton}
+    >
+      <img 
+        src={googleIcon} 
+        alt="Google" 
+        style={styles.googleIcon} 
+      />
+      <span style={styles.buttonText}>Continue with Google</span>
     </button>
   );
+};
+
+const styles = {
+  googleButton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: '10px',
+    border: '1px solid #dadce0',
+    borderRadius: '4px',
+    backgroundColor: '#fff',
+    cursor: 'pointer',
+    gap: '10px',
+    marginTop: '10px'
+  },
+  googleIcon: {
+    width: '18px',
+    height: '18px'
+  },
+  buttonText: {
+    color: '#3c4043',
+    fontSize: '14px',
+    fontWeight: '500'
+  }
 };
 
 export default GoogleLoginButton;

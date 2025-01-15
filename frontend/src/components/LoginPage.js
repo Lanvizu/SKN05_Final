@@ -36,24 +36,16 @@ const LoginPage = () => {
     }
   };
 
-  const handleRegisterClick = () => {
-    navigate('/register');
-  };
-
-  const handleForgetClick = () => {
-    navigate('/forgot');
-  };
-
   return (
     <div style={styles.container}>
-      <h1>Welcome to Our App</h1>
-      <p>Please log in to continue</p>
+      <h2 style={styles.title}>Login</h2>
+      <p style={styles.sub_title}>서비스를 이용하시려면 로그인을 해주세요</p>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="이메일"
+          placeholder="Email"
           required
           style={styles.input}
         />
@@ -61,19 +53,40 @@ const LoginPage = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
+          placeholder="Password"
           required
           style={styles.input}
         />
-        <button type="submit" style={styles.loginButton}>로그인</button>
+        <button type="submit" style={styles.loginButton}>
+          Login
+        </button>
+        <div style={styles.bottomContainer}>
+          <div style={styles.links}>
+            <div style={styles.linkContainer}>
+              <span 
+                onClick={() => navigate('/register')} 
+                style={styles.linkText}
+              >
+                Signup
+              </span>
+            </div>
+            <div style={styles.linkContainer}>
+              <span 
+                onClick={() => navigate('/forgot')} 
+                style={styles.linkText}
+              >
+                Forgot password?
+              </span>
+            </div>
+          </div>
+          <div style={styles.divider}>
+            <span>or</span>
+          </div>
+          <div style={styles.socialLogin}>
+            <GoogleLoginButton />
+          </div>
+        </div>
       </form>
-      <GoogleLoginButton />
-      <button style={styles.registerButton} onClick={handleRegisterClick}>
-        Register
-      </button>
-      <button style={styles.registerButton} onClick={handleForgetClick}>
-        Forgot
-      </button>
     </div>
   );
 };
@@ -85,44 +98,99 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: '24px',
+    marginBottom: '20px',
+  },
+  sub_title: {
+    fontSize: '12px',
+    marginBottom: '14px',
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
     width: '100%',
-    maxWidth: '300px',
-    marginBottom: '20px',
+    maxWidth: '400px',
+    padding: '20px',
+    boxSizing: 'border-box',
   },
   input: {
     width: '100%',
-    padding: '10px',
-    margin: '5px 0',
-    fontSize: '16px',
-    borderRadius: '5px',
+    padding: '12px',
+    marginBottom: '10px',
     border: '1px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '14px',
+    boxSizing: 'border-box',
   },
   loginButton: {
     width: '100%',
-    padding: '10px',
-    fontSize: '16px',
-    backgroundColor: '#28a745',
+    padding: '12px',
+    backgroundColor: '#000',
     color: '#fff',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '4px',
+    fontSize: '14px',
     cursor: 'pointer',
-    marginTop: '10px',
+    marginBottom: '5px',
   },
-  registerButton: {
-    marginTop: '20px',
-    padding: '10px 20px',
-    fontSize: '16px',
-    backgroundColor: '#007bff',
-    color: '#fff',
+  bottomContainer: {
+    textAlign: 'center',
+  },
+  divider: {
+    position: 'relative',
+    marginTop: '10px',
+    borderTop: '1px solid #ddd',
+  },
+  socialLogin: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '20px',
+    marginBottom: '20px',
+  },
+  socialButton: {
+    width: '40px',
+    height: '40px',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '50%',
     cursor: 'pointer',
+    padding: '0',
+    backgroundColor: 'transparent',
+  },
+  socialIcon: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
+  },
+  links: {
+    display: 'flex',
+    justifyContent: 'space-arround',
+    margin: '10px',
+  },
+  linkButton: {
+    background: 'none',
+    border: 'none',
+    color: '#666',
+    cursor: 'pointer',
+    fontSize: '14px',
+    flex: '0 0 50%',
+    padding: 0,
+    margin: 0,
+    
+  },
+  linkContainer: {
+    flex: '0 0 50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  linkText: {
+    color: '#666',
+    cursor: 'pointer',
+    fontSize: '14px',
+    textDecoration: 'underline',
+    margin: '0 auto',
+    textAlign: 'center',
   },
 };
 
