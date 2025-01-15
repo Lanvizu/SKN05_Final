@@ -39,13 +39,13 @@ class BaseSocialLoginView(APIView):
         user_key, registration_params = self.get_account_user_primary_key(user_profile_response)
 
         try:
-            # 사용자 및 소셜 계정 확인
             user: CustomUser = self.user.objects.get(email=user_key)
             social_user: SocialAccount = SocialAccount.objects.get(user=user)
 
             if social_user.provider != self.platform:
                 return Response({"error": "No matching social type"}, status=status.HTTP_400_BAD_REQUEST)
-
+            if social_user:
+                return services.social_user_login(user)
             # 로그인 처리
             return self.handle_successful_login(user)
 
@@ -55,51 +55,33 @@ class BaseSocialLoginView(APIView):
             return services.user_does_not_exist(user, created, self.platform, registration_params)
 
         except SocialAccount.DoesNotExist:
-            return Response({"error": "소셜로그인 유저가 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
+            response_message = {"error": "소셜로그인 유저가 아닙니다."}
+            return Response(response_message, status=status.HTTP_400_BAD_REQUEST)
 
     def handle_successful_login(self, user):
-        """로그인 성공 시 JWT 토큰 발급 및 쿠키 설정"""
-        refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
-
         response = Response({"detail": "Login successful"}, status=status.HTTP_200_OK)
-        response.set_cookie(
-            settings.REST_AUTH['JWT_AUTH_COOKIE'],
-            access_token,
-            expires=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-            httponly=settings.REST_AUTH['JWT_AUTH_HTTPONLY'],
-            samesite=settings.REST_AUTH['JWT_AUTH_SAMESITE'],
-            secure=settings.REST_AUTH['JWT_AUTH_SECURE']
-        )
-        response.set_cookie(
-            settings.REST_AUTH['JWT_AUTH_REFRESH_COOKIE'],
-            str(refresh),
-            expires=timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
-            httponly=settings.REST_AUTH['JWT_AUTH_HTTPONLY'],
-            samesite=settings.REST_AUTH['JWT_AUTH_SAMESITE'],
-            secure=settings.REST_AUTH['JWT_AUTH_SECURE']
-        )
-        return response
+        return services.set_jwt_cookies(response, user)
 
     def request_user_profile(self, access_token: str) -> Request:
         pass
 
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
         pass
-
-    def simple_registration(self, email):
-        pass
-
 
 class GoogleLogin(BaseSocialLoginView):
     platform = "google"
     token_url = getattr(settings, "google_token_api")
 
+    def post(self, request: Request):
+        return super().post(request)
+    
     def request_user_profile(self, access_token: str) -> Request:
         return requests.get(f"{self.token_url}?access_token={access_token}")
 
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
-        return user_info_response.get("email"), {"user_id": user_info_response.get("id")}
+        email = user_info_response.get("email")
+        user_id = user_info_response.get("user_id")
+        return email, {"user_id": user_id}
 
     def simple_registration(self, email):
         return self.user.objects.get_or_create(email=email)
@@ -113,18 +95,9 @@ class CustomLoginView(LoginView):
 
             if access_token:
                 # Set Access Token in HttpOnly cookie
-                response.set_cookie(
-                    settings.REST_AUTH['JWT_AUTH_COOKIE'],
-                    access_token,
-                    expires=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-                    httponly=settings.REST_AUTH['JWT_AUTH_HTTPONLY'],
-                    samesite=settings.REST_AUTH['JWT_AUTH_SAMESITE'],
-                    secure=settings.REST_AUTH['JWT_AUTH_SECURE']
-                )
-                response.data.pop('access', None)  # Remove Access Token from response data
-
-            # Do not handle refresh token here (remove related code)
-            response.data.pop('refresh', None)  # Optionally remove refresh token from JSON response
+                response = services.set_jwt_cookies(response, self.user)
+                response.data.pop('access', None)
+                response.data.pop('refresh', None)
 
         return response
     
@@ -152,13 +125,6 @@ class MyPageView(APIView):
     def get(self, request):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data)
-    
-    # def put(self, request):
-    #     serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=400)
         
 class LogoutView(APIView):
     authentication_classes = [CookieJWTAuthentication]
