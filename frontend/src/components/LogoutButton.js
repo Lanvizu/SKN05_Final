@@ -17,10 +17,10 @@ const LogoutButton = () => {
       if (response.ok) {
         logout();
         navigate('/');
-        alert('로그아웃 성공!');
+        alert('로그아웃 성공');
       } else {
         console.error('로그아웃 실패:', response.statusText);
-        alert('로그아웃 실패!');
+        alert('로그아웃 실패');
       }
     } catch (error) {
       console.error('로그아웃 중 오류 발생:', error);

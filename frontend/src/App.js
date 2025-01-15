@@ -21,6 +21,7 @@ const App = () => {
           <Route
             path="/"
             element={
+              // env 설정 필요
               <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
                 <LoginPage />
               </GoogleOAuthProvider>

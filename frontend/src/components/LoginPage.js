@@ -23,8 +23,8 @@ const LoginPage = () => {
       });
 
       if (response.ok) {
-        login(); // 로그인 성공 시 AuthContext의 login 함수 호출
-        alert('로그인 성공!');
+        login();
+        alert('로그인 성공');
         navigate('/main');
       } else {
         const errorData = await response.json();

@@ -18,9 +18,13 @@ const GoogleLoginButton = () => {
         });
   
         // 응답 데이터 확인 및 처리
-        if (res.status === 200 && res.data.detail === "Login successful") {
-          login(); // AuthContext의 login 함수 호출
-          alert('구글 로그인 성공!');
+        if (res.status === 200 || res.status === 201) {
+          login();
+          if (res.status === 200) {
+            alert('구글 로그인 성공');
+          } else {
+            alert('회원가입 및 로그인 성공');
+          }
           navigate('/main');
         } else {
           alert(res.data.error || '로그인 처리 중 오류가 발생했습니다.');
