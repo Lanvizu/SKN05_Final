@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "allauth.account.middleware.AccountMiddleware",
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 REST_FRAMEWORK = {
@@ -110,27 +110,27 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default' : {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'skn0502', # 연동할 mysql db 이름
-#         'USER': 'root', # db 접속 계정명
-#         'PASSWORD': getattr(current_module, "mysql_password"), # 해당 계정 비밀번호
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
-
 DATABASES = {
-    'default': {
+    'default' : {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': 'db',
+        'NAME': 'skn0502', # 연동할 mysql db 이름
+        'USER': 'root', # db 접속 계정명
+        'PASSWORD': getattr(current_module, "mysql_password"), # 해당 계정 비밀번호
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('MYSQL_DATABASE'),
+#         'USER': os.environ.get('MYSQL_USER'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+#         'HOST': 'db',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -162,6 +162,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+AUTHENTICATION_BACKENDS = (
+    "allauth.account.auth_backends.AuthenticationBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
 # custom variable
 SITE_ID = 1
 ACCOUNT_UNIQUE_EMAIL = True
@@ -171,6 +175,8 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 REST_USE_JWT = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# LOGIN_REDIRECT_URL = '/main/'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # 허용할 클라이언트 도메인
@@ -190,6 +196,19 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
 }
 
 STATIC_URL = 'static/'
