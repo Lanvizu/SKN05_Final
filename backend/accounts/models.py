@@ -43,6 +43,9 @@ class CustomUser(AbstractBaseUser):
 
     USERNAME_FIELD = "email"
 
+    is_email_verified = models.BooleanField(default=False, verbose_name="이메일 인증 여부")
+    # email_verification_token = models.CharField(max_length=100, blank=True, null=True)
+
     objects = CustomUserManager()
 
     class Meta:

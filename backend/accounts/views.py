@@ -21,8 +21,11 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from dj_rest_auth.views import LoginView
-from django.utils import timezone
-    
+
+# from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+# from django.urls import reverse_lazy
+# from .forms import CustomPasswordResetForm
+
 class BaseSocialLoginView(APIView):
     permission_classes = (AllowAny,)
     user: CustomUser = get_user_model()
@@ -100,6 +103,17 @@ class CustomLoginView(LoginView):
                 response.data.pop('refresh', None)
 
         return response
+
+# class CustomPasswordResetView(PasswordResetView):
+#     form_class = CustomPasswordResetForm
+#     template_name = 'accounts/password_reset.html'
+#     email_template_name = 'accounts/password_reset_email.html'
+#     subject_template_name = 'accounts/password_reset_subject.txt'
+#     success_url = reverse_lazy('password_reset_done')
+
+# class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+#     template_name = 'accounts/password_reset_confirm.html'
+#     success_url = reverse_lazy('password_reset_complete')
     
 class CookieJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
