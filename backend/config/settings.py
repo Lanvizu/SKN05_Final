@@ -45,6 +45,7 @@ THIRD_PARTY = [
 
 APPLICATION = [
     "accounts",
+    'chat',
 ]
 
 INSTALLED_APPS += THIRD_PARTY + APPLICATION
@@ -106,10 +107,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# 로컬 테스트용
 DATABASES = {
     'default' : {
         'ENGINE': 'django.db.backends.mysql',
@@ -121,6 +122,7 @@ DATABASES = {
     }
 }
 
+# Docker 환경
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -217,3 +219,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# runpod 설정
+
+# RUNPOD_API_KEY = getattr(current_module, "RUNPOD_API_KEY")
+# RUNPOD_ENDPOINT_ID = os.getenv('RUNPOD_ENDPOINT_ID')
+RUNPOD_API_KEY = 'rpa_9HQTO9ISNX2EP83M02TH7FOIIZBY27Z15IIW4P5T132k4h'

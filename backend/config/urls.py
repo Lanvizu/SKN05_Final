@@ -11,4 +11,9 @@ user = [
     path('api/accounts/', include('allauth.urls')),
 ]
 
+chat = [
+    path('api/chat/', include('chat.urls')),
+]
+
 urlpatterns.extend(user)
+urlpatterns.extend(chat)
