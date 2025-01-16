@@ -48,7 +48,7 @@ APPLICATION = [
     'chat',
 ]
 
-INSTALLED_APPS += THIRD_PARTY + APPLICATION
+INSTALLED_APPS += APPLICATION + THIRD_PARTY
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
@@ -84,15 +84,16 @@ REST_AUTH = {
     "JWT_AUTH_SAMESITE": "Lax",  # CSRF 보호를 위한 SameSite 설정
     "LOGIN_SERIALIZER": "accounts.serializers.UserLoginSerializer",
     "REGISTER_SERIALIZER": "accounts.serializers.UserRegistrationSerializer",
-    'SESSION_LOGIN' : False
+    # 'SESSION_LOGIN' : False
 }
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -173,10 +174,27 @@ SITE_ID = 1
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 REST_USE_JWT = True
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/'
+LOGIN_URL = 'http://localhost:3000/'
+
+# 이메일 설정
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ghzm888@gmail.com'
+EMAIL_HOST_PASSWORD = 'jxbutbddbhepppdm'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# 비밀번호 재설정 URL 설정
+PASSWORD_RESET_TIMEOUT = 3600  # 1시간
 
 # LOGIN_REDIRECT_URL = '/main/'
 
@@ -190,6 +208,12 @@ CORS_ALLOW_HEADERS = [
     "Accept",
     "Origin",
     "Access-Control-Allow-Origin",
+    "X-CSRFToken",
+    "Accept-Encoding",
+    "User-Agent",
+    "DNT",
+    "Cache-Control",
+    "X-Requested-With",
 ]
 CORS_ALLOW_CREDENTIALS = True  # credentials: 'include' 요청 허용
 
