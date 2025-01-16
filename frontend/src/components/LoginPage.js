@@ -105,7 +105,8 @@ const styles = {
     marginBottom: '20px',
   },
   sub_title: {
-    fontSize: '12px',
+    color: '#666',
+    fontSize: '14px',
     marginBottom: '14px',
   },
   form: {
