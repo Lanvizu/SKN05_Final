@@ -3,8 +3,9 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import googleIcon from '../assets/google_icon.png'
+import naverIcon from '../assets/naver_icon.png'
 
+// 추후 수정 필요
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -48,11 +49,11 @@ const GoogleLoginButton = () => {
   >
     <div style={styles.buttonContent}>
       <img 
-        src={googleIcon} 
+        src={naverIcon} 
         alt="Google" 
         style={styles.googleIcon} 
       />
-      <span style={styles.buttonText}>Continue with Google</span>
+      <span style={styles.buttonText}>Continue with Naver</span>
     </div>
   </button>
   );

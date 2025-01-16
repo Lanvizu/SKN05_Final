@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from './GoogleLoginButton';
+import NaverLoginButton from './NaverLoginButton';
+import KakaoLoginButton from './KakaoLoginButton';
 import { useAuth } from '../AuthContext';
 
 const LoginPage = () => {
@@ -84,6 +86,8 @@ const LoginPage = () => {
           </div>
           <div style={styles.socialLogin}>
             <GoogleLoginButton />
+            <NaverLoginButton />
+            <KakaoLoginButton />
           </div>
         </div>
       </form>
@@ -144,7 +148,7 @@ const styles = {
     borderTop: '1px solid #ddd',
   },
   socialLogin: {
-    display: 'flex',
+    // display: 'flex',
     justifyContent: 'center',
     gap: '20px',
     marginBottom: '20px',

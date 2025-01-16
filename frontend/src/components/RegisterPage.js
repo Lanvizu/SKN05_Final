@@ -6,9 +6,10 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 초기화
+  const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (password !== password2) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
@@ -22,40 +23,56 @@ const RegisterPage = () => {
       });
       alert('회원가입 성공!');
       console.log(response.data);
-      navigate('/'); // 회원가입 성공 후 로그인 페이지로 이동
-    } catch (err) {
-      console.error('회원가입 중 오류 발생:', err);
+      navigate('/');
+    } catch (error) {
+      console.error('회원가입 중 오류 발생:', error);
       alert('회원가입 실패!');
     }
   };
 
   return (
     <div style={styles.container}>
-      <h1>회원가입</h1>
-      <input
-        type="email"
-        placeholder="이메일"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="password"
-        placeholder="비밀번호"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="password"
-        placeholder="비밀번호 확인"
-        value={password2}
-        onChange={(e) => setPassword2(e.target.value)}
-        style={styles.input}
-      />
-      <button style={styles.registerButton} onClick={handleRegister}>
-        가입하기
-      </button>
+      <h2 style={styles.title}>회원가입</h2>
+      <p style={styles.sub_title}>
+        서비스를 이용하기 위해 회원가입을 해주세요.
+      </p>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          value={password2}
+          onChange={(e) => setPassword2(e.target.value)}
+          placeholder="Confirm Password"
+          required
+          style={styles.input}
+        />
+        <button type="submit" style={styles.submitButton}>
+          가입하기
+        </button>
+      </form>
+      <div style={styles.bottomContainer}>
+        <button
+          onClick={() => navigate('/')}
+          style={styles.backButton}
+        >
+          로그인 페이지로 돌아가기
+        </button>
+      </div>
     </div>
   );
 };
@@ -67,22 +84,57 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: '24px',
+    marginBottom: '20px',
+  },
+  sub_title: {
+    color: '#666',
+    fontSize: '14px',
+    marginBottom: '14px',
+    textAlign: 'center',
+  },
+  form: {
+    width: '100%',
+    maxWidth: '400px',
+    padding: '20px',
+    boxSizing: 'border-box',
   },
   input: {
+    width: '100%',
+    padding: '12px',
     marginBottom: '10px',
-    padding: '10px',
-    width: '300px',
-    fontSize: '16px',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '14px',
+    boxSizing: 'border-box',
   },
-  registerButton: {
-    padding: '10px 20px',
-    fontSize: '16px',
-    backgroundColor: '#007bff',
+  submitButton: {
+    width: '100%',
+    padding: '12px',
+    backgroundColor: '#000',
     color: '#fff',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '4px',
+    fontSize: '14px',
     cursor: 'pointer',
+    marginBottom: '10px',
+  },
+  bottomContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: '20px',
+  },
+  backButton: {
+    background: 'none',
+    border: 'none',
+    color: '#666',
+    cursor: 'pointer',
+    fontSize: '14px',
+    textDecoration: 'underline',
   },
 };
 

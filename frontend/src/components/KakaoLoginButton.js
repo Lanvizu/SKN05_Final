@@ -3,7 +3,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import googleIcon from '../assets/google_icon.png'
+import kakaoIcon from '../assets/kakao_icon.png'
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
@@ -48,11 +48,11 @@ const GoogleLoginButton = () => {
   >
     <div style={styles.buttonContent}>
       <img 
-        src={googleIcon} 
-        alt="Google" 
+        src={kakaoIcon} 
+        alt="Kakao" 
         style={styles.googleIcon} 
       />
-      <span style={styles.buttonText}>Continue with Google</span>
+      <span style={styles.buttonText}>Continue with Kakao</span>
     </div>
   </button>
   );
