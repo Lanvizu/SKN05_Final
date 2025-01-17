@@ -16,15 +16,16 @@ from config import settings
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from dj_rest_auth.views import LoginView
-
-# from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
-# from django.urls import reverse_lazy
-# from .forms import CustomPasswordResetForm
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 class BaseSocialLoginView(APIView):
     permission_classes = (AllowAny,)
@@ -103,17 +104,6 @@ class CustomLoginView(LoginView):
                 response.data.pop('refresh', None)
 
         return response
-
-# class CustomPasswordResetView(PasswordResetView):
-#     form_class = CustomPasswordResetForm
-#     template_name = 'accounts/password_reset.html'
-#     email_template_name = 'accounts/password_reset_email.html'
-#     subject_template_name = 'accounts/password_reset_subject.txt'
-#     success_url = reverse_lazy('password_reset_done')
-
-# class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-#     template_name = 'accounts/password_reset_confirm.html'
-#     success_url = reverse_lazy('password_reset_complete')
     
 class CookieJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
@@ -174,3 +164,67 @@ class LogoutView(APIView):
             return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+User = get_user_model()
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            return self.process_reset_request(email)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def process_reset_request(self, email):
+        try:
+            user = User.objects.get(email=email)
+            self.send_reset_email(user)
+        except User.DoesNotExist:
+            pass
+        return Response({"detail": "비밀번호 재설정 이메일을 발송했습니다."}, status=status.HTTP_200_OK)
+
+    def send_reset_email(self, user):
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+        
+        context = {
+            'user': user,
+            'reset_url': reset_url,
+        }
+        subject = render_to_string('password_reset_subject.txt', context)
+        message = render_to_string('password_reset_email.html', context)
+        
+        send_mail(
+            subject.strip(),
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False,
+            html_message=message,
+        )
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            serializer = PasswordResetConfirmSerializer(data=request.data)
+            if serializer.is_valid():
+                new_password = serializer.validated_data['new_password1']
+                user.set_password(new_password)
+                user.save()
+                return Response({"detail": "비밀번호가 성공적으로 재설정되었습니다."}, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "Invalid reset link or token expired."}, status=status.HTTP_400_BAD_REQUEST)

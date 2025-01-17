@@ -82,6 +82,19 @@ class UserLoginSerializer(serializers.ModelSerializer):
         attrs["user"] = user
         return attrs
     
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    new_password1 = serializers.CharField(required=True, write_only=True)
+    new_password2 = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        if data['new_password1'] != data['new_password2']:
+            raise serializers.ValidationError("두 비밀번호가 일치하지 않습니다.")
+        return data
+
 # MyPage용 serializer 추후 추가가능
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,7 +1,5 @@
 from accounts import views
 from django.urls import path, include
-# from .views import CustomPasswordResetView
-# from django.contrib.auth import views as auth_views
 from dj_rest_auth.registration.views import VerifyEmailView, ConfirmEmailView
 
 urlpatterns = [
@@ -14,15 +12,6 @@ urlpatterns = [
     path("google/login-request/", views.GoogleLogin.as_view()),
     path('mypage/', views.MyPageView.as_view(), name='mypage'),
 
-#     path('password-reset/', CustomPasswordResetView.as_view(), name='password_reset'),
-#     path('password-reset/done/', 
-#          auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'),
-#          name='password_reset_done'),
-#     path('reset/<uidb64>/<token>/', 
-#          auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'),
-#          name='password_reset_confirm'),
-#     path('reset/done/', 
-#          auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),
-#          name='password_reset_complete'),
-
+    path('password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]

@@ -86,7 +86,8 @@ REST_AUTH = {
     "REGISTER_SERIALIZER": "accounts.serializers.UserRegistrationSerializer",
     # 'SESSION_LOGIN' : False
 }
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
+                        'http://localhost:8000',]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -196,6 +197,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 PASSWORD_RESET_TIMEOUT = 3600  # 1시간
 
 # LOGIN_REDIRECT_URL = '/main/'
+FRONTEND_URL = 'http://localhost:3000'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # 허용할 클라이언트 도메인
