@@ -10,24 +10,39 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (password !== password2) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-
+    
     try {
       const response = await axios.post('http://localhost:8000/api/accounts/register/', {
         email,
         password,
         password2,
       });
-      alert('회원가입 성공!');
+      alert('회원가입 성공');
       console.log(response.data);
       navigate('/');
     } catch (error) {
       console.error('회원가입 중 오류 발생:', error);
-      alert('회원가입 실패!');
-    }
+
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+        let errorMessage = '';
+        if (errorData.email && errorData.email.length > 0) {
+          errorMessage = errorData.email[0];
+        }
+        if (errorMessage) {
+          alert(errorMessage);
+        } else {
+          alert('회원가입 실패: 알 수 없는 오류가 발생했습니다.');
+        }
+      } else {
+        alert('회원가입 실패: 서버 오류가 발생했습니다.');
+      }
+    } 
   };
 
   return (

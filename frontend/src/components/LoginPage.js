@@ -24,13 +24,15 @@ const LoginPage = () => {
         credentials: 'include',
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         login();
         alert('로그인 성공');
         navigate('/main');
       } else {
-        const errorData = await response.json();
-        alert(errorData.message || '로그인에 실패했습니다.');
+        // const errorData = await response.json();
+        alert(data.non_field_errors || '로그인에 실패했습니다.');
       }
     } catch (error) {
       console.error('로그인 중 오류 발생:', error);
