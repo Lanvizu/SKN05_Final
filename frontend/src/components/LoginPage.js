@@ -28,7 +28,7 @@ const LoginPage = () => {
 
       if (response.ok) {
         login();
-        alert('로그인 성공');
+        // alert('로그인 성공');
         navigate('/main');
       } else {
         // const errorData = await response.json();

@@ -22,9 +22,9 @@ const GoogleLoginButton = () => {
         if (res.status === 200 || res.status === 201) {
           login();
           if (res.status === 200) {
-            alert('구글 로그인 성공');
+            // alert('구글 로그인 성공');
           } else {
-            alert('회원가입 및 로그인 성공');
+            // alert('회원가입 및 로그인 성공');
           }
           navigate('/main');
         } else {
