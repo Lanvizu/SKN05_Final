@@ -198,6 +198,8 @@ PASSWORD_RESET_TIMEOUT = 3600  # 1시간
 
 # LOGIN_REDIRECT_URL = '/main/'
 FRONTEND_URL = 'http://localhost:3000'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # 허용할 클라이언트 도메인

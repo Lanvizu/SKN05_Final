@@ -228,3 +228,36 @@ class PasswordResetConfirmView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Invalid reset link or token expired."}, status=status.HTTP_400_BAD_REQUEST)
+        
+class EmailConfirmationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            user = User.objects.get(email=email)
+            self.send_Confirmation_email(user)
+            return Response({"detail": "인증 이메일을 발송했습니다."}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"detail": "해당 이메일로 등록된 사용자가 없습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+    def send_Confirmation_email(self, user):
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        confirm_url = f"{settings.FRONTEND_URL}/confirm-email/{uid}/{token}/"
+        
+        context = {
+            'user': user,
+            'confirm_url': confirm_url,
+        }
+        subject = render_to_string('email_confirmation_subject.txt', context)
+        message = render_to_string('email_confirmation_email.html', context)
+        
+        send_mail(
+            subject.strip(),
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False,
+            html_message=message,
+        )
