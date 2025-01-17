@@ -4,29 +4,17 @@ import axios from 'axios';
 
 const ForgotPage = () => {
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/accounts/password-reset/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        alert('비밀번호 재설정 링크가 이메일로 전송되었습니다.');
-        navigate('/');
-      } else {
-        const errorData = await response.json();
-        alert(errorData.message || '요청 처리에 실패했습니다.');
-      }
+      const response = await axios.post('http://localhost:8000/api/accounts/password-reset/', { email });
+      setMessage(response.data.detail);
+      setTimeout(() => navigate('/'), 3000); // 3초 후 로그인 페이지로 이동
     } catch (error) {
-      console.error('오류 발생:', error);
-      alert('서버 오류가 발생했습니다.');
+      setMessage(error.response?.data?.detail || 'An error occurred. Please try again.');
     }
   };
 
@@ -41,14 +29,15 @@ const ForgotPage = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="이메일"
           required
           style={styles.input}
         />
         <button type="submit" style={styles.submitButton}>
-          비밀번호 재설정
+          비밀번호 재설정 링크 보내기
         </button>
       </form>
+      {message && <p style={styles.message}>{message}</p>}
       <div style={styles.bottomContainer}>
         <button
           onClick={() => navigate('/')}
@@ -119,6 +108,12 @@ const styles = {
     cursor: 'pointer',
     fontSize: '14px',
     textDecoration: 'underline',
+  },
+  message: {
+    marginTop: '10px',
+    color: '#666',
+    fontSize: '14px',
+    textAlign: 'center',
   },
 };
 

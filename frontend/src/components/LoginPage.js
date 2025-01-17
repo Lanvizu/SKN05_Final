@@ -42,14 +42,14 @@ const LoginPage = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Login</h2>
+      <h2 style={styles.title}>로그인</h2>
       <p style={styles.sub_title}>서비스를 이용하시려면 로그인을 해주세요</p>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="이메일"
           required
           style={styles.input}
         />
@@ -57,12 +57,12 @@ const LoginPage = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
+          placeholder="비밀번호"
           required
           style={styles.input}
         />
         <button type="submit" style={styles.loginButton}>
-          Login
+          로그인
         </button>
         <div style={styles.bottomContainer}>
           <div style={styles.links}>
@@ -71,7 +71,7 @@ const LoginPage = () => {
                 onClick={() => navigate('/register')} 
                 style={styles.linkText}
               >
-                Signup
+                회원가입
               </span>
             </div>
             <div style={styles.linkContainer}>
@@ -79,12 +79,12 @@ const LoginPage = () => {
                 onClick={() => navigate('/forgot')} 
                 style={styles.linkText}
               >
-                Forgot password?
+                비밀번호 찾기
               </span>
             </div>
           </div>
           <div style={styles.divider}>
-            <span>or</span>
+            {/* <span>또는</span> */}
           </div>
           <div style={styles.socialLogin}>
             <GoogleLoginButton />
@@ -146,8 +146,11 @@ const styles = {
   },
   divider: {
     position: 'relative',
-    marginTop: '10px',
+    marginTop: '20px',
+    marginBottom: '10px',
     borderTop: '1px solid #ddd',
+    // color: '#666',
+    // fontSize: '12px'
   },
   socialLogin: {
     // display: 'flex',

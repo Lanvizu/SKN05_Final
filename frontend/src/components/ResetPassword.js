@@ -1,85 +1,60 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const RegisterPage = () => {
-  const [email, setEmail] = useState('');
+function ResetPassword() {
   const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const { uid, token } = useParams();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (password !== password2) {
-      alert('비밀번호가 일치하지 않습니다.');
+    if (password !== confirmPassword) {
+      setMessage("비밀번호가 일치하지 않습니다.");
       return;
     }
-    
     try {
-      const response = await axios.post('http://localhost:8000/api/accounts/register/', {
-        email,
-        password,
-        password2,
+      const response = await axios.post(`http://localhost:8000/api/accounts/password-reset-confirm/${uid}/${token}/`, {
+        new_password1: password,
+        new_password2: confirmPassword
       });
-      alert('회원가입 성공');
-      console.log(response.data);
-      navigate('/');
+      setMessage(response.data.detail);
+      setTimeout(() => navigate('/'), 3000);
     } catch (error) {
-      console.error('회원가입 중 오류 발생:', error);
-
-      if (error.response && error.response.data) {
-        const errorData = error.response.data;
-        let errorMessage = '';
-        if (errorData.email && errorData.email.length > 0) {
-          errorMessage = errorData.email[0];
-        }
-        if (errorMessage) {
-          alert(errorMessage);
-        } else {
-          alert('회원가입 실패: 알 수 없는 오류가 발생했습니다.');
-        }
-      } else {
-        alert('회원가입 실패: 서버 오류가 발생했습니다.');
-      }
-    } 
+      setMessage(error.response?.data?.detail || '오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>회원가입</h2>
+      <h2 style={styles.title}>새 비밀번호 설정</h2>
       <p style={styles.sub_title}>
-        서비스를 이용하기 위해 회원가입을 해주세요.
+        새로운 비밀번호를 입력해주세요.
       </p>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="이메일"
-          required
-          style={styles.input}
-        />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
+          placeholder="새 비밀번호"
           required
           style={styles.input}
         />
         <input
           type="password"
-          value={password2}
-          onChange={(e) => setPassword2(e.target.value)}
-          placeholder="비밀번호 재입력"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="새 비밀번호 확인"
           required
           style={styles.input}
         />
         <button type="submit" style={styles.submitButton}>
-          가입하기
+          비밀번호 재설정
         </button>
       </form>
+      {message && <p style={styles.message}>{message}</p>}
       <div style={styles.bottomContainer}>
         <button
           onClick={() => navigate('/')}
@@ -90,7 +65,7 @@ const RegisterPage = () => {
       </div>
     </div>
   );
-};
+}
 
 const styles = {
   container: {
@@ -151,6 +126,12 @@ const styles = {
     fontSize: '14px',
     textDecoration: 'underline',
   },
+  message: {
+    marginTop: '10px',
+    color: '#666',
+    fontSize: '14px',
+    textAlign: 'center',
+  },
 };
 
-export default RegisterPage;
+export default ResetPassword;
