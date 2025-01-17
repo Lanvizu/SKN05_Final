@@ -190,9 +190,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ghzm888@gmail.com'
-EMAIL_HOST_PASSWORD = 'jxbutbddbhepppdm'
+EMAIL_HOST_PASSWORD = getattr(current_module, "google_host_password")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 # 비밀번호 재설정 URL 설정
 PASSWORD_RESET_TIMEOUT = 3600  # 1시간
 

@@ -26,7 +26,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['password2']:
-            raise serializers.ValidationError({"password": "비밀번호가 일치하지 않습니다."})
+            raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
         return data
 
     def save(self, request):
@@ -38,7 +38,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         password2 = self.validated_data["password2"]
 
         if password != password2:
-            raise serializers.ValidationError({"password": "비밀번호가 일치하지 않습니다."})
+            raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
         user.set_password(password)
         user.save()
         return user
@@ -59,13 +59,26 @@ class UserLoginSerializer(serializers.ModelSerializer):
         email = attrs.get("email")
         password = attrs.get("password")
         if email and password:
-            user = authenticate(
-                email=email,
-                password=password,
-            )
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                raise serializers.ValidationError("사용자가 존재하지 않습니다.")
+
+            # 비밀번호 확인
+            if not user.check_password(password):
+                raise serializers.ValidationError("이메일 또는 비밀번호가 올바르지 않습니다.")
+
+            # 이메일 인증 여부 확인
+            if not user.is_email_verified:
+                raise serializers.ValidationError("이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요.")
+
+            # 모든 검증을 통과한 경우 인증 진행
+            user = authenticate(email=email, password=password)
             if not user:
-                msg = "Incorrect credentials."
-                raise serializers.ValidationError(msg, code="authorization")
+                raise serializers.ValidationError("인증 과정에서 오류가 발생했습니다.")
+
+        else:
+            raise serializers.ValidationError("이메일과 비밀번호를 모두 입력해주세요.")
         attrs["user"] = user
         return attrs
     
