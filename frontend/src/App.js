@@ -10,6 +10,7 @@ import ResetPassword from './components/ResetPassword';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';
 import ChatPage from './components/ChatPage';
+import ProfileEditPage from './components/ProfileEditPage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -50,6 +51,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-profile"
+            element={
+              <ProtectedRoute>
+                <ProfileEditPage />
               </ProtectedRoute>
             }
           />

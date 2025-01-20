@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import NavigationLinks from './NavigationLinks';
 
 const MyPage = () => {
-  const [userData, setUserData] = useState(null); // 사용자 데이터 상태
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
-  // 마이페이지 데이터 가져오기
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/accounts/mypage/', {
-          method: 'GET', // POST 요청 사용
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include', // 쿠키를 포함하여 요청
+          credentials: 'include',
         });
 
         if (response.ok) {
           const data = await response.json();
-          setUserData(data); // 사용자 데이터를 상태에 저장
+          setUserData(data);
         } else {
           alert('마이페이지 데이터를 불러오지 못했습니다.');
         }
@@ -30,18 +32,86 @@ const MyPage = () => {
     fetchUserData();
   }, []);
 
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
+  };
+
   if (!userData) {
-    return <div>로딩 중...</div>; // 데이터 로딩 중 표시
+    return <div style={styles.loading}>로딩 중...</div>;
   }
 
   return (
     <div>
-      <h2>마이페이지</h2>
-      <p>이메일: {userData.email}</p>
-      <p>가입일: {userData.date_joined}</p>
-      <p>마지막 로그인: {userData.last_login}</p>
+      <NavigationLinks />
+      <div style={styles.container}>
+        <h2 style={styles.title}>마이페이지</h2>
+        <div style={styles.infoContainer}>
+          <p style={styles.infoItem}>
+            <span style={styles.label}>이메일:</span> {userData.email}
+          </p>
+          <p style={styles.infoItem}>
+            <span style={styles.label}>가입일:</span> {new Date(userData.date_joined).toLocaleDateString()}
+          </p>
+          <p style={styles.infoItem}>
+            <span style={styles.label}>마지막 로그인:</span> {new Date(userData.last_login).toLocaleString()}
+          </p>
+          <button onClick={handleEditProfile} style={styles.editButton}>
+            개인정보 수정
+          </button>
+        </div>
+      </div>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 'calc(100vh - 60px)',
+    backgroundColor: '#fff',
+    marginTop: '60px',
+  },
+  title: {
+    fontSize: '24px',
+    marginBottom: '20px',
+  },
+  infoContainer: {
+    width: '100%',
+    maxWidth: '400px',
+    padding: '20px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    backgroundColor: '#f9f9f9',
+  },
+  infoItem: {
+    marginBottom: '10px',
+    fontSize: '16px',
+  },
+  label: {
+    fontWeight: 'bold',
+    marginRight: '10px',
+  },
+  loading: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    fontSize: '18px',
+  },
+  editButton: {
+    width: '100%',
+    padding: '10px',
+    backgroundColor: '#000',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '16px',
+    cursor: 'pointer',
+    marginTop: '20px',
+  },
 };
 
 export default MyPage;
