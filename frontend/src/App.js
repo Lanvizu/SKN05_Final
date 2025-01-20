@@ -6,7 +6,6 @@ import RegisterPage from './components/RegisterPage';
 import ForgotPage from './components/ForgotPage';
 import MainPage from './components/MainPage';
 import MyPage from './components/MyPage';
-import ConfirmEmail from './components/VerifyEmail';
 import ResetPassword from './components/ResetPassword';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';

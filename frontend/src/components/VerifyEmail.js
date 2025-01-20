@@ -11,6 +11,7 @@ function VerifyEmail() {
     const verifyEmail = async () => {
       try {
         const response = await axios.post('http://localhost:8000/api/accounts/registration/verify-email/', { key });
+        console.log(response.data);
         setStatus('완료');
         setTimeout(() => navigate('/'), 3000);
       } catch (error) {
