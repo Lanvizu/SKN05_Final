@@ -9,6 +9,7 @@ import MyPage from './components/MyPage';
 import ResetPassword from './components/ResetPassword';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';
+import ChatPage from './components/ChatPage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -23,7 +24,6 @@ const App = () => {
           <Route
             path="/"
             element={
-              // env 설정 필요
               <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
                 <LoginPage />
               </GoogleOAuthProvider>
@@ -42,6 +42,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <MyPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
               </ProtectedRoute>
             }
           />

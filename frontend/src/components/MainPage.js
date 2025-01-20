@@ -1,47 +1,32 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
+// import { useNavigate } from 'react-router-dom';
+// import LogoutButton from './LogoutButton';
+import NavigationLinks from './NavigationLinks';
 
 const MainPage = () => {
-  const navigate = useNavigate();
-
-  const handleMyPageClick = () => {
-    navigate('/mypage');
-  };
-
-  const handlePasswordChangeClick = () => {
-    navigate('/change-password');  // 비밀번호 변경 페이지로 이동
-  };
-
-  const handleChatClick = () => {
-    navigate('/chat');  // 채팅 페이지로 이동
-  };
-
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>메인 페이지</h2>
-      <p style={styles.sub_title}>
-        환영합니다! 로그인에 성공하셨습니다.
-      </p>
-      <div style={styles.buttonContainer}>
-        <button onClick={handleMyPageClick} style={styles.button}>
-          마이페이지
-        </button>
-        <button onClick={handlePasswordChangeClick} style={styles.button}>
-          비밀번호 변경
-        </button>
-        <button onClick={handleChatClick} style={styles.button}>
-          채팅
-        </button>
-      </div>
-      <div style={styles.bottomContainer}>
-        <LogoutButton style={styles.logoutButton} />
+    <div>
+      <NavigationLinks />
+      <div style={styles.content}>
+        <h2 style={styles.title}>메인 페이지</h2>
+        <p style={styles.sub_title}>
+          환영합니다! 로그인에 성공하셨습니다.
+        </p>
       </div>
     </div>
   );
 };
 
 const styles = {
+    content: {
+      marginTop: '60px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 'calc(100vh - 60px)',
+      backgroundColor: '#fff',
+    },
   container: {
     display: 'flex',
     flexDirection: 'column',
