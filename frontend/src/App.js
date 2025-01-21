@@ -66,6 +66,8 @@ const App = () => {
           <Route path="/forgot" element={<ForgotPage />} />
           <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
           <Route path="/verify-email/:key" element={<VerifyEmail />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/main" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
