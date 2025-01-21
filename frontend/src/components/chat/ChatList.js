@@ -57,7 +57,9 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated }) 
                     onClick={() => onSelectRoom(room)}
                     >
                     {room.first_question ? (
-                        <p style={styles.firstQuestion}>{room.first_question}</p>
+                        <p style={{...styles.firstQuestion, ...styles.truncate}}>
+                            {room.first_question}
+                        </p>
                     ) : (
                         <p style={styles.inactiveMessage}>진행한 채팅 내용이 없습니다.</p>
                     )}
@@ -151,6 +153,7 @@ const styles = {
     padding: 0,
   },
   listItem: {
+    height: '40px',
     padding: '5px',
     cursor: 'pointer',
     borderRadius: '4px',
@@ -168,6 +171,11 @@ const styles = {
     color: '#999',
     fontSize: '14px',
     fontStyle: 'italic',
+  },
+  truncate: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 };
 
