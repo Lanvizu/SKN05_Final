@@ -1,12 +1,13 @@
 from rest_framework import serializers
-from .models import ChatRequest, ChatResponse
+from .models import ChatRoom, ChatMessage
 
-class ChatRequestSerializer(serializers.ModelSerializer):
+class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ChatRequest
-        fields = '__all__'
+        model = ChatMessage
+        fields = ['id', 'is_user', 'content', 'created_at']
 
-class ChatResponseSerializer(serializers.ModelSerializer):
+class ChatRoomSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = ChatResponse
-        fields = '__all__'
+        model = ChatRoom
+        fields = ['id', 'name', 'created_at']

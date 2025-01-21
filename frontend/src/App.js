@@ -9,7 +9,7 @@ import MyPage from './components/MyPage';
 import ResetPassword from './components/ResetPassword';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';
-import ChatPage from './components/ChatPage';
+import ChatPage from './components/chat/ChatPage';
 import ProfileEditPage from './components/ProfileEditPage';
 
 const ProtectedRoute = ({ children }) => {
@@ -48,6 +48,14 @@ const App = () => {
           />
           <Route
             path="/chat"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat/:roomId"
             element={
               <ProtectedRoute>
                 <ChatPage />
