@@ -12,7 +12,7 @@ user = [
 ]
 
 chat = [
-    path('api/', include('chat.urls')),
+    path('api/chat/', include('chat.urls')),
 ]
 
 urlpatterns.extend(user)
