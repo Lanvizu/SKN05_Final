@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NavigationLinks from '../NavigationLinks';
+import NavigationLinks from '../navigation/NavigationLinks';
 import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 

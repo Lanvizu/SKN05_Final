@@ -1,7 +1,7 @@
 // LogoutButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../AuthContext';
 
 const LogoutButton = () => {
   const navigate = useNavigate();

@@ -129,7 +129,6 @@ const styles = {
     maxWidth: '70%',
     alignSelf: 'flex-end',
     marginLeft: 'auto',
-    textAlign: 'right',
     width: 'fit-content',
     padding: '10px 15px',
   },
