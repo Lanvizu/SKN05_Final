@@ -1,10 +1,13 @@
 from django.db import models
+from django.conf import settings
 
-class ChatRequest(models.Model):
-    user_input = models.TextField()
+class ChatRoom(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
-class ChatResponse(models.Model):
-    request = models.ForeignKey(ChatRequest, on_delete=models.CASCADE, related_name='responses')
-    response_text = models.TextField()
+class ChatMessage(models.Model):
+    room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages')
+    is_user = models.BooleanField(default=True)
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
