@@ -1,4 +1,3 @@
-// LogoutButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
@@ -27,8 +26,19 @@ const LogoutButton = () => {
       alert('로그아웃 실패!');
     }
   };
-
-  return <button onClick={handleLogout}>로그아웃</button>;
+  return <span onClick={handleLogout} style={styles.link}>Logout</span>;
 };
+const styles = {
+  link: {
+    color: '#000',
+    fontSize: '14px',
+    cursor: 'pointer',
+    margin: '0 15px',
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+}
 
 export default LogoutButton;

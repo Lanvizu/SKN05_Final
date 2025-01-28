@@ -55,7 +55,7 @@ const NavigationLinks = () => {
             <span onClick={() => handleNavigation('/mypage')} style={styles.link}>
               MyPage
             </span>
-            <LogoutButton onClick={handleLogout} style={styles.logoutLink} />
+            <LogoutButton onClick={handleLogout} />
           </>
         ) : (
           <span onClick={handleLogin} style={styles.link}>
@@ -102,16 +102,6 @@ const styles = {
     fontSize: '14px',
     cursor: 'pointer',
     margin: '0 15px',
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-  logoutLink: {
-    color: '#666',
-    fontSize: '14px',
-    cursor: 'pointer',
-    marginLeft: '20px',
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
