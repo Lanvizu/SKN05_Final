@@ -1,15 +1,25 @@
 import React from 'react';
 import NavigationLinks from './NavigationLinks';
+import { useAuth } from '../../AuthContext';
+
 
 const MainPage = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div>
       <NavigationLinks />
       <div style={styles.content}>
         <h2 style={styles.title}>메인 페이지</h2>
-        <p style={styles.sub_title}>
-          환영합니다! 로그인에 성공하셨습니다.
-        </p>
+        {isAuthenticated ? (
+          <p style={styles.sub_title}>
+            환영합니다! 로그인에 성공하셨습니다.
+          </p>
+        ) : (
+          <p style={styles.sub_title}>
+            로그인하시면 더 많은 기능을 이용하실 수 있습니다.
+          </p>
+        )}
       </div>
     </div>
   );

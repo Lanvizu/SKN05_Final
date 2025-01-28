@@ -25,17 +25,15 @@ const App = () => {
           <Route
             path="/"
             element={
-              <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
-                <LoginPage />
-              </GoogleOAuthProvider>
+                <MainPage />
             }
           />
           <Route
-            path="/main"
+            path="/login"
             element={
-              <ProtectedRoute>
-                <MainPage />
-              </ProtectedRoute>
+              <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
+                <LoginPage />
+              </GoogleOAuthProvider>
             }
           />
           <Route

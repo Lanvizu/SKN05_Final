@@ -26,7 +26,7 @@ const GoogleLoginButton = () => {
           } else {
             // alert('회원가입 및 로그인 성공');
           }
-          navigate('/main');
+          navigate('/');
         } else {
           alert(res.data.error || '로그인 처리 중 오류가 발생했습니다.');
         }
