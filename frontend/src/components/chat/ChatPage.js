@@ -12,6 +12,12 @@ const ChatPage = () => {
     fetchChatRooms();
   }, []);
 
+  useEffect(() => {
+    if (chatRooms.length > 0 && !selectedRoom) {
+      setSelectedRoom(chatRooms[0]);
+    }
+  }, [chatRooms, selectedRoom]);
+
   const fetchChatRooms = async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/chat/rooms/', {
@@ -29,6 +35,7 @@ const ChatPage = () => {
 
   const handleChatRoomCreated = (newRoom) => {
     setChatRooms(prevRooms => [newRoom, ...prevRooms]);
+    setSelectedRoom(newRoom);
   };
 
   const updateChatRoom = (roomId, firstQuestion) => {

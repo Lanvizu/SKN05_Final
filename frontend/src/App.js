@@ -11,10 +11,22 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';
 import ChatPage from './components/chat/ChatPage';
 import ProfileEditPage from './components/ProfileEditPage';
+import AuthenticatedMainPage from './components/navigation/AuthenticatedMainPage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/" replace />;
+};
+
+const MainPageRouter = () => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? (
+    <ProtectedRoute>
+      <AuthenticatedMainPage />
+    </ProtectedRoute>
+  ) : (
+    <MainPage />
+  );
 };
 
 const App = () => {
@@ -25,7 +37,7 @@ const App = () => {
           <Route
             path="/"
             element={
-                <MainPage />
+                <MainPageRouter />
             }
           />
           <Route
