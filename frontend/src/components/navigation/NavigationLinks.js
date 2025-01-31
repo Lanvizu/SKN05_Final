@@ -15,6 +15,10 @@ const NavigationLinks = () => {
     navigate('/login');
   };
 
+  const handleRegister = () => {
+    navigate('/register');
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -58,9 +62,14 @@ const NavigationLinks = () => {
             <LogoutButton onClick={handleLogout} />
           </>
         ) : (
-          <span onClick={handleLogin} style={styles.link}>
-            Login
-          </span>
+          <>
+            <span onClick={handleLogin} style={styles.link}>
+              Login
+            </span>
+            <span onClick={handleRegister} style={styles.link}>
+              SignUp
+            </span>
+          </>
         )}
       </div>
     </nav>
