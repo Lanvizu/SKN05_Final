@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     
     # 사용자 정의 앱
     "accounts",
-    'chat',
+    "chat",
+    "stocks",
 ]
 
 MIDDLEWARE = [

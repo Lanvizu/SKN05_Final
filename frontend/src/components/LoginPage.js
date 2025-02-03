@@ -29,7 +29,7 @@ const LoginPage = () => {
       if (response.ok) {
         login();
         // alert('로그인 성공');
-        navigate('/main');
+        navigate('/');
       } else {
         // const errorData = await response.json();
         alert(data.non_field_errors || '로그인에 실패했습니다.');

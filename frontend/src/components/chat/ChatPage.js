@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NavigationLinks from '../NavigationLinks';
+import NavigationLinks from '../navigation/NavigationLinks';
 import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 
@@ -11,6 +11,12 @@ const ChatPage = () => {
   useEffect(() => {
     fetchChatRooms();
   }, []);
+
+  useEffect(() => {
+    if (chatRooms.length > 0 && !selectedRoom) {
+      setSelectedRoom(chatRooms[0]);
+    }
+  }, [chatRooms, selectedRoom]);
 
   const fetchChatRooms = async () => {
     try {
@@ -29,6 +35,7 @@ const ChatPage = () => {
 
   const handleChatRoomCreated = (newRoom) => {
     setChatRooms(prevRooms => [newRoom, ...prevRooms]);
+    setSelectedRoom(newRoom);
   };
 
   const updateChatRoom = (roomId, firstQuestion) => {

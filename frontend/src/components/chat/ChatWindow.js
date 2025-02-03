@@ -89,18 +89,20 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="메시지를 입력하세요..."
-          style={styles.input}
-        />
-        <button type="submit" style={styles.sendButton}>
-          전송
+      <div style={styles.inputContainer}>
+        <form onSubmit={handleSubmit} style={styles.form}>
+            <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="메시지를 입력하세요..."
+            style={styles.input}
+            />
+        </form>
+        <button onClick={handleSubmit} style={styles.sendButton}>
+            ↑
         </button>
-      </form>
+      </div>
     </div>
   );  
 };
@@ -124,44 +126,58 @@ const styles = {
   userMessage: {
     backgroundColor: '#000',
     color: '#fff',
-    borderRadius: '18px',
+    borderRadius: '15px',
     marginBottom: '10px',
     maxWidth: '70%',
     alignSelf: 'flex-end',
     marginLeft: 'auto',
-    textAlign: 'right',
     width: 'fit-content',
     padding: '10px 15px',
   },
   botMessage: {
     backgroundColor: '#f0f0f0',
     padding: '10px 15px',
-    borderRadius: '18px',
+    borderRadius: '15px',
     marginBottom: '10px',
     // maxWidth: '70%',
     alignSelf: 'flex-start',
   },
-  form: {
-    display: 'flex',
-    padding: '10px',
+  inputContainer: {
+    padding: '5px',
+    backgroundColor: '#ffffff',
     borderTop: '1px solid #ddd',
-  },
-  input: {
-    flex: 1,
-    padding: '12px',
+    display: 'flex',
+    alignItems: 'center',
     border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '14px',
+    borderRadius: '15px',
+    margin: '10px',
+  },
+  form: {
+    flex: 1,
     marginRight: '10px',
   },
+  input: {
+    width: '95%',
+    padding: '12px 15px',
+    border: 'none',
+    fontSize: '14px',
+    outline: 'none',
+  },
   sendButton: {
-    padding: '12px 20px',
+    padding: '12px',
     backgroundColor: '#000',
     color: '#fff',
     border: 'none',
-    borderRadius: '4px',
+    borderRadius: '25%',
     fontSize: '14px',
     cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '30px',
+    height: '30px',
+    minWidth: '30px',
+    marginRight:'5px',
   },
   error: {
     color: '#ff0000',

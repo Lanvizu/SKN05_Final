@@ -4,17 +4,29 @@ import { AuthProvider, useAuth } from './AuthContext';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForgotPage from './components/ForgotPage';
-import MainPage from './components/MainPage';
-import MyPage from './components/MyPage';
+import MainPage from './components/navigation/MainPage';
+import MyPage from './components/navigation/MyPage';
 import ResetPassword from './components/ResetPassword';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';
 import ChatPage from './components/chat/ChatPage';
 import ProfileEditPage from './components/ProfileEditPage';
+import AuthenticatedMainPage from './components/navigation/AuthenticatedMainPage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/" replace />;
+};
+
+const MainPageRouter = () => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? (
+    <ProtectedRoute>
+      <AuthenticatedMainPage />
+    </ProtectedRoute>
+  ) : (
+    <MainPage />
+  );
 };
 
 const App = () => {
@@ -25,17 +37,15 @@ const App = () => {
           <Route
             path="/"
             element={
-              <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
-                <LoginPage />
-              </GoogleOAuthProvider>
+                <MainPageRouter />
             }
           />
           <Route
-            path="/main"
+            path="/login"
             element={
-              <ProtectedRoute>
-                <MainPage />
-              </ProtectedRoute>
+              <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
+                <LoginPage />
+              </GoogleOAuthProvider>
             }
           />
           <Route
