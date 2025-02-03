@@ -85,7 +85,13 @@ const RegisterPage = () => {
           onClick={() => navigate('/')}
           style={styles.backButton}
         >
-          로그인 페이지로 돌아가기
+          메인 페이지
+        </button>
+        <button
+          onClick={() => navigate('/login')}
+          style={styles.backButton}
+        >
+          로그인 페이지
         </button>
       </div>
     </div>
@@ -139,9 +145,7 @@ const styles = {
   },
   bottomContainer: {
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
-    marginTop: '20px',
   },
   backButton: {
     background: 'none',
@@ -150,6 +154,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: '14px',
     textDecoration: 'underline',
+    margin: '0px 30px'
   },
 };
 
