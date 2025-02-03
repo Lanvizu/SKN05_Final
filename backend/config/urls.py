@@ -15,5 +15,10 @@ chat = [
     path('api/chat/', include('chat.urls')),
 ]
 
+stocks = [
+    path('api/stocks/', include('stocks.urls')),
+]
+
 urlpatterns.extend(user)
 urlpatterns.extend(chat)
+urlpatterns.extend(stocks)
