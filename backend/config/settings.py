@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "accounts",
     'chat',
     "stocks",
+    "stats_repo",
+    "docs_repo",
 ]
 
 MIDDLEWARE = [

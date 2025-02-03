@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import NavigationLinks from './NavigationLinks'; // 네비게이션 컴포넌트 추가
+import NavigationLinks from './NavigationLinksAfterLogin'; // 네비게이션 컴포넌트 추가
 
 const ChatPage = () => {
   const [input, setInput] = useState('');

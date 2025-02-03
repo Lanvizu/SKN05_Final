@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import NavigationLinks from './NavigationLinks';
+import NavigationLinks from './NavigationLinksAfterLogin';
 
 const MainPage = () => {
   const [indices, setIndices] = useState([]);

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
 
-const NavigationLinks = () => {
+const NavigationLinks = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
@@ -12,9 +11,15 @@ const NavigationLinks = () => {
   return (
     <nav style={styles.container}>
       <div style={styles.leftSection}>
-        <span onClick={() => handleNavigation('/main')} style={styles.link}>
-          메인페이지
-        </span>
+        {isLoggedIn ? (
+          <span onClick={() => handleNavigation('/main')} style={styles.link}>
+            메인페이지
+          </span>
+        ) : (
+          <span onClick={() => handleNavigation('/landing')} style={styles.link}>
+            랜딩페이지
+          </span>
+        )}
       </div>
       <div style={styles.rightSection}>
         <span onClick={() => handleNavigation('/mypage')} style={styles.link}>
@@ -23,7 +28,15 @@ const NavigationLinks = () => {
         <span onClick={() => handleNavigation('/chat')} style={styles.link}>
           채팅
         </span>
-        <LogoutButton style={styles.logoutLink} />
+        {isLoggedIn ? (
+          <span onClick={onLogout} style={styles.logoutLink}>
+            로그아웃
+          </span>
+        ) : (
+          <span onClick={() => handleNavigation('/login')} style={styles.loginLink}>
+            로그인
+          </span>
+        )}
       </div>
     </nav>
   );

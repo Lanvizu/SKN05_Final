@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationLinks from './NavigationLinks';
+import NavigationLinks from './NavigationLinksAfterLogin';
 
 const ProfileEditPage = () => {
   const [userData, setUserData] = useState({
