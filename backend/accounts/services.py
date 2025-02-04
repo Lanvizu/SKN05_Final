@@ -31,13 +31,7 @@ def access_token_is_valid(request: Request) -> Union[Dict[str, Any], Response]:
         return JsonResponse(error_message, status=request.status_code)
     return request.json()
 
-def clear_existing_tokens(response):
-    response.delete_cookie(settings.REST_AUTH['JWT_AUTH_COOKIE'])
-    response.delete_cookie(settings.REST_AUTH['JWT_AUTH_REFRESH_COOKIE'])
-    return response
-
 def set_jwt_cookies(response, user):
-    response = clear_existing_tokens(response)
     refresh = RefreshToken.for_user(user)
     access_token = str(refresh.access_token)
 
