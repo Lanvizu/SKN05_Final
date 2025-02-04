@@ -3,13 +3,14 @@ import axios from 'axios';
 
 const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated }) => {
     const [isOpen, setIsOpen] = useState(true);
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
     const handleCreateNewChat = async () => {
       try {
         const response = await axios.post(
-          'http://localhost:8000/api/chat/room/create/',
+          `${BASE_URL}/api/chat/room/create/`,
           {},
           {
             headers: {

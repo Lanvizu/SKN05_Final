@@ -6,11 +6,12 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const fetchMessages = useCallback(async () => {
     try {
       setError(null);
-      const response = await axios.get(`http://localhost:8000/api/chat/room/${roomId}/`, {
+      const response = await axios.get(`${BASE_URL}/api/chat/room/${roomId}/`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -44,7 +45,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
       setMessages((prev) => [...prev, userMessage]);
 
       const response = await axios.post(
-        `http://localhost:8000/api/chat/room/${roomId}/`,
+        `${BASE_URL}/api/chat/room/${roomId}/`,
         { input },
         {
           headers: {

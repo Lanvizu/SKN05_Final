@@ -7,6 +7,7 @@ import ChatWindow from './ChatWindow';
 const ChatPage = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     fetchChatRooms();
@@ -20,7 +21,7 @@ const ChatPage = () => {
 
   const fetchChatRooms = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/chat/rooms/', {
+      const response = await axios.get(`${BASE_URL}/api/chat/rooms/`, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import NavigationLinks from './NavigationLinks';
 
 const MyPage = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/accounts/mypage/', {
+        const response = await fetch(`${BASE_URL}/api/accounts/mypage/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

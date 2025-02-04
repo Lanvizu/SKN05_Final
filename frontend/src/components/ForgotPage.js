@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ForgotPage = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -10,9 +11,9 @@ const ForgotPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/accounts/password-reset/', { email });
+      const response = await axios.post(`${BASE_URL}/api/accounts/password-reset/`, { email });
       setMessage(response.data.detail);
-      setTimeout(() => navigate('/'), 3000); // 3초 후 로그인 페이지로 이동
+      setTimeout(() => navigate('/'), 3000);
     } catch (error) {
       setMessage(error.response?.data?.detail || 'An error occurred. Please try again.');
     }
