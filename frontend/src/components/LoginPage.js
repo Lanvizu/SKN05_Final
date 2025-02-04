@@ -6,6 +6,7 @@ import KakaoLoginButton from './KakaoLoginButton';
 import { useAuth } from '../AuthContext';
 
 const LoginPage = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8000/api/accounts/login/', {
+      const response = await fetch(`${BASE_URL}/api/accounts/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -3,13 +3,14 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/accounts/check-auth/', {
+        const response = await fetch(`${BASE_URL}/api/accounts/check-auth/`, {
           method: 'GET',
           credentials: 'include',
         });

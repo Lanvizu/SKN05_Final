@@ -13,6 +13,7 @@ const initialIndices = [
 ];
 
 const AuthenticatedMainPage = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
   const [indices, setIndices] = useState(initialIndices);
@@ -22,7 +23,7 @@ const AuthenticatedMainPage = () => {
 
   const fetchIndices = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/stocks/indices/', {
+      const response = await axios.get(`${BASE_URL}/api/stocks/indices/`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -49,7 +50,7 @@ const AuthenticatedMainPage = () => {
   const fetchStocks = async () => {
     setIsLoadingStocks(true);
     try {
-      const response = await axios.get('http://localhost:8000/api/stocks/', {
+      const response = await axios.get(`${BASE_URL}/api/stocks/`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -79,7 +80,7 @@ const AuthenticatedMainPage = () => {
     if (inputValue.trim()) {
       try {
         const roomResponse = await axios.post(
-          'http://localhost:8000/api/chat/room/create/',
+          `${BASE_URL}/api/chat/room/create/`,
           {},
           {
             headers: {
@@ -93,7 +94,7 @@ const AuthenticatedMainPage = () => {
           const newRoom = roomResponse.data;
 
           await axios.post(
-            `http://localhost:8000/api/chat/room/${newRoom.id}/`,
+            `${BASE_URL}/api/chat/room/${newRoom.id}/`,
             { input: inputValue },
             {
               headers: {
