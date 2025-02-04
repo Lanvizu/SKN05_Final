@@ -84,28 +84,28 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # 로컬 테스트용
-DATABASES = {
-    'default' : {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'skn0502', # 연동할 mysql db 이름
-        'USER': 'root', # db 접속 계정명
-        'PASSWORD': getattr(current_module, "mysql_password"), # 해당 계정 비밀번호
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-
-# Docker 환경
 # DATABASES = {
-#     'default': {
+#     'default' : {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.environ.get('MYSQL_DATABASE'),
-#         'USER': os.environ.get('MYSQL_USER'),
-#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-#         'HOST': 'db',
+#         'NAME': 'skn0502', # 연동할 mysql db 이름
+#         'USER': 'root', # db 접속 계정명
+#         'PASSWORD': getattr(current_module, "mysql_password"), # 해당 계정 비밀번호
+#         'HOST': '127.0.0.1',
 #         'PORT': '3306',
 #     }
 # }
+
+# Docker 환경
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQL_DATABASE'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': 'db',
+        'PORT': '3306',
+    }
+}
 
 TEMPLATES = [
     {
