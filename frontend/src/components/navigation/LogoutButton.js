@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 
 const LogoutButton = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const { logout } = useAuth();
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/accounts/logout/', {
+      const response = await fetch(`${BASE_URL}/api/accounts/logout/`, {
         method: 'POST',
         credentials: 'include',
       });

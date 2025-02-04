@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -17,7 +18,7 @@ const RegisterPage = () => {
     }
     
     try {
-      const response = await axios.post('http://localhost:8000/api/accounts/register/', {
+      const response = await axios.post(`${BASE_URL}/api/accounts/register/`, {
         email,
         password,
         password2,
@@ -85,7 +86,13 @@ const RegisterPage = () => {
           onClick={() => navigate('/')}
           style={styles.backButton}
         >
-          로그인 페이지로 돌아가기
+          메인 페이지
+        </button>
+        <button
+          onClick={() => navigate('/login')}
+          style={styles.backButton}
+        >
+          로그인 페이지
         </button>
       </div>
     </div>
@@ -139,9 +146,7 @@ const styles = {
   },
   bottomContainer: {
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
-    marginTop: '20px',
   },
   backButton: {
     background: 'none',
@@ -150,6 +155,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: '14px',
     textDecoration: 'underline',
+    margin: '0px 30px'
   },
 };
 

@@ -6,26 +6,20 @@ import { useAuth } from '../AuthContext';
 import googleIcon from '../assets/google_icon.png'
 
 const GoogleLoginButton = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (response) => {
       try {
-        const res = await axios.post('http://localhost:8000/api/accounts/google/login-request/', {
+        const res = await axios.post(`${BASE_URL}/api/accounts/google/login-request/`, {
           access_token: response.access_token,
         }, {
           withCredentials: true,
         });
-  
-        // 응답 데이터 확인 및 처리
         if (res.status === 200 || res.status === 201) {
           login();
-          if (res.status === 200) {
-            // alert('구글 로그인 성공');
-          } else {
-            // alert('회원가입 및 로그인 성공');
-          }
           navigate('/');
         } else {
           alert(res.data.error || '로그인 처리 중 오류가 발생했습니다.');

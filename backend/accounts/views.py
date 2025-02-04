@@ -62,9 +62,15 @@ class BaseSocialLoginView(APIView):
         except SocialAccount.DoesNotExist:
             response_message = {"error": "소셜로그인 유저가 아닙니다."}
             return Response(response_message, status=status.HTTP_400_BAD_REQUEST)
+    
+    def clear_jwt_cookies(response):
+        response.delete_cookie(settings.REST_AUTH['JWT_AUTH_COOKIE'])
+        response.delete_cookie(settings.REST_AUTH['JWT_AUTH_REFRESH_COOKIE'])
+        return response
 
     def handle_successful_login(self, user):
         response = Response({"detail": "Login successful"}, status=status.HTTP_200_OK)
+        response = clear_jwt_cookies(response)
         return services.set_jwt_cookies(response, user)
 
     def request_user_profile(self, access_token: str) -> Request:

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function VerifyEmail() {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [status, setStatus] = useState('진행 중');
   const { key } = useParams();
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function VerifyEmail() {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.post('http://localhost:8000/api/accounts/registration/verify-email/', { key });
+        const response = await axios.post(`${BASE_URL}/api/accounts/registration/verify-email/`, { key });
         console.log(response.data);
         setStatus('완료');
         setTimeout(() => navigate('/'), 3000);

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NavigationLinks from './navigation/NavigationLinks';
 
 const ProfileEditPage = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [userData, setUserData] = useState({
     email: '',
     first_name: '',
@@ -14,7 +15,7 @@ const ProfileEditPage = () => {
     // 사용자 데이터 불러오기
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/accounts/mypage/', {
+        const response = await fetch(`${BASE_URL}/api/accounts/mypage/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ const ProfileEditPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/api/accounts/update-profile/', {
+      const response = await fetch(`${BASE_URL}/api/accounts/update-profile/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

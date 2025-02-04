@@ -10,7 +10,6 @@ from typing import Union, Dict, Any
 
 from .models import CustomUser
 
-
 def user_does_not_exist(user: CustomUser, created: bool, ptf: str, uid: str) -> Response:
     platform = {
         "google": "google",

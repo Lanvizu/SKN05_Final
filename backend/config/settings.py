@@ -3,15 +3,14 @@ from pathlib import Path
 import sys
 import os
 from .utils import Initialize_env_variables
+from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-CONFIG_DIR = Path(__file__).resolve().parent
-SECRET_JSON = Path(CONFIG_DIR, "secrets.json")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BASE_DIR / '.env')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+# DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
-current_module = sys.modules[__name__]
-Initialize_env_variables(SECRET_JSON, current_module)
-
-SECRET_KEY = getattr(current_module, "secret_key")
 DEBUG = True  # 프로덕션 환경에서는 False로 설정해야 함
 ALLOWED_HOSTS = ["*"]  # 프로덕션 환경에서는 특정 호스트만 허용하도록 설정해야 함
 
@@ -84,28 +83,28 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # 로컬 테스트용
-DATABASES = {
-    'default' : {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'skn0502', # 연동할 mysql db 이름
-        'USER': 'root', # db 접속 계정명
-        'PASSWORD': getattr(current_module, "mysql_password"), # 해당 계정 비밀번호
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-
-# Docker 환경
 # DATABASES = {
-#     'default': {
+#     'default' : {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.environ.get('MYSQL_DATABASE'),
-#         'USER': os.environ.get('MYSQL_USER'),
+#         'NAME': 'skn0502',
+#         'USER': 'root',
 #         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-#         'HOST': 'db',
+#         'HOST': '127.0.0.1',
 #         'PORT': '3306',
 #     }
 # }
+
+# Docker 환경
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQL_DATABASE'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': 'db',
+        'PORT': '3306',
+    }
+}
 
 TEMPLATES = [
     {
@@ -157,10 +156,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ghzm888@gmail.com'
-EMAIL_HOST_PASSWORD = getattr(current_module, "google_host_password")
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = [os.environ.get('BASE_FRONTEND_URL')]
 CORS_ALLOW_HEADERS = [
     "Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin",
     "Access-Control-Allow-Origin", "X-CSRFToken", "Accept-Encoding",
@@ -189,8 +188,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
-LOGIN_URL = 'http://localhost:3000/'
-FRONTEND_URL = 'http://localhost:3000'
+
+LOGIN_URL = os.environ.get('BASE_FRONTEND_URL')
+FRONTEND_URL = os.environ.get('BASE_FRONTEND_URL')
 PASSWORD_RESET_TIMEOUT = 3600
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
@@ -199,6 +199,9 @@ ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # runpod 설정
-RUNPOD_API_KEY = getattr(current_module, "runpod_api_key")
+
+RUNPOD_API_KEY = os.environ.get('RUNPOD_API_KEY')
 # RUNPOD_ENDPOINT_ID = os.getenv('RUNPOD_ENDPOINT_ID')
-OPENAI_API_KEY = getattr(current_module, "openai_api_key")
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+# Google Token API URL
+google_token_api = os.environ.get('GOOGLE_TOKEN_API')
