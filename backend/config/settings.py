@@ -67,7 +67,7 @@ REST_AUTH = {
     "JWT_AUTH_REFRESH_COOKIE": "refresh_token",
     "JWT_AUTH_HTTPONLY": True,
     "JWT_AUTH_RETURN_EXPIRATION": True,
-    "JWT_AUTH_SECURE": True,
+    "JWT_AUTH_SECURE": False, # HTTPS 환경에서 True
     "JWT_AUTH_SAMESITE": "Lax",
     "LOGIN_SERIALIZER": "accounts.serializers.UserLoginSerializer",
     "REGISTER_SERIALIZER": "accounts.serializers.UserRegistrationSerializer",
@@ -156,7 +156,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ghzm888@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = os.environ.get('GOOGLE_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 CORS_ALLOWED_ORIGINS = [os.environ.get('BASE_FRONTEND_URL')]
