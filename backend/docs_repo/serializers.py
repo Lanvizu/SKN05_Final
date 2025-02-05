@@ -4,4 +4,4 @@ from .models import StockReport
 class StockReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockReport
-        fields = '__all__'
+        fields = ['ticker', 'summary', 'created_at']
