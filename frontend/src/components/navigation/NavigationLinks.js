@@ -39,21 +39,10 @@ const NavigationLinks = () => {
           Main
         </span>
       </div>
-      <div style={styles.centerSection}>
-        <span onClick={() => handleAuthenticatedNavigation('/news')} style={styles.link}>
-          News
-        </span>
-        <span onClick={() => handleAuthenticatedNavigation('/report')} style={styles.link}>
-          Report
-        </span>
+      <div style={styles.rightSection}>
         <span onClick={() => handleAuthenticatedNavigation('/chat')} style={styles.link}>
           Chat
         </span>
-        <span onClick={() => handleAuthenticatedNavigation('/status')} style={styles.link}>
-          Status
-        </span>
-      </div>
-      <div style={styles.rightSection}>
         {isAuthenticated ? (
           <>
             <span onClick={() => handleNavigation('/mypage')} style={styles.link}>
@@ -89,6 +78,7 @@ const styles = {
     left: 0,
     backgroundColor: '#fff',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    zIndex: '1000',
   },
   leftSection: {
     flex: 1,
