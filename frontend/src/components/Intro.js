@@ -33,17 +33,13 @@ const MainPage = () => {
           로그인하시면 더 많은 기능을 이용하실 수 있습니다.
         </p> */}
         <div className="intro_mobile_wrap">
-          <div className="store_button">
-            <a href="https://apps.apple.com/kr/app/%ED%86%A0%EC%8A%A4/id839333328">
-              <img src={require('../assets/asset/icons_timeline/applekorea.png')} alt="apple icon" />
-              <span>App Store</span>
-            </a>
+          <div className="store_button" onClick={handleLoginRedirect}>
+            <img src={require('../assets/asset/icons_timeline/applekorea.png')} alt="apple icon" />
+            <span>App Store</span>
           </div>
-          <div className="store_button">
-            <a href="https://play.google.com/store/apps/details?id=viva.republica.toss&pli=1">
-              <img src={require('../assets/asset/icons_timeline/googleplay.png')} alt="googleplay icon" />
-              <span>Play Store</span>
-            </a>
+          <div className="store_button" onClick={handleLoginRedirect}>
+            <img src={require('../assets/asset/icons_timeline/googleplay.png')} alt="googleplay icon" />
+            <span>Play Store</span>
           </div>
         </div>
         <div style={styles.inputContainer}>

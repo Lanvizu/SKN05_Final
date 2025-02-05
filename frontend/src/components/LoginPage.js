@@ -4,6 +4,7 @@ import GoogleLoginButton from './GoogleLoginButton';
 import NaverLoginButton from './NaverLoginButton';
 import KakaoLoginButton from './KakaoLoginButton';
 import { useAuth } from '../AuthContext';
+import NavigationLinks from './navigation/NavigationLinks';
 
 const LoginPage = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -42,58 +43,61 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>로그인</h2>
-      <p style={styles.sub_title}>서비스를 이용하시려면 로그인을 해주세요</p>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="이메일"
-          required
-          style={styles.input}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
-          required
-          style={styles.input}
-        />
-        <button type="submit" style={styles.loginButton}>
-          로그인
-        </button>
-        <div style={styles.bottomContainer}>
-          <div style={styles.links}>
-            <div style={styles.linkContainer}>
-              <span 
-                onClick={() => navigate('/register')} 
-                style={styles.linkText}
-              >
-                회원가입
-              </span>
+    <div>
+      <NavigationLinks />
+      <div style={styles.container}>
+        <h2 style={styles.title}>로그인</h2>
+        <p style={styles.sub_title}>서비스를 이용하시려면 로그인을 해주세요</p>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일"
+            required
+            style={styles.input}
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호"
+            required
+            style={styles.input}
+          />
+          <button type="submit" style={styles.loginButton}>
+            로그인
+          </button>
+          <div style={styles.bottomContainer}>
+            <div style={styles.links}>
+              <div style={styles.linkContainer}>
+                <span 
+                  onClick={() => navigate('/register')} 
+                  style={styles.linkText}
+                >
+                  회원가입
+                </span>
+              </div>
+              <div style={styles.linkContainer}>
+                <span 
+                  onClick={() => navigate('/forgot')} 
+                  style={styles.linkText}
+                >
+                  비밀번호 찾기
+                </span>
+              </div>
             </div>
-            <div style={styles.linkContainer}>
-              <span 
-                onClick={() => navigate('/forgot')} 
-                style={styles.linkText}
-              >
-                비밀번호 찾기
-              </span>
+            <div style={styles.divider}>
+              {/* <span>또는</span> */}
+            </div>
+            <div style={styles.socialLogin}>
+              <GoogleLoginButton />
+              <NaverLoginButton />
+              <KakaoLoginButton />
             </div>
           </div>
-          <div style={styles.divider}>
-            {/* <span>또는</span> */}
-          </div>
-          <div style={styles.socialLogin}>
-            <GoogleLoginButton />
-            <NaverLoginButton />
-            <KakaoLoginButton />
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

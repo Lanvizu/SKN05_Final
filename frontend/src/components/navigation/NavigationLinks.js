@@ -34,17 +34,19 @@ const NavigationLinks = () => {
 
   return (
     <nav style={styles.container}>
-      <div style={styles.leftSection}>
-        <span onClick={() => handleNavigation('/')} style={styles.link}>
-          Main
-        </span>
-      </div>
+      {isAuthenticated && (
+        <div style={styles.leftSection}>
+          <span onClick={() => handleNavigation('/')} style={styles.link}>
+            Main
+          </span>
+        </div>
+      )}
       <div style={styles.rightSection}>
-        <span onClick={() => handleAuthenticatedNavigation('/chat')} style={styles.link}>
-          Chat
-        </span>
         {isAuthenticated ? (
           <>
+            <span onClick={() => handleAuthenticatedNavigation('/chat')} style={styles.link}>
+              Chat
+            </span>
             <span onClick={() => handleNavigation('/mypage')} style={styles.link}>
               MyPage
             </span>

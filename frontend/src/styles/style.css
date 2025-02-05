@@ -1,9 +1,4 @@
-@font-face {
-    font-family: TossFaceFont;
-    src: url('../assets/font/TossFaceFontMac.ttf');
-  }
-  
-  @font-face{
+@font-face{
     font-family: Noto Sans;
     src: url('../assets/font/Noto_Sans_KR/NotoSansKR-Black.otf');
     font-weight: 900;
@@ -32,6 +27,11 @@
     src: url('../assets/font/Noto_Sans_KR/NotoSansKR-Regular.otf');
     font-weight: 300;
   }
+  
+  /* @font-face {
+    font-family: TossFaceFont;
+    src: url('../assets/font/TossFaceFontMac.ttf');
+  } */
   
   
   @keyframes appear{
@@ -227,6 +227,9 @@
     margin: 5px;
     padding: 5px 10px;
     font-size: 17px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
   }
   
   .store_button a{
