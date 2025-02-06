@@ -47,18 +47,19 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
 ]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_AUTHENTICATION_CLASSES": ('dj_rest_auth.jwt_auth.JWTCookieAuthentication',),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SESSION_AUTHENTICATION_CLASSES": [],  # 세션 인증 비활성화
 }
 
 REST_AUTH = {
@@ -83,28 +84,28 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # 로컬 테스트용
-# DATABASES = {
-#     'default' : {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'skn0502',
-#         'USER': 'root',
-#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
-
-# Docker 환경
 DATABASES = {
-    'default': {
+    'default' : {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
+        'NAME': 'skn0502',
+        'USER': 'root',
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': 'db',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
+
+# Docker 환경
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('MYSQL_DATABASE'),
+#         'USER': os.environ.get('MYSQL_USER'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+#         'HOST': 'db',
+#         'PORT': '3306',
+#     }
+# }
 
 TEMPLATES = [
     {
@@ -131,7 +132,7 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
-    "django.contrib.auth.backends.ModelBackend",
+    # "django.contrib.auth.backends.ModelBackend",
 )
 
 SITE_ID = 1
@@ -158,6 +159,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ghzm888@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get('GOOGLE_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
+GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
 
 CORS_ALLOWED_ORIGINS = [os.environ.get('BASE_FRONTEND_URL')]
 CORS_ALLOW_HEADERS = [
@@ -203,5 +208,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 RUNPOD_API_KEY = os.environ.get('RUNPOD_API_KEY')
 # RUNPOD_ENDPOINT_ID = os.getenv('RUNPOD_ENDPOINT_ID')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-# Google Token API URL
-google_token_api = os.environ.get('GOOGLE_TOKEN_API')
