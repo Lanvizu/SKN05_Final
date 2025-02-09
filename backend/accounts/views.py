@@ -35,7 +35,6 @@ class BaseSocialLoginView(APIView):
     @csrf_exempt
     def post(self, request: Request):
         access_token: str = request.data.get("access_token")
-        print(access_token)
         user_profile_request: Response = self.request_user_profile(access_token)
         user_profile_response: Dict[str, Any] = services.access_token_is_valid(user_profile_request)
         if not user_profile_response:
@@ -82,7 +81,8 @@ class GoogleLoginRequest(APIView):
             f"response_type=code&"
             f"client_id={settings.GOOGLE_CLIENT_ID}&"
             f"redirect_uri={settings.GOOGLE_REDIRECT_URI}&"
-            f"scope=email profile"
+            f"scope=email profile&"
+            f"prompt=select_account"
         )
         return Response({"authorization_url": google_auth_url})
 

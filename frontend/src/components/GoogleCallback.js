@@ -11,10 +11,10 @@ const GoogleCallback = () => {
     const exchangeCodeForToken = async () => {
       const code = new URLSearchParams(window.location.search).get('code');
       
-      // if (!code) {
-      //   console.error('인증 코드 없음');
-      //   return navigate('/login');
-      // }
+      if (!code) {
+        console.error('인증 코드 없음');
+        return navigate('/login');
+      }
 
       try {
         const response = await axios.post(
@@ -24,7 +24,7 @@ const GoogleCallback = () => {
         );
 
         if (response.status === 200 || response.status === 201) {
-          await login();
+          login();
           navigate('/');
         }
       } catch (error) {
