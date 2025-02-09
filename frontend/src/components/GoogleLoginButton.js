@@ -1,54 +1,33 @@
 import React from 'react';
-import { useGoogleLogin } from '@react-oauth/google';
+import googleIcon from '../assets/google_icon.png';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
-import googleIcon from '../assets/google_icon.png'
 
 const GoogleLoginButton = () => {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      try {
-        const res = await axios.post(`${BASE_URL}/api/accounts/google/login-request/`, {
-          access_token: response.access_token,
-        }, {
-          withCredentials: true,
-        });
-        if (res.status === 200 || res.status === 201) {
-          login();
-          navigate('/');
-        } else {
-          alert(res.data.error || '로그인 처리 중 오류가 발생했습니다.');
-        }
-      } catch (err) {
-        console.error('로그인 중 오류 발생:', err.response?.data || err.message);
-        alert(err.response?.data?.error || '서버 오류가 발생했습니다.');
-      }
-    },
-    onError: (error) => {
-      console.error('구글 로그인 실패:', error);
-      alert('구글 로그인에 실패했습니다.');
-    },
-  });
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/accounts/google/login-request/`
+      );
+      window.location.href = response.data.authorization_url;
+    } catch (error) {
+      console.error('구글 로그인 초기화 실패:', error);
+    }
+  };
 
   return (
     <button 
-    onClick={googleLogin}
-    style={styles.googleButton}
-  >
-    <div style={styles.buttonContent}>
-      <img 
-        src={googleIcon} 
-        alt="Google" 
-        style={styles.googleIcon} 
-      />
-      <span style={styles.buttonText}>Continue with Google</span>
-    </div>
-  </button>
+      onClick={handleGoogleLogin}
+      style={styles.googleButton}
+    >
+      <div style={styles.buttonContent}>
+        <img 
+          src={googleIcon} 
+          alt="Google" 
+          style={styles.googleIcon} 
+        />
+        <span style={styles.buttonText}>Continue with Google</span>
+      </div>
+    </button>
   );
 };
 

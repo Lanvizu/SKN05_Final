@@ -6,9 +6,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 user = [
-    path('api/accounts/', include('accounts.urls')),
     path('api/accounts/', include('dj_rest_auth.urls')),
     path('api/accounts/', include('allauth.urls')),
+    path('api/accounts/', include('accounts.urls')),
 ]
 
 chat = [

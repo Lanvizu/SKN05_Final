@@ -37,7 +37,6 @@ class BaseSocialLoginView(APIView):
         access_token: str = request.data.get("access_token")
         user_profile_request: Response = self.request_user_profile(access_token)
         user_profile_response: Dict[str, Any] = services.access_token_is_valid(user_profile_request)
-
         if not user_profile_response:
             return Response({"error": "Invalid access token"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,14 +62,8 @@ class BaseSocialLoginView(APIView):
             response_message = {"error": "소셜로그인 유저가 아닙니다."}
             return Response(response_message, status=status.HTTP_400_BAD_REQUEST)
     
-    def clear_jwt_cookies(response):
-        response.delete_cookie(settings.REST_AUTH['JWT_AUTH_COOKIE'])
-        response.delete_cookie(settings.REST_AUTH['JWT_AUTH_REFRESH_COOKIE'])
-        return response
-
     def handle_successful_login(self, user):
         response = Response({"detail": "Login successful"}, status=status.HTTP_200_OK)
-        response = clear_jwt_cookies(response)
         return services.set_jwt_cookies(response, user)
 
     def request_user_profile(self, access_token: str) -> Request:
@@ -79,15 +72,52 @@ class BaseSocialLoginView(APIView):
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
         pass
 
+class GoogleLoginRequest(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        google_auth_url = (
+            f"https://accounts.google.com/o/oauth2/v2/auth?"
+            f"response_type=code&"
+            f"client_id={settings.GOOGLE_CLIENT_ID}&"
+            f"redirect_uri={settings.GOOGLE_REDIRECT_URI}&"
+            f"scope=email profile&"
+            f"prompt=select_account"
+        )
+        return Response({"authorization_url": google_auth_url})
+
 class GoogleLogin(BaseSocialLoginView):
     platform = "google"
-    token_url = getattr(settings, "google_token_api")
+
+    def get_access_token(self, request: Request) -> str:
+        code = request.data.get("code")
+        state = "random"
+        client_id = settings.GOOGLE_CLIENT_ID
+        client_secret = settings.GOOGLE_CLIENT_SECRET
+        redirect_uri = settings.GOOGLE_REDIRECT_URI
+
+        token_req = requests.post(
+            f"https://oauth2.googleapis.com/token?"
+            f"client_id={client_id}&"
+            f"client_secret={client_secret}&"
+            f"code={code}&"
+            f"grant_type=authorization_code&"
+            f"redirect_uri={redirect_uri}&"
+            f"state={state}"
+        )
+        token_req_json = token_req.json()
+        access_token = token_req_json.get("access_token")
+        return access_token
 
     def post(self, request: Request):
+        token = self.get_access_token(request)
+        if hasattr(request.data, "_mutable"):
+            request.data._mutable = True
+        request.data["access_token"] = token
         return super().post(request)
     
     def request_user_profile(self, access_token: str) -> Request:
-        return requests.get(f"{self.token_url}?access_token={access_token}")
+        return requests.get(f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={access_token}")
 
     def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
         email = user_info_response.get("email")

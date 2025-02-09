@@ -7,11 +7,11 @@ import ForgotPage from './components/ForgotPage';
 import MainPage from './components/navigation/MainPage';
 import MyPage from './components/navigation/MyPage';
 import ResetPassword from './components/ResetPassword';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import VerifyEmail from './components/VerifyEmail';
 import ChatPage from './components/chat/ChatPage';
 import ProfileEditPage from './components/ProfileEditPage';
 import AuthenticatedMainPage from './components/navigation/AuthenticatedMainPage';
+import GoogleCallback from './components/GoogleCallback';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -43,9 +43,7 @@ const App = () => {
           <Route
             path="/login"
             element={
-              <GoogleOAuthProvider clientId="745619133914-8gsplqn8ahi82njujtggl2cufkvrrs09.apps.googleusercontent.com">
-                <LoginPage />
-              </GoogleOAuthProvider>
+              <LoginPage />
             }
           />
           <Route
@@ -80,6 +78,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot" element={<ForgotPage />} />
           <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
