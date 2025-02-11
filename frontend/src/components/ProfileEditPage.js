@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationLinks from './navigation/NavigationLinks';
+import NavigationLinks from './NavigationLinks';
 
 const ProfileEditPage = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;

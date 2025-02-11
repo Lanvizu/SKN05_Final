@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
-import { useAuth } from '../../AuthContext';
+import { useAuth } from '../AuthContext';
 
 const NavigationLinks = () => {
   const navigate = useNavigate();

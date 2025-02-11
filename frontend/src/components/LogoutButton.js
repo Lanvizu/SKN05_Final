@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../AuthContext';
+import { useAuth } from '../AuthContext';
 
 const LogoutButton = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;

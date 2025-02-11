@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationLinks from './NavigationLinks';
+import InterestStocksModal from './InterestStocksModal';
 
 const MyPage = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [userData, setUserData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +39,10 @@ const MyPage = () => {
     navigate('/edit-profile');
   };
 
+  const handleEditInterestStocks = () => {
+    setIsModalOpen(true);
+  };
+
   if (!userData) {
     return <div style={styles.loading}>로딩 중...</div>;
   }
@@ -59,8 +65,22 @@ const MyPage = () => {
           <button onClick={handleEditProfile} style={styles.editButton}>
             개인정보 수정
           </button>
+          <h3 style={styles.subtitle}>관심종목</h3>
+          <ul style={styles.stockList}>
+            {userData.interest_tickers && userData.interest_tickers.map((ticker, index) => (
+              <li key={index} style={styles.stockItem}>{ticker}</li>
+            ))}
+          </ul>
+          <button onClick={handleEditInterestStocks} style={styles.editButton}>
+            관심종목 수정
+          </button>
         </div>
       </div>
+      <InterestStocksModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        currentStocks={userData.interest_tickers || []}
+      />
     </div>
   );
 };
@@ -112,6 +132,19 @@ const styles = {
     fontSize: '16px',
     cursor: 'pointer',
     marginTop: '20px',
+  },
+  subtitle: {
+    fontSize: '18px',
+    marginTop: '20px',
+    marginBottom: '10px',
+  },
+  stockList: {
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+  },
+  stockItem: {
+    padding: '5px 0',
   },
 };
 

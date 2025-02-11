@@ -4,13 +4,13 @@ import { AuthProvider, useAuth } from './AuthContext';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForgotPage from './components/ForgotPage';
-import MainPage from './components/navigation/MainPage';
-import MyPage from './components/navigation/MyPage';
+import MainPage from './components/main/MainPage';
+import MyPage from './components/MyPage';
 import ResetPassword from './components/ResetPassword';
 import VerifyEmail from './components/VerifyEmail';
 import ChatPage from './components/chat/ChatPage';
 import ProfileEditPage from './components/ProfileEditPage';
-import AuthenticatedMainPage from './components/navigation/AuthenticatedMainPage';
+import AuthenticatedMainPage from './components/main/AuthenticatedMainPage';
 import GoogleCallback from './components/GoogleCallback';
 
 const ProtectedRoute = ({ children }) => {

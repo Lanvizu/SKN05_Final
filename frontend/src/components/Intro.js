@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationLinks from './navigation/NavigationLinks';
-import '../styles/style.css'; // Intro 컴포넌트의 CSS 파일을 import
+import NavigationLinks from './NavigationLinks';
+import '../styles/style.css';
 
 const MainPage = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationLinks from './NavigationLinks';
+import NavigationLinks from '../NavigationLinks';
 import axios from 'axios';
 
 const initialIndices = [
@@ -27,7 +27,6 @@ const AuthenticatedMainPage = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        // 초기 정의된 이름과 API 데이터를 매핑하여 업데이트
         const updatedIndices = initialIndices.map(index => {
           const fetchedIndex = response.data.find(item => item.name === index.id);
           return {
@@ -152,7 +151,9 @@ const AuthenticatedMainPage = () => {
             <div style={styles.section}>
               <h3>관심 종목</h3>
               <ul>
-                {stocks.length > 0 ? (
+                {isLoadingStocks ? (
+                  <li>로딩 중...</li>
+                ) : stocks.length > 0 ? (
                   stocks.map((stock, idx) => (
                     <div key={idx} style={{ marginBottom: '10px' }}>
                       <span style={{ display: 'block' }}>{stock.name}</span>

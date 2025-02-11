@@ -4,7 +4,7 @@ import GoogleLoginButton from './GoogleLoginButton';
 import NaverLoginButton from './NaverLoginButton';
 import KakaoLoginButton from './KakaoLoginButton';
 import { useAuth } from '../AuthContext';
-import NavigationLinks from './navigation/NavigationLinks';
+import NavigationLinks from './NavigationLinks';
 
 const LoginPage = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
