@@ -69,9 +69,10 @@ services:
       - db
     command: >
       sh -c "sleep 10 &&
-             python manage.py makemigrations &&
-             python manage.py migrate &&
-             gunicorn --config /web/gunicorn_config.py config.wsgi:application"
+            python manage.py makemigrations &&
+            python manage.py migrate &&
+            python manage.py loaddata /backend/stocks/fixtures/sp500.json &&
+            gunicorn --config /web/gunicorn_config.py config.wsgi:application"
     ports:
       - "8000:8000"
     volumes:
