@@ -23,9 +23,9 @@ const RegisterPage = () => {
         password,
         password2,
       });
-      alert('회원가입 성공');
+      alert('회원가입이 완료되었습니다. 입력하신 이메일로 인증 메일을 발송했습니다.');
       console.log(response.data);
-      navigate('login/');
+      navigate('/');
     } catch (error) {
       console.error('회원가입 중 오류 발생:', error);
 
@@ -50,7 +50,7 @@ const RegisterPage = () => {
     <div style={styles.container}>
       <h2 style={styles.title}>회원가입</h2>
       <p style={styles.sub_title}>
-        서비스를 이용하기 위해 회원가입을 해주세요.
+        서비스를 이용하기 위해 회원가입 후 이메일 인증을 진행해주세요.
       </p>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
