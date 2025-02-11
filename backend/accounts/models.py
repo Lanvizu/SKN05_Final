@@ -35,6 +35,13 @@ class CustomUser(AbstractBaseUser):
         verbose_name="이메일",
     )
 
+    interest_tickers = models.JSONField(
+        default=list,
+        null=False,
+        blank=True,
+        help_text="사용자의 관심 종목 티커 리스트 (최대 10개까지 허용)"
+    )
+
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="가입 일시")
     last_login = models.DateTimeField(auto_now=True, verbose_name="최종 로그인 일시")
 

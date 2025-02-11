@@ -19,3 +19,11 @@ class Index(models.Model):
 
     def __str__(self):
         return self.name
+    
+class SP500Ticker(models.Model):
+    ticker = models.CharField(max_length=10, unique=True, verbose_name="티커")
+    name = models.CharField(max_length=200, verbose_name="회사명")
+    sector = models.CharField(max_length=100, blank=True, null=True, verbose_name="섹터")
+
+    def __str__(self):
+        return self.ticker

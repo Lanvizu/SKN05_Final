@@ -101,3 +101,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['email', 'date_joined', 'last_login']
         read_only_fields = ['date_joined', 'last_login']
+
+class InterestTickerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['interest_tickers']
+
+    def validate_interest_tickers(self, value):
+        if not isinstance(value, list):
+            raise serializers.ValidationError("관심 티커 값은 리스트 형식이어야 합니다.")
+        if len(value) > 10:
+            raise serializers.ValidationError("최대 10개까지의 티커만 추가할 수 있습니다.")
+        return value

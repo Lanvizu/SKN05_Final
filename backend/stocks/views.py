@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 import yfinance as yf
-import pandas as pd
-import matplotlib.pyplot as plt
-import io
-import urllib, base64
-from .models import Index
+from rest_framework import generics
+from django.db.models import Q
+from .models import SP500Ticker
+from .serializers import SP500TickerSerializer
+from config.authentication import CookieJWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 def fetch_real_time_data(ticker):
     try:
@@ -19,13 +20,53 @@ def fetch_real_time_data(ticker):
     except Exception as e:
         return None, None, None
 
-@api_view(['GET'])
-def stock_api_view(request):
-    tickers = ['IONQ', 'TSLA', 'NVDA']
-    stocks_data = []
+class StockView(APIView):
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    for ticker in tickers:
-        try:
+    def get(self, request):
+        user = request.user
+        tickers = user.interest_tickers
+        stocks_data = []
+
+        for ticker in tickers:
+            try:
+                stock = yf.Ticker(ticker)
+                hist = stock.history(period="1d")
+                if not hist.empty:
+                    latest = hist.iloc[-1]
+                    open_price = latest['Open']
+                    if open_price == 0:
+                        change = "N/A"
+                    else:
+                        change_value = latest['Close'] - open_price
+                        change_percent = (change_value / open_price) * 100
+                        change = f"{round(change_value, 1)} ({round(change_percent, 1)}%)"
+                    stock_data = {
+                        'ticker': ticker,
+                        'name': ticker,
+                        'price': round(latest.get('Close', 0), 1),
+                        'volume': latest.get('Volume', 0),
+                        'change': change
+                    }
+                    stocks_data.append(stock_data)
+            except Exception as e:
+                print(f"Error fetching data for {ticker}: {e}")
+                continue
+
+        if stocks_data:
+            return Response(stocks_data)
+        return Response({'error': 'No data available'}, status=404)
+
+class IndicesView(APIView):
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        tickers = ['^VIX', 'GC=F', '^DJI', '^IXIC', '^GSPC', '^RUT']
+        index_data = []
+
+        for ticker in tickers:
             stock = yf.Ticker(ticker)
             hist = stock.history(period="1d")
             if not hist.empty:
@@ -37,46 +78,28 @@ def stock_api_view(request):
                     change_value = latest['Close'] - open_price
                     change_percent = (change_value / open_price) * 100
                     change = f"{round(change_value, 1)} ({round(change_percent, 1)}%)"
-                stock_data = {
-                    'ticker': ticker,
+                index_data.append({
                     'name': ticker,
-                    'price': round(latest.get('Close', 0), 1),
-                    'volume': latest.get('Volume', 0),
+                    'value': latest['Close'],
                     'change': change
-                }
-                stocks_data.append(stock_data)
-        except Exception as e:
-            print(f"Error fetching data for {ticker}: {e}")
-            continue
+                })
 
-    if stocks_data:
-        return Response(stocks_data)
-    return Response({'error': 'No data available'}, status=404)
+        return Response(index_data)
 
-@api_view(['GET'])
-def indices_api_view(request):
-    tickers = ['^VIX', 'GC=F', '^DJI', '^IXIC', '^GSPC', '^RUT']
-    index_data = []
 
-    for ticker in tickers:
-        stock = yf.Ticker(ticker)
-        hist = stock.history(period="1d")
-        if not hist.empty:
-            latest = hist.iloc[-1]
-            open_price = latest['Open']
-            if open_price == 0:
-                change = "N/A"
-            else:
-                change_value = latest['Close'] - open_price
-                change_percent = (change_value / open_price) * 100
-                change = f"{round(change_value, 1)} ({round(change_percent, 1)}%)"
-            index_data.append({
-                'name': ticker,
-                'value': latest['Close'],
-                'change': change
-            })
+class SP500TickerListView(generics.ListAPIView):
+    serializer_class = SP500TickerSerializer
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    return Response(index_data)
+    def get_queryset(self):
+        queryset = SP500Ticker.objects.all()
+        search_term = self.request.query_params.get('search', '')
+        if search_term:
+            queryset = queryset.filter(
+                Q(ticker__icontains=search_term) | Q(name__icontains=search_term)
+            )
+        return queryset
 
 # # 티커와 한글 이름 매핑
 # TICKER_TO_KOREAN_NAME = {

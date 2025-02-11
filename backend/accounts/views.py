@@ -14,9 +14,10 @@ from . import services
 from .models import CustomUser
 from config import settings
 
+from .serializers import UserProfileSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer, InterestTickerSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import UserProfileSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
@@ -81,8 +82,7 @@ class GoogleLoginRequest(APIView):
             f"response_type=code&"
             f"client_id={settings.GOOGLE_CLIENT_ID}&"
             f"redirect_uri={settings.GOOGLE_REDIRECT_URI}&"
-            f"scope=email profile&"
-            f"prompt=select_account"
+            f"scope=email profile"
         )
         return Response({"authorization_url": google_auth_url})
 
@@ -265,3 +265,17 @@ class PasswordResetConfirmView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Invalid reset link or token expired."}, status=status.HTTP_400_BAD_REQUEST)
+        
+class InterestTickerView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = InterestTickerSerializer(request.user)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        serializer = InterestTickerSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

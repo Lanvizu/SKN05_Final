@@ -167,7 +167,9 @@ GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
 FRONTEND_URL = os.environ.get('BASE_FRONTEND_URL')
 
-CORS_ALLOWED_ORIGINS = [FRONTEND_URL, GOOGLE_REDIRECT_URI]
+# CORS_ALLOWED_ORIGINS = [FRONTEND_URL, GOOGLE_REDIRECT_URI]
+
+CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
 CORS_ALLOW_HEADERS = [
     "Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin",
     "Access-Control-Allow-Origin", "X-CSRFToken", "Accept-Encoding",

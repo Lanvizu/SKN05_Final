@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Index
+from .models import Index, SP500Ticker
 
 class StockSerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=10)
@@ -13,3 +13,8 @@ class IndexSerializer(serializers.ModelSerializer):
     class Meta:
         model = Index
         fields = ['ticker', 'name', 'korean_name', 'value', 'change', 'last_updated']
+
+class SP500TickerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SP500Ticker
+        fields = ['ticker', 'name', 'sector']
