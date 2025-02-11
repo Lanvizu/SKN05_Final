@@ -25,7 +25,7 @@ const RegisterPage = () => {
       });
       alert('회원가입 성공');
       console.log(response.data);
-      navigate('/');
+      navigate('login/');
     } catch (error) {
       console.error('회원가입 중 오류 발생:', error);
 
