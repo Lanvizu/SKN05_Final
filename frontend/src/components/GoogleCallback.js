@@ -7,10 +7,20 @@ const GoogleCallback = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const dnsAddress = process.env.REACT_APP_DNS_ADDRESS;
+  const ipAddress = process.env.REACT_APP_IP_ADDRESS;
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
+    if (window.location.hostname === dnsAddress) {
+      const newURL = window.location.href.replace(dnsAddress, ipAddress);
+      window.location.replace(newURL);
+      return;
+    }
+
     const exchangeCodeForToken = async () => {
       const code = new URLSearchParams(window.location.search).get('code');
-      
+
       if (!code) {
         console.error('인증 코드 없음');
         return navigate('/login');
@@ -18,7 +28,7 @@ const GoogleCallback = () => {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/api/accounts/google/callback/`,
+          `${baseUrl}/api/accounts/google/callback/`,
           { code },
           { withCredentials: true }
         );
@@ -34,7 +44,7 @@ const GoogleCallback = () => {
     };
 
     exchangeCodeForToken();
-  }, [navigate, login]);
+  }, [navigate, login, dnsAddress, ipAddress, baseUrl]);
 
   return <div>인증 처리 중...</div>;
 };
