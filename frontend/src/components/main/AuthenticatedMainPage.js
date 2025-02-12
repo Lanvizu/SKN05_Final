@@ -88,10 +88,8 @@ const AuthenticatedMainPage = () => {
             withCredentials: true,
           }
         );
-
         if (roomResponse.status === 201) {
           const newRoom = roomResponse.data;
-
           await axios.post(
             `${BASE_URL}/api/chat/room/${newRoom.id}/`,
             { input: inputValue },
@@ -149,35 +147,48 @@ const AuthenticatedMainPage = () => {
               </ul>
             </div>
             <div style={styles.section}>
-              <h3>관심 종목</h3>
-              <ul>
-                {isLoadingStocks ? (
-                  <li>로딩 중...</li>
-                ) : stocks.length > 0 ? (
-                  stocks.map((stock, idx) => (
-                    <div key={idx} style={{ marginBottom: '10px' }}>
-                      <span style={{ display: 'block' }}>{stock.name}</span>
-                      <span style={{ display: 'block' }}>
-                        <strong>가격:</strong> 
-                        <span style={{ color: stock.price < 0 ? 'red' : 'green' }}>
+              <h3 style={styles.interestTitle}>관심 종목</h3>
+              {isLoadingStocks ? (
+                <p>로딩 중...</p>
+              ) : stocks.length > 0 ? (
+                stocks.map((stock, idx) => (
+                  <div key={idx} style={styles.stockCard}>
+                    <div style={styles.stockDetails}>
+                      <div style={styles.row}>
+                        <h4 style={styles.stockName}>{stock.name}</h4>
+                        <span
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: '18px',
+                            marginLeft: '5px',
+                          }}
+                        >
                           ${stock.price}
                         </span>
-                      </span>
-                      <span style={{ display: 'block' }}>
-                        <strong>변화:</strong> 
-                        <span style={{ color: stock.change < 0 ? 'red' : 'green' }}>
+                      </div>
+                      <div style={styles.row}>
+                        <div style={styles.volume}>
+                          <span style={styles.stockVolume}>거래량</span>
+                          <span style={{ ...styles.stockVolume, marginLeft: '5px' }}>
+                            {stock.volume}
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            color: stock.change < 0 ? 'blue' : 'red',
+                            fontSize: '13px',
+                            marginLeft: '5px',
+                          }}
+                        >
                           {stock.change}
                         </span>
-                      </span>
-                      <span style={{ display: 'block' }}>
-                        <strong>거래량:</strong> {stock.volume}
-                      </span>
+                      </div>
                     </div>
-                  ))
-                ) : (
-                  <li>데이터를 불러올 수 없습니다.</li>
-                )}
-              </ul>
+                  </div>
+                ))
+              ) : (
+                <p>데이터를 불러올 수 없습니다.</p>
+              )}
             </div>
           </div>
 
@@ -193,8 +204,16 @@ const AuthenticatedMainPage = () => {
                     </>
                   ) : (
                     <>
-                      <p style={styles.indexValue}>{index.value !== null ? index.value.toFixed(2) : 'N/A'}</p>
-                      <p style={index.change && index.change.includes('-') ? styles.negativeChange : styles.positiveChange}>
+                      <p style={styles.indexValue}>
+                        {index.value !== null ? index.value.toFixed(2) : 'N/A'}
+                      </p>
+                      <p
+                        style={
+                          index.change && index.change.includes('-')
+                            ? styles.negativeChange
+                            : styles.positiveChange
+                        }
+                      >
                         {index.change || 'N/A'}
                       </p>
                     </>
@@ -284,7 +303,7 @@ const styles = {
     width: '30px',
     height: '30px',
     minWidth: '30px',
-    marginRight:'5px',
+    marginRight: '5px',
   },
   layout: {
     display: 'flex',
@@ -293,7 +312,7 @@ const styles = {
     marginTop: '50px',
   },
   sidebar: {
-    flex: '0 0 15%',
+    flex: '0 0 20%',
     padding: '15px',
     backgroundColor: '#f9f9f9',
     borderRadius: '10px',
@@ -317,7 +336,7 @@ const styles = {
     border: '1px solid #ddd',
     borderRadius: '10px',
     textAlign: 'center',
-    width: '300px',
+    width: '200px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   indexName: {
@@ -329,11 +348,11 @@ const styles = {
     margin: '12px 0',
   },
   positiveChange: {
-    color: 'green',
+    color: 'red',
     fontSize: '16px',
   },
   negativeChange: {
-    color: 'red',
+    color: 'blue',
     fontSize: '16px',
   },
   newsContainer: {
@@ -344,11 +363,44 @@ const styles = {
     borderBottom: '1px solid #ddd',
   },
   mainContent: {
-    flex: '0 0 80%',
+    flex: '0 0 70%',
   },
   loadingText: {
     color: '#888',
     fontStyle: 'italic'
+  },
+  interestTitle: {
+    marginBottom: '15px',
+  },
+  stockCard: {
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    padding: '15px',
+    marginBottom: '15px',
+    backgroundColor: '#fff',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  },
+  stockDetails: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  stockName: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+  },
+  volume: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  stockVolume: {
+    fontSize: '13px',
+    color: 'gray',
   },
 };
 
