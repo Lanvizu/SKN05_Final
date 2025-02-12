@@ -132,7 +132,6 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
-    # "django.contrib.auth.backends.ModelBackend",
 )
 
 SITE_ID = 1
@@ -166,9 +165,11 @@ GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
 FRONTEND_URL = os.environ.get('BASE_FRONTEND_URL')
-
-CORS_ALLOWED_ORIGINS = [FRONTEND_URL, GOOGLE_REDIRECT_URI]
+BASE_DNS_ADDRESS = os.environ.get('BASE_DNS_ADDRESS')
+CORS_ALLOWED_ORIGINS = [FRONTEND_URL, BASE_DNS_ADDRESS]
 # CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
+NGROK_URL = os.environ.get('NGROK_URL')
+
 CORS_ALLOW_HEADERS = [
     "Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin",
     "Access-Control-Allow-Origin", "X-CSRFToken", "Accept-Encoding",
@@ -204,7 +205,6 @@ ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # runpod 설정
-
-RUNPOD_API_KEY = os.environ.get('RUNPOD_API_KEY')
+# RUNPOD_API_KEY = os.environ.get('RUNPOD_API_KEY')
 # RUNPOD_ENDPOINT_ID = os.getenv('RUNPOD_ENDPOINT_ID')
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+# OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
