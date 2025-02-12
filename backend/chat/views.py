@@ -181,6 +181,14 @@ class ChatView(APIView):
         except Exception as e:
             return Response({"message": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def delete(self, request, room_id):
+        try:
+            room = ChatRoom.objects.get(id=room_id, user=request.user)
+            room.delete()
+            return Response({"message": "Chat room deleted successfully"}, status=status.HTTP_200_OK)
+        except ChatRoom.DoesNotExist:
+            return Response({"message": "Chat room not found"}, status=status.HTTP_404_NOT_FOUND)
+
 class CreateChatRoomView(APIView):
     authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]

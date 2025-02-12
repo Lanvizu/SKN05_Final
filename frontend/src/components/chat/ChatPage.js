@@ -40,9 +40,22 @@ const ChatPage = () => {
   };
 
   const updateChatRoom = (roomId, firstQuestion) => {
-    setChatRooms(prevRooms => prevRooms.map(room => 
-      room.id === roomId ? { ...room, first_question: firstQuestion } : room
-    ));
+    setChatRooms(prevRooms =>
+      prevRooms.map(room =>
+        room.id === roomId
+          ? { ...room, first_question: firstQuestion }
+          : room
+      )
+    );
+  };
+
+  const handleChatRoomDeleted = (deletedRoom) => {
+    setChatRooms(prevRooms =>
+      prevRooms.filter(room => room.id !== deletedRoom.id)
+    );
+    if (selectedRoom && selectedRoom.id === deletedRoom.id) {
+      setSelectedRoom(null);
+    }
   };
 
   return (
@@ -54,10 +67,11 @@ const ChatPage = () => {
           onSelectRoom={setSelectedRoom}
           selectedRoom={selectedRoom}
           onChatRoomCreated={handleChatRoomCreated}
+          onChatRoomDeleted={handleChatRoomDeleted}
         />
-        {selectedRoom && <ChatWindow 
-        roomId={selectedRoom.id}
-        onUpdateRoom={updateChatRoom} />}
+        {selectedRoom && (
+          <ChatWindow roomId={selectedRoom.id} onUpdateRoom={updateChatRoom} />
+        )}
       </div>
     </div>
   );
