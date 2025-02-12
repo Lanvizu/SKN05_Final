@@ -54,9 +54,7 @@ class StockView(APIView):
                 print(f"Error fetching data for {ticker}: {e}")
                 continue
 
-        if stocks_data:
-            return Response(stocks_data)
-        return Response({'error': 'No data available'}, status=404)
+        return Response(stocks_data)
 
 class IndicesView(APIView):
     authentication_classes = [CookieJWTAuthentication]
