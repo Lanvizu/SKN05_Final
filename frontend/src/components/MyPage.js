@@ -76,25 +76,22 @@ const MyPage = () => {
       <NavigationLinks />
       <div style={styles.container}>
         <h2 style={styles.title}>마이페이지</h2>
-        <div style={styles.infoContainer}>
-          <p style={styles.infoItem}>
+          {/* <p style={styles.infoItem}>
             <span style={styles.label}>이메일:</span> {userData.email}
-          </p>
-          <button onClick={handleEditProfile} style={styles.editButton}>
-            개인정보 수정
-          </button>
-          <h3 style={styles.subtitle}>관심종목</h3>
-          <ul style={styles.stockList}>
+          </p> */}
+          
+          {/* <ul style={styles.stockList}>
             {userData.interest_tickers && userData.interest_tickers.map((ticker, index) => (
               <li key={index} style={styles.stockItem}>{ticker}</li>
             ))}
-          </ul>
-          <button onClick={handleEditInterestStocks} style={styles.editButton}>
-            관심종목 수정
-          </button>
-
-          <div style={styles.marketSection}>
-            <h3 style={styles.subtitle}>주식 정보</h3>
+          </ul> */}
+          <div style={styles.infoContainer}>
+            <div style={styles.container2}>
+              <h3 style={styles.subtitle}>관심 주식</h3>
+              <button onClick={handleEditInterestStocks} style={styles.editButton}>
+              편집
+            </button>
+            </div>
             {isLoadingStocks ? (
               <p>로딩 중...</p>
             ) : stocks.length > 0 ? (
@@ -109,7 +106,8 @@ const MyPage = () => {
                       <span style={styles.stockVolume}>거래량: {stock.volume}</span>
                       <span style={{ 
                         color: stock.change.includes('-') ? 'blue' : 'red', 
-                        marginLeft: '10px'
+                        marginLeft: '10px',
+                        fontSize: '14px',
                       }}>
                         {stock.change}
                       </span>
@@ -121,8 +119,11 @@ const MyPage = () => {
               <p>데이터를 불러올 수 없습니다.</p>
             )}
           </div>
+
+          <button onClick={handleEditProfile} style={styles.editButton}>
+            개인정보 수정
+          </button>
         </div>
-      </div>
       <InterestStocksModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -140,7 +141,6 @@ const styles = {
     justifyContent: 'center',
     minHeight: 'calc(100vh - 60px)',
     backgroundColor: '#fff',
-    marginTop: '60px',
   },
   title: {
     fontSize: '24px',
@@ -153,6 +153,12 @@ const styles = {
     border: '1px solid #ddd',
     borderRadius: '8px',
     backgroundColor: '#f9f9f9',
+  },
+  container2: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
   },
   infoItem: {
     marginBottom: '10px',
@@ -170,7 +176,6 @@ const styles = {
     fontSize: '18px',
   },
   editButton: {
-    width: '100%',
     padding: '10px',
     backgroundColor: '#000',
     color: '#fff',
@@ -178,12 +183,9 @@ const styles = {
     borderRadius: '4px',
     fontSize: '16px',
     cursor: 'pointer',
-    marginTop: '20px',
   },
   subtitle: {
     fontSize: '18px',
-    marginTop: '20px',
-    marginBottom: '10px',
   },
   stockList: {
     listStyle: 'none',
@@ -192,15 +194,6 @@ const styles = {
   },
   stockItem: {
     padding: '5px 0',
-  },
-  marketSection: {
-    width: '100%',
-    maxWidth: '600px',
-    marginTop: '20px',
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    backgroundColor: '#f0f0f0',
   },
   stockCard: {
     padding: '10px',
@@ -217,6 +210,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     marginBottom: '5px',
+    justifyContent: 'space-between',
   },
   stockName: {
     fontSize: '18px',
