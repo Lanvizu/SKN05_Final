@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationLinks from '../NavigationLinks';
 import axios from 'axios';
+import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
 
 const initialIndices = [
   { id: "^VIX", name: "VIX" },
@@ -135,9 +136,12 @@ const AuthenticatedMainPage = () => {
                 style={styles.input}
               />
             </div>
-            <button type="submit" style={styles.sendButton}>
-              ↑
-            </button>
+            <img
+              src={send_arrow}
+              alt="Send Arrow"
+              onClick={handleSubmit}
+              style={styles.sendButton}
+            />
           </form>
         </div>
 
@@ -295,20 +299,10 @@ const styles = {
     textAlign: 'center',
   },
   sendButton: {
-    padding: '12px',
-    backgroundColor: '#000',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '25%',
-    fontSize: '14px',
+    width: '25px',
+    height: '25px',
     cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '30px',
-    height: '30px',
-    minWidth: '30px',
-    marginRight: '5px',
+    marginRight: '10px',
   },
   layout: {
     display: 'flex',

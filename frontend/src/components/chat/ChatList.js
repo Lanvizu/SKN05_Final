@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import plus_button from '../../assets/asset/chatIcons/plus_button.png';
+import toggle_arrow_right from '../../assets/asset/chatIcons/toggle_arrow_right.png';
+import toggle_arrow_left from '../../assets/asset/chatIcons/toggle_arrow_left.png';
+import delete_button from '../../assets/asset/chatIcons/delete_button.png';
 
 const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, onChatRoomDeleted }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -35,7 +39,7 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
   };
 
   const handleDeleteRoom = async (room, e) => {
-    e.stopPropagation(); // 리스트 아이템 클릭 이벤트 전파 방지
+    e.stopPropagation();
     const confirmDelete = window.confirm('정말 해당 채팅방을 삭제하시겠습니까?');
     if (!confirmDelete) {
       return;
@@ -63,13 +67,19 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
       {isOpen ? (
         <>
           <div style={styles.header}>
-            <button onClick={toggleSidebar} style={styles.toggleButton}>
-              ◀
-            </button>
+            <img
+              src={toggle_arrow_left}
+              alt="Toggle Arrow Right"
+              onClick={toggleSidebar}
+              style={styles.toggleButton}
+            />
             <h2 style={styles.title}>채팅 목록</h2>
-            <button onClick={handleCreateNewChat} style={styles.newChatButton}>
-              +
-            </button>
+            <img
+              src={plus_button}
+              alt="Plus Button"
+              onClick={handleCreateNewChat}
+              style={styles.newChatButton}
+            />
           </div>
           <ul style={styles.list}>
             {recentChatRooms.map((room) => (
@@ -88,21 +98,24 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
                 ) : (
                   <p style={styles.inactiveMessage}>진행한 채팅 내용이 없습니다.</p>
                 )}
-                <button
+                <img
+                  src={delete_button}
+                  alt="Delete Button"
                   onClick={(e) => handleDeleteRoom(room, e)}
                   style={styles.deleteButton}
-                >
-                  삭제
-                </button>
+                />
               </li>
             ))}
           </ul>
         </>
       ) : (
         <div style={styles.closedHeader}>
-          <button onClick={toggleSidebar} style={styles.toggleButtonClosed}>
-            ▶
-          </button>
+          <img
+              src={toggle_arrow_right}
+              alt="Toggle Arrow Right"
+              onClick={toggleSidebar}
+              style={styles.toggleButtonClosed}
+            />
         </div>
       )}
     </div>
@@ -131,17 +144,26 @@ const styles = {
     justifyContent: 'center',
   },
   toggleButton: {
+    width: '25px',
+    height: '25px',
     cursor: 'pointer',
+    marginLeft: '10px',
   },
   toggleButtonClosed: {
+    width: '25px',
+    height: '25px',
     cursor: 'pointer',
   },
   title: {
     flex: 1,
     textAlign: 'center',
+    margin: 0,
   },
   newChatButton: {
+    width: '25px',
+    height: '25px',
     cursor: 'pointer',
+    marginRight: '10px',
   },
   list: {
     listStyleType: 'none',
@@ -152,6 +174,9 @@ const styles = {
     borderBottom: '1px solid #eee',
     position: 'relative',
     cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   selectedItem: {
     backgroundColor: '#f0f0f0',
@@ -169,121 +194,11 @@ const styles = {
     textOverflow: 'ellipsis',
   },
   deleteButton: {
-    position: 'absolute',
-    right: '10px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    backgroundColor: '#ff4d4f',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '3px',
+    width: '20px',
+    height: '20px',
     cursor: 'pointer',
-    padding: '2px 5px',
+    marginRight: '10px',
   },
 };
 
 export default ChatList;
-
-
-// const styles = {
-//   container: {
-//     width: '250px',
-//     borderRight: '1px solid #ddd',
-//     padding: '20px',
-//     transition: 'width 0.3s ease-in-out',
-//   },
-//   closedContainer: {
-//     width: '40px',
-//     borderRight: '1px solid #ddd',
-//     transition: 'width 0.3s ease-in-out',
-//   },
-//   header: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     marginBottom: '20px',
-//   },
-//   closedHeader: {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     height: '60px',
-//   },
-//   title: {
-//     fontSize: '20px',
-//     margin: 0,
-//     flex: 1,
-//     textAlign: 'center',
-//   },
-//   toggleButton: {
-//     width: '30px',
-//     height: '30px',
-//     backgroundColor: '#000',
-//     color: '#fff',
-//     border: 'none',
-//     borderRadius: '4px',
-//     cursor: 'pointer',
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: 0,
-//   },
-//   toggleButtonClosed: {
-//     width: '30px',
-//     height: '30px',
-//     backgroundColor: '#000',
-//     color: '#fff',
-//     border: 'none',
-//     borderRadius: '4px',
-//     cursor: 'pointer',
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: 0,
-//   },
-//   newChatButton: {
-//     width: '30px',
-//     height: '30px',
-//     fontSize: '20px',
-//     backgroundColor: '#000',
-//     color: '#fff',
-//     border: 'none',
-//     borderRadius: '50%',
-//     cursor: 'pointer',
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: 0,
-//   },
-//   list: {
-//     listStyle: 'none',
-//     padding: 0,
-//   },
-//   listItem: {
-//     height: '40px',
-//     padding: '5px',
-//     cursor: 'pointer',
-//     borderRadius: '4px',
-//     marginBottom: '10px',
-//     border: '1px solid #ddd',
-//   },
-//   selectedItem: {
-//     backgroundColor: '#f0f0f0',
-//   },
-//   firstQuestion: {
-//     color: '#333',
-//     fontSize: '14px',
-//   },
-//   inactiveMessage: {
-//     color: '#999',
-//     fontSize: '14px',
-//     fontStyle: 'italic',
-//   },
-//   truncate: {
-//     whiteSpace: 'nowrap',
-//     overflow: 'hidden',
-//     textOverflow: 'ellipsis',
-//   },
-// };
-
-// export default ChatList;

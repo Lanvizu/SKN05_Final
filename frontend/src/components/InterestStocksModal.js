@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
+const InterestStocksModal = ({ isOpen, onClose, currentStocks, onUpdate }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [stocks, setStocks] = useState([]);
   const [selectedStocks, setSelectedStocks] = useState(currentStocks || []);
@@ -30,10 +30,12 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
   }, [isOpen, BASE_URL]);
 
   const handleStockToggle = (ticker) => {
-    setSelectedStocks(prev =>
+    setSelectedStocks((prev) =>
       prev.includes(ticker)
-        ? prev.filter(s => s !== ticker)
-        : prev.length < 10 ? [...prev, ticker] : prev
+        ? prev.filter((s) => s !== ticker)
+        : prev.length < 10
+        ? [...prev, ticker]
+        : prev
     );
   };
 
@@ -49,6 +51,9 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
         const data = await response.json();
         console.log('관심 종목 업데이트 성공:', data);
         onClose();
+        if (onUpdate) {
+          onUpdate();
+        }
       } else {
         console.error('관심 종목 업데이트 실패. 상태 코드:', response.status);
       }
@@ -57,9 +62,10 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
     }
   };
 
-  const filteredStocks = stocks.filter(stock =>
-    stock.ticker.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredStocks = stocks.filter(
+    (stock) =>
+      stock.ticker.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (!isOpen) return null;
@@ -78,14 +84,17 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
             style={styles.searchInput}
           />
           <div style={styles.buttonContainer}>
-            <button onClick={handleSave} style={styles.saveButton}>저장</button>
-            <button onClick={onClose} style={styles.cancelButton}>취소</button>
+            <button onClick={handleSave} style={styles.saveButton}>
+              저장
+            </button>
+            <button onClick={onClose} style={styles.cancelButton}>
+              취소
+            </button>
           </div>
         </div>
-        {/* Scrollable container for ticker list */}
         <div style={styles.stockListContainer}>
           <ul style={styles.stockList}>
-            {filteredStocks.map(stock => (
+            {filteredStocks.map((stock) => (
               <li key={stock.ticker} style={styles.stockItem}>
                 <label>
                   <input

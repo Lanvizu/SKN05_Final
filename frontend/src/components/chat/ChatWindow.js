@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
 
 const ChatWindow = ({ roomId, onUpdateRoom }) => {
   const [input, setInput] = useState('');
@@ -82,7 +83,10 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
           messages.map((message, index) => (
             <div
               key={index}
-              style={message.is_user ? styles.userMessage : styles.botMessage}
+              style={{
+                ...message.is_user ? styles.userMessage : styles.botMessage,
+                whiteSpace: 'pre-wrap'
+              }}
             >
               {message.content}
             </div>
@@ -100,9 +104,12 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
             style={styles.input}
             />
         </form>
-        <button onClick={handleSubmit} style={styles.sendButton}>
-            ↑
-        </button>
+        <img
+          src={send_arrow}
+          alt="Send Arrow"
+          onClick={handleSubmit}
+          style={styles.sendButton}
+        />
       </div>
     </div>
   );  
@@ -165,20 +172,10 @@ const styles = {
     outline: 'none',
   },
   sendButton: {
-    padding: '12px',
-    backgroundColor: '#000',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '25%',
-    fontSize: '14px',
+    width: '25px',
+    height: '25px',
     cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '30px',
-    height: '30px',
-    minWidth: '30px',
-    marginRight:'5px',
+    marginRight: '10px',
   },
   error: {
     color: '#ff0000',
