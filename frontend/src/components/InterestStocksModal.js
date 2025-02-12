@@ -12,9 +12,7 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
         try {
           const response = await fetch(`${BASE_URL}/api/stocks/sp500/`, {
             method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
           });
           if (response.ok) {
@@ -35,7 +33,7 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
     setSelectedStocks(prev =>
       prev.includes(ticker)
         ? prev.filter(s => s !== ticker)
-        : [...prev, ticker]
+        : prev.length < 10 ? [...prev, ticker] : prev
     );
   };
 
@@ -43,9 +41,7 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
     try {
       const response = await fetch(`${BASE_URL}/api/accounts/interest-tickers/`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ interest_tickers: selectedStocks }),
       });
@@ -71,31 +67,37 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks }) => {
   return (
     <div style={styles.modalOverlay}>
       <div style={styles.modalContent}>
-        <h2>관심종목 설정</h2>
-        <input
-          type="text"
-          placeholder="종목 검색"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={styles.searchInput}
-        />
-        <ul style={styles.stockList}>
-          {filteredStocks.map(stock => (
-            <li key={stock.ticker} style={styles.stockItem}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedStocks.includes(stock.ticker)}
-                  onChange={() => handleStockToggle(stock.ticker)}
-                />
-                {stock.ticker} - {stock.name} ({stock.sector})
-              </label>
-            </li>
-          ))}
-        </ul>
-        <div style={styles.buttonContainer}>
-          <button onClick={handleSave} style={styles.saveButton}>저장</button>
-          <button onClick={onClose} style={styles.cancelButton}>취소</button>
+        <h2 style={styles.title}>관심종목 설정</h2>
+        <p style={styles.maxStocksInfo}>최대 10개까지 등록 가능합니다.</p>
+        <div style={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="종목 검색"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={styles.searchInput}
+          />
+          <div style={styles.buttonContainer}>
+            <button onClick={handleSave} style={styles.saveButton}>저장</button>
+            <button onClick={onClose} style={styles.cancelButton}>취소</button>
+          </div>
+        </div>
+        {/* Scrollable container for ticker list */}
+        <div style={styles.stockListContainer}>
+          <ul style={styles.stockList}>
+            {filteredStocks.map(stock => (
+              <li key={stock.ticker} style={styles.stockItem}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedStocks.includes(stock.ticker)}
+                    onChange={() => handleStockToggle(stock.ticker)}
+                  />
+                  {stock.ticker} - {stock.name} ({stock.sector})
+                </label>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
@@ -115,32 +117,39 @@ const styles = {
     alignItems: 'center',
   },
   modalContent: {
+    display: 'flex',
+    flexDirection: 'column',
     backgroundColor: 'white',
     padding: '20px',
     borderRadius: '8px',
     width: '90%',
     maxWidth: '600px',
-    maxHeight: '80%',
-    overflowY: 'auto',
+    maxHeight: '80%', // overall modal max height
+  },
+  title: {
+    marginTop: 0,
+    marginBottom: '10px',
+  },
+  maxStocksInfo: {
+    fontSize: '14px',
+    color: '#666',
+    marginBottom: '10px',
+  },
+  searchContainer: {
+    marginTop: '10px',
+    marginBottom: '10px',
+    display: 'flex',
   },
   searchInput: {
-    width: '100%',
+    width: '95%',
     padding: '10px',
-    marginBottom: '10px',
     borderRadius: '4px',
     border: '1px solid #ddd',
-  },
-  stockList: {
-    listStyle: 'none',
-    padding: 0,
-  },
-  stockItem: {
-    padding: '5px 0',
+    marginRight: '10px',
   },
   buttonContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
-    marginTop: '20px',
   },
   saveButton: {
     padding: '10px 20px',
@@ -158,6 +167,21 @@ const styles = {
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
+  },
+  stockListContainer: {
+    flex: 1,
+    overflowY: 'auto', // only this container will scroll
+    marginTop: '20px',
+    borderTop: '1px solid #eee', // optional, for visual separation
+    paddingTop: '10px',
+  },
+  stockList: {
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+  },
+  stockItem: {
+    padding: '5px 0',
   },
 };
 

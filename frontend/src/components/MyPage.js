@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationLinks from './NavigationLinks';
 import InterestStocksModal from './InterestStocksModal';
+import axios from 'axios';
 
 const MyPage = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [userData, setUserData] = useState(null);
+  const [stocks, setStocks] = useState([]);
+  const [isLoadingStocks, setIsLoadingStocks] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -19,7 +22,6 @@ const MyPage = () => {
           },
           credentials: 'include',
         });
-
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
@@ -33,7 +35,29 @@ const MyPage = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [BASE_URL]);
+
+  useEffect(() => {
+    const fetchStocks = async () => {
+      setIsLoadingStocks(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/api/stocks/`, {
+          withCredentials: true,
+        });
+        if (response.status === 200) {
+          setStocks(response.data);
+        } else {
+          console.error('주식 데이터를 가져오지 못했습니다.');
+        }
+      } catch (error) {
+        console.error('주식 API 요청 중 오류 발생:', error);
+      } finally {
+        setIsLoadingStocks(false);
+      }
+    };
+
+    fetchStocks();
+  }, [BASE_URL]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile');
@@ -56,12 +80,6 @@ const MyPage = () => {
           <p style={styles.infoItem}>
             <span style={styles.label}>이메일:</span> {userData.email}
           </p>
-          <p style={styles.infoItem}>
-            <span style={styles.label}>가입일:</span> {new Date(userData.date_joined).toLocaleDateString()}
-          </p>
-          <p style={styles.infoItem}>
-            <span style={styles.label}>마지막 로그인:</span> {new Date(userData.last_login).toLocaleString()}
-          </p>
           <button onClick={handleEditProfile} style={styles.editButton}>
             개인정보 수정
           </button>
@@ -74,6 +92,35 @@ const MyPage = () => {
           <button onClick={handleEditInterestStocks} style={styles.editButton}>
             관심종목 수정
           </button>
+
+          <div style={styles.marketSection}>
+            <h3 style={styles.subtitle}>주식 정보</h3>
+            {isLoadingStocks ? (
+              <p>로딩 중...</p>
+            ) : stocks.length > 0 ? (
+              stocks.map((stock, index) => (
+                <div key={index} style={styles.stockCard}>
+                  <div style={styles.stockDetails}>
+                    <div style={styles.row}>
+                      <h4 style={styles.stockName}>{stock.name}</h4>
+                      <span style={styles.stockPrice}>${stock.price}</span>
+                    </div>
+                    <div style={styles.row}>
+                      <span style={styles.stockVolume}>거래량: {stock.volume}</span>
+                      <span style={{ 
+                        color: stock.change.includes('-') ? 'blue' : 'red', 
+                        marginLeft: '10px'
+                      }}>
+                        {stock.change}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>데이터를 불러올 수 없습니다.</p>
+            )}
+          </div>
         </div>
       </div>
       <InterestStocksModal
@@ -91,7 +138,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 'calc(100vh - 60px)',
+    minHeight: 'calc(100vh - 60px)',
     backgroundColor: '#fff',
     marginTop: '60px',
   },
@@ -145,6 +192,43 @@ const styles = {
   },
   stockItem: {
     padding: '5px 0',
+  },
+  marketSection: {
+    width: '100%',
+    maxWidth: '600px',
+    marginTop: '20px',
+    padding: '20px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    backgroundColor: '#f0f0f0',
+  },
+  stockCard: {
+    padding: '10px',
+    marginBottom: '10px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    backgroundColor: '#fff',
+  },
+  stockDetails: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '5px',
+  },
+  stockName: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+  },
+  stockPrice: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    marginLeft: '5px',
+  },
+  stockVolume: {
+    fontSize: '14px',
   },
 };
 
