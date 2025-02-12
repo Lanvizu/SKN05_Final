@@ -126,6 +126,11 @@ const AuthenticatedMainPage = () => {
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
+                onFocus={(e) => (e.target.placeholder = "")}
+                onBlur={(e) =>
+                  (e.target.placeholder =
+                    "종목, 주가, 뉴스, 지표 등 다양한 정보를 물어보세요!")
+                }
                 placeholder="종목, 주가, 뉴스, 지표 등 다양한 정보를 물어보세요!"
                 style={styles.input}
               />
@@ -175,7 +180,7 @@ const AuthenticatedMainPage = () => {
                         </div>
                         <span
                           style={{
-                            color: stock.change < 0 ? 'blue' : 'red',
+                            color: stock.change.includes('-') ? 'blue' : 'red',
                             fontSize: '13px',
                             marginLeft: '5px',
                           }}
