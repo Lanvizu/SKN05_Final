@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "accounts",
     "chat",
     "stocks",
+    "news",
 ]
 
 MIDDLEWARE = [
@@ -169,6 +170,7 @@ GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
 NGROK_URL = os.environ.get('NGROK_URL')
+CURRENTS_API_KEY = os.environ.get('NGROK_URL')
 
 CORS_ALLOW_HEADERS = [
     "Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin",

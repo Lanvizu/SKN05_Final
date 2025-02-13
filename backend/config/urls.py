@@ -19,6 +19,11 @@ stocks = [
     path('api/stocks/', include('stocks.urls')),
 ]
 
+news = [
+    path('api/news/', include('news.urls')),
+]
+
 urlpatterns.extend(user)
 urlpatterns.extend(chat)
 urlpatterns.extend(stocks)
+urlpatterns.extend(news)
