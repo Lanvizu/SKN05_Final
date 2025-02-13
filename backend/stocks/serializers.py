@@ -1,18 +1,30 @@
 from rest_framework import serializers
-from .models import Index, SP500Ticker
+from .models import SP500Ticker
+from .models import StockData, IndexData
 
-class StockSerializer(serializers.Serializer):
-    ticker = serializers.CharField(max_length=10)
-    open_price = serializers.FloatField()
-    high_price = serializers.FloatField()
-    low_price = serializers.FloatField()
-    close_price = serializers.FloatField()
-    volume = serializers.IntegerField()
-    
-class IndexSerializer(serializers.ModelSerializer):
+class StockDataSerializer(serializers.ModelSerializer):
+    change = serializers.SerializerMethodField()
+    name = serializers.CharField(source='ticker')
+    price = serializers.FloatField(source='close_price')
+
     class Meta:
-        model = Index
-        fields = ['ticker', 'name', 'korean_name', 'value', 'change', 'last_updated']
+        model = StockData
+        fields = ['ticker', 'name', 'price', 'volume', 'change']
+
+    def get_change(self, obj):
+        return obj.compute_change()
+
+class IndexDataSerializer(serializers.ModelSerializer):
+    change = serializers.SerializerMethodField()
+    name = serializers.CharField(source='ticker')
+    value = serializers.FloatField(source='close_value')
+
+    class Meta:
+        model = IndexData
+        fields = ['ticker', 'name', 'value', 'change']
+
+    def get_change(self, obj):
+        return obj.compute_change()
 
 class SP500TickerSerializer(serializers.ModelSerializer):
     class Meta:

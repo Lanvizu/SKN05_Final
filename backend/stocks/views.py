@@ -3,11 +3,12 @@ from rest_framework.response import Response
 import yfinance as yf
 from rest_framework import generics
 from django.db.models import Q
-from .models import SP500Ticker
-from .serializers import SP500TickerSerializer
+from .models import SP500Ticker, StockData, IndexData
+from .serializers import SP500TickerSerializer, StockDataSerializer, IndexDataSerializer
 from config.authentication import CookieJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from django.utils import timezone
 
 def fetch_real_time_data(ticker):
     try:
@@ -27,34 +28,36 @@ class StockView(APIView):
     def get(self, request):
         user = request.user
         tickers = user.interest_tickers
+        today = timezone.now().date()
         stocks_data = []
 
         for ticker in tickers:
-            try:
-                stock = yf.Ticker(ticker)
-                hist = stock.history(period="1d")
-                if not hist.empty:
-                    latest = hist.iloc[-1]
-                    open_price = latest['Open']
-                    if open_price == 0:
-                        change = "N/A"
-                    else:
-                        change_value = latest['Close'] - open_price
-                        change_percent = (change_value / open_price) * 100
-                        change = f"{round(change_value, 1)} ({round(change_percent, 1)}%)"
-                    stock_data = {
-                        'ticker': ticker,
-                        'name': ticker,
-                        'price': round(latest.get('Close', 0), 1),
-                        'volume': latest.get('Volume', 0),
-                        'change': change
-                    }
-                    stocks_data.append(stock_data)
-            except Exception as e:
-                print(f"Error fetching data for {ticker}: {e}")
-                continue
+            stock_instance = StockData.objects.filter(ticker=ticker, date=today).first()
+            if not stock_instance:
+                try:
+                    stock = yf.Ticker(ticker)
+                    hist = stock.history(period="1d")
+                    if not hist.empty:
+                        latest = hist.iloc[-1]
+                        open_price = round(float(latest.get('Open', 0)), 2)
+                        close_price = round(float(latest.get('Close', 0)), 2)
+                        volume = int(latest.get('Volume', 0))
+                        stock_instance = StockData.objects.create(
+                            ticker=ticker,
+                            date=today,
+                            open_price=open_price,
+                            close_price=close_price,
+                            volume=volume
+                        )
+                except Exception as e:
+                    print(f"Error fetching data for {ticker}: {e}")
+                    continue
 
-        return Response(stocks_data)
+            if stock_instance:
+                stocks_data.append(stock_instance)
+
+        serializer = StockDataSerializer(stocks_data, many=True)
+        return Response(serializer.data)
 
 class IndicesView(APIView):
     authentication_classes = [CookieJWTAuthentication]
@@ -62,27 +65,34 @@ class IndicesView(APIView):
 
     def get(self, request):
         tickers = ['^VIX', 'GC=F', '^DJI', '^IXIC', '^GSPC', '^RUT']
+        today = timezone.now().date()
         index_data = []
 
         for ticker in tickers:
-            stock = yf.Ticker(ticker)
-            hist = stock.history(period="1d")
-            if not hist.empty:
-                latest = hist.iloc[-1]
-                open_price = latest['Open']
-                if open_price == 0:
-                    change = "N/A"
-                else:
-                    change_value = latest['Close'] - open_price
-                    change_percent = (change_value / open_price) * 100
-                    change = f"{round(change_value, 1)} ({round(change_percent, 1)}%)"
-                index_data.append({
-                    'name': ticker,
-                    'value': latest['Close'],
-                    'change': change
-                })
+            index_instance = IndexData.objects.filter(ticker=ticker, date=today).first()
+            if not index_instance:
+                try:
+                    stock = yf.Ticker(ticker)
+                    hist = stock.history(period="1d")
+                    if not hist.empty:
+                        latest = hist.iloc[-1]
+                        open_value = round(float(latest.get('Open', 0)), 2)
+                        close_value = round(float(latest.get('Close', 0)), 2)
+                        index_instance = IndexData.objects.create(
+                            ticker=ticker,
+                            date=today,
+                            open_value=open_value,
+                            close_value=close_value
+                        )
+                except Exception as e:
+                    print(f"Error fetching data for {ticker}: {e}")
+                    continue
 
-        return Response(index_data)
+            if index_instance:
+                index_data.append(index_instance)
+
+        serializer = IndexDataSerializer(index_data, many=True)
+        return Response(serializer.data)
 
 
 class SP500TickerListView(generics.ListAPIView):
@@ -98,33 +108,3 @@ class SP500TickerListView(generics.ListAPIView):
                 Q(ticker__icontains=search_term) | Q(name__icontains=search_term)
             )
         return queryset
-
-# # 티커와 한글 이름 매핑
-# TICKER_TO_KOREAN_NAME = {
-#     '^VIX': 'CBOE 변동성 지수',
-#     'GC=F': '금 선물',
-#     '^DJI': '다우존스 산업평균지수',
-#     '^IXIC': '나스닥 종합지수',
-#     '^GSPC': 'S&P 500',
-#     '^RUT': '러셀 2000',
-# }
-# @api_view(['GET'])
-# def update_indices(request):
-#     tickers = TICKER_TO_KOREAN_NAME.keys()
-#     for ticker in tickers:
-#         stock = yf.Ticker(ticker)
-#         hist = stock.history(period="1d")
-#         if not hist.empty:
-#             latest = hist.iloc[-1]
-#             open_price = latest['Open']
-#             change = "N/A" if open_price == 0 else f"{latest['Close'] - open_price} ({(latest['Close'] - open_price) / open_price * 100:.2f}%)"
-#             Index.objects.update_or_create(
-#                 ticker=ticker,
-#                 defaults={
-#                     'name': ticker,
-#                     'korean_name': TICKER_TO_KOREAN_NAME[ticker],
-#                     'value': latest['Close'],
-#                     'change': change
-#                 }
-#             )
-#     return Response({'status': 'Indices updated successfully'})
