@@ -1,8 +1,8 @@
 import React from 'react';
 import NavigationLinks from '../NavigationLinks';
-import Intro from '../Intro';
-import Home from '../Home';
-import Footer from '../Footer';
+import Intro from './Intro';
+import Home from './Home';
+import Footer from './Footer';
 
 const MainPage = () => {
   return (

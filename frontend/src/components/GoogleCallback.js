@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import Loading from '../LoadingModal';
 
 const GoogleCallback = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const GoogleCallback = () => {
     exchangeCodeForToken();
   }, [navigate, login, dnsAddress, ipAddress, baseUrl]);
 
-  return <div>인증 처리 중...</div>;
+  return <Loading />;
 };
 
 export default GoogleCallback;

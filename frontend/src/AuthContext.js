@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import Loading from './LoadingModal';
 
 const AuthContext = createContext(null);
 
@@ -7,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = useCallback(async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/accounts/check-auth/`, {
         method: 'GET',
@@ -25,11 +26,11 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [BASE_URL]);
 
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, [checkAuthStatus]);
 
   const login = async () => {
     await checkAuthStatus();
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => setIsAuthenticated(false);
 
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return <Loading />;
   }
 
   return (

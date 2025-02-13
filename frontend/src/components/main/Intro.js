@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationLinks from './NavigationLinks';
-import '../styles/style.css';
+import NavigationLinks from '../NavigationLinks';
+import '../../styles/style.css';
+import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -25,20 +26,16 @@ const MainPage = () => {
     <div>
       <NavigationLinks />
       <div style={styles.content}>
-        {/* <h2 style={styles.title}>퀀톡에게 무엇이든 물어보세요</h2> */}
         <div className="intro_textwrap">
               <h1>주식의 모든것<br />퀀톡에게 쉽고 간편하게</h1>
         </div>
-        {/* <p style={styles.sub_title}>
-          로그인하시면 더 많은 기능을 이용하실 수 있습니다.
-        </p> */}
         <div className="intro_mobile_wrap">
           <div className="store_button" onClick={handleLoginRedirect}>
-            <img src={require('../assets/asset/icons_timeline/applekorea.png')} alt="apple icon" />
+            <img src={require('../../assets/asset/icons_timeline/applekorea.png')} alt="apple icon" />
             <span>App Store</span>
           </div>
           <div className="store_button" onClick={handleLoginRedirect}>
-            <img src={require('../assets/asset/icons_timeline/googleplay.png')} alt="googleplay icon" />
+            <img src={require('../../assets/asset/icons_timeline/googleplay.png')} alt="googleplay icon" />
             <span>Play Store</span>
           </div>
         </div>
@@ -52,9 +49,12 @@ const MainPage = () => {
               readOnly
             />
           </div>
-          <button onClick={handleLoginRedirect} style={styles.sendButton}>
-            ↑
-          </button>
+          <img
+            src={send_arrow}
+            alt="Send Arrow"
+            onClick={handleLoginRedirect}
+            style={styles.sendButton}
+          />
         </div>
       </div>
       
@@ -143,20 +143,10 @@ const styles = {
     textAlign: 'center',
   },
   sendButton: {
-    padding: '12px',
-    backgroundColor: '#000',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '25%',
-    fontSize: '14px',
+    width: '25px',
+    height: '25px',
     cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '30px',
-    height: '30px',
-    minWidth: '30px',
-    marginRight:'5px',
+    marginRight: '10px',
   },
 };
 

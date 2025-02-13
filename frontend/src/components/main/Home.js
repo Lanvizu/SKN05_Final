@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import stockChart from '../assets/asset/newtossim/주식차트.png';
-import insu02 from '../assets/asset/newtossim/section2_2_insu_02.jpg';
-import financialAnalysis from '../assets/asset/newtossim/재무재표분석.png';
-import newsAnalysis from '../assets/asset/newtossim/주요뉴스분석.png';
+import stockChart from '../../assets/asset/newtossim/주식차트.png';
+import insu02 from '../../assets/asset/newtossim/section2_2_insu_02.jpg';
+import financialAnalysis from '../../assets/asset/newtossim/재무재표분석.png';
+import newsAnalysis from '../../assets/asset/newtossim/주요뉴스분석.png';
 
 const Home = () => {
   const homeTextRef = useRef(null);
@@ -502,7 +502,7 @@ const Home = () => {
             <h2>전문가를 위한</h2>
           </div>
           <div className="iphone_wrap" ref={homeIphone2Ref}>
-            <img className="image_item1" src={require('../assets/asset/newtossim/전문장점.png')} alt="smartphone image2" />
+            <img className="image_item1" src={require('../../assets/asset/newtossim/전문장점.png')} alt="smartphone image2" />
           </div>
         </div>
       </section>
@@ -515,7 +515,7 @@ const Home = () => {
             <h2>투자 초보자를 위한</h2>
           </div>
           <div className="iphone_wrap" ref={homeIphone1Ref}>
-            <img className="image_item1" src={require('../assets/asset/newtossim/초보장점.png')} alt="smartphone image1" />
+            <img className="image_item1" src={require('../../assets/asset/newtossim/초보장점.png')} alt="smartphone image1" />
           </div>
         </div>
       </section>
@@ -527,12 +527,12 @@ const Home = () => {
                 <h2>모두가 할 수 있도록</h2>
             </div>
             <div className="home5_scroll_container">
-                <img src={require('../assets/asset/newtossim/거래량.png')} alt="거래량" />
-                <img src={require('../assets/asset/newtossim/실시간차트.png')} alt="실시간차트" />
-                <img src={require('../assets/asset/newtossim/재무재표.png')} alt="재무재표" />
-                <img src={require('../assets/asset/newtossim/증시일정.png')} alt="증시일정" />
-                <img src={require('../assets/asset/newtossim/회사정보.png')} alt="회사정보" />
-                <img src={require('../assets/asset/newtossim/투자지표.png')} alt="투자지표" />
+                <img src={require('../../assets/asset/newtossim/거래량.png')} alt="거래량" />
+                <img src={require('../../assets/asset/newtossim/실시간차트.png')} alt="실시간차트" />
+                <img src={require('../../assets/asset/newtossim/재무재표.png')} alt="재무재표" />
+                <img src={require('../../assets/asset/newtossim/증시일정.png')} alt="증시일정" />
+                <img src={require('../../assets/asset/newtossim/회사정보.png')} alt="회사정보" />
+                <img src={require('../../assets/asset/newtossim/투자지표.png')} alt="투자지표" />
                 </div>
             </div>
         </section>
@@ -549,7 +549,7 @@ const Home = () => {
             <div className="home4_grid_container">
               <div className="home4_content">
                 <img
-                    src={require('../assets/asset/icons_4x/icon-credit-grade-check-2.png')}
+                    src={require('../../assets/asset/icons_4x/icon-credit-grade-check-2.png')}
                     alt=""
                     ref={el => home4ImagesRef.current[0] = el}  // 여기에 ref 추가
                 />
@@ -563,7 +563,7 @@ const Home = () => {
 
               <div className="home4_content">
                 <img
-                    src={require('../assets/asset/icons_4x/icon-credit-grade-up-2.png')}
+                    src={require('../../assets/asset/icons_4x/icon-credit-grade-up-2.png')}
                     alt=""
                     ref={el => home4ImagesRef.current[1] = el}  // ref 추가
                 />
@@ -577,7 +577,7 @@ const Home = () => {
 
                 <div className="home4_content">
                 <img
-                    src={require('../assets/asset/icons_4x/icon-alarm-3.png')}
+                    src={require('../../assets/asset/icons_4x/icon-alarm-3.png')}
                     alt=""
                     ref={el => home4ImagesRef.current[2] = el}  // ref 추가
                 />

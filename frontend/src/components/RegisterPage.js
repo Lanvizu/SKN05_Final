@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import LoadingModal from '../LoadingModal';
 
 const RegisterPage = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,6 +19,8 @@ const RegisterPage = () => {
       return;
     }
     
+    setIsSubmitting(true);
+
     try {
       const response = await axios.post(`${BASE_URL}/api/accounts/register/`, {
         email,
@@ -28,7 +32,6 @@ const RegisterPage = () => {
       navigate('/');
     } catch (error) {
       console.error('회원가입 중 오류 발생:', error);
-
       if (error.response && error.response.data) {
         const errorData = error.response.data;
         let errorMessage = '';
@@ -43,11 +46,14 @@ const RegisterPage = () => {
       } else {
         alert('회원가입 실패: 서버 오류가 발생했습니다.');
       }
-    } 
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div style={styles.container}>
+      {isSubmitting && <LoadingModal />}
       <h2 style={styles.title}>회원가입</h2>
       <p style={styles.sub_title}>
         서비스를 이용하기 위해 회원가입 후 이메일 인증을 진행해주세요.
@@ -101,6 +107,7 @@ const RegisterPage = () => {
 
 const styles = {
   container: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

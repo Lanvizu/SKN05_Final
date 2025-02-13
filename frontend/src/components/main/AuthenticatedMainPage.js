@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Tooltip } from 'react-tooltip';
 import NavigationLinks from '../NavigationLinks';
 import axios from 'axios';
 import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
@@ -46,7 +47,7 @@ const AuthenticatedMainPage = () => {
   const [isLoadingIndices, setIsLoadingIndices] = useState(true);
   const [isLoadingStocks, setIsLoadingStocks] = useState(true);
 
-  const fetchIndices = async () => {
+  const fetchIndices = useCallback(async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/stocks/indices/`, {
         withCredentials: true,
@@ -69,9 +70,9 @@ const AuthenticatedMainPage = () => {
     } finally {
       setIsLoadingIndices(false);
     }
-  };
-
-  const fetchStocks = async () => {
+  }, [BASE_URL]);
+  
+  const fetchStocks = useCallback(async () => {
     setIsLoadingStocks(true);
     try {
       const response = await axios.get(`${BASE_URL}/api/stocks/`, {
@@ -87,12 +88,13 @@ const AuthenticatedMainPage = () => {
     } finally {
       setIsLoadingStocks(false);
     }
-  };
-
+  }, [BASE_URL]);
+  
   useEffect(() => {
     fetchIndices();
     fetchStocks();
-  }, []);
+  }, [fetchIndices, fetchStocks]);
+  
 
 
   const handleInputChange = (e) => {
@@ -230,11 +232,13 @@ const AuthenticatedMainPage = () => {
               {indices.map((index, idx) => (
                 <div key={idx} style={styles.indexCard}>
                   <span 
-                    title={index.description} 
+                    data-tooltip-id={`tooltip-${index.name}`}
+                    data-tooltip-content={index.description}
                     style={styles.tooltip}
                   >
                     ?
                   </span>
+                  <Tooltip id={`tooltip-${index.name}`} />
                   <h3 style={styles.indexName}>{index.name}</h3>
                   {isLoadingIndices ? (
                     <>
@@ -359,6 +363,7 @@ const styles = {
     // justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '30px',
+    maxWidth: '900px',
   },
   indexCard: {
     padding: '10px',
