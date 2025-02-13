@@ -167,7 +167,7 @@ const styles = {
     marginTop: '30px',
   },
   listItem: {
-    // padding: '10px',
+    padding: '10px',
     borderBottom: '1px solid #eee',
     position: 'relative',
     cursor: 'pointer',
@@ -179,10 +179,10 @@ const styles = {
     backgroundColor: '#f0f0f0',
   },
   firstQuestion: {
-    margin: 0,
+    margin: '10px',
   },
   inactiveMessage: {
-    marginLeft: '10px',
+    margin: '10px',
     color: '#888',
     fontStyle: 'italic',
   },

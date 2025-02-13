@@ -1,7 +1,7 @@
 import React from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '../AuthContext';
-import googleIcon from '../assets/google_icon.png';
+import naverIcon from '../assets/naver_icon.png';
 
 const GoogleLoginButton = () => {
   // const navigate = useNavigate();
@@ -27,7 +27,7 @@ const GoogleLoginButton = () => {
     >
       <div style={styles.buttonContent}>
         <img 
-          src={googleIcon} 
+          src={naverIcon} 
           alt="Google" 
           style={styles.googleIcon} 
         />

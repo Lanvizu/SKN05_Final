@@ -164,7 +164,7 @@ const styles = {
     alignItems: 'center',
     border: '1px solid #ddd',
     borderRadius: '15px',
-    margin: '10px, 0',
+    margin: '10px 0px',
   },
   form: {
     flex: 1,
