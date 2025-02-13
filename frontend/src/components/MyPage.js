@@ -78,8 +78,8 @@ const MyPage = () => {
     <div>
       <NavigationLinks />
       <div style={styles.container}>
-        <h2 style={styles.title}>관심 주식</h2>
         <div style={styles.infoContainer}>
+          <h2 style={styles.title}>관심 주식</h2>
           <span onClick={handleEditInterestStocks} style={styles.editText}>
             편집
           </span>
@@ -110,7 +110,7 @@ const MyPage = () => {
                 </div>
               ))
             ) : (
-              <p>데이터를 불러올 수 없습니다.</p>
+              <p>관심 주식을 추가해주세요!</p>
             )}
           </div>
         </div>
@@ -139,19 +139,24 @@ const styles = {
   },
   title: {
     fontSize: '24px',
-    marginBottom: '20px',
+    margin: '18px',
+    textAlign: 'center',
   },
   infoContainer: {
     width: '100%',
     maxWidth: '400px',
+    marginTop: '100px',
     padding: '20px',
     paddingTop: '10px',
     border: '1px solid #ddd',
     borderRadius: '8px',
     backgroundColor: '#f9f9f9',
+    minHeight: '500px',
   },
   container2: {
     marginTop: '10px',
+    height: '400px',  
+    overflowY: 'auto',
   },
   infoItem: {
     marginBottom: '10px',

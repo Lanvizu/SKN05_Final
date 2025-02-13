@@ -29,6 +29,17 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks, onUpdate }) => {
     }
   }, [isOpen, BASE_URL]);
 
+  useEffect(() => {
+    if (isOpen) {
+      const storedStocks = localStorage.getItem('interestStocks');
+      if (storedStocks) {
+        setSelectedStocks(JSON.parse(storedStocks));
+      } else if (currentStocks) {
+        setSelectedStocks(currentStocks);
+      }
+    }
+  }, [isOpen, currentStocks]);
+
   const handleStockToggle = (ticker) => {
     setSelectedStocks((prev) =>
       prev.includes(ticker)
@@ -37,6 +48,10 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks, onUpdate }) => {
         ? [...prev, ticker]
         : prev
     );
+  };
+
+  const handleRemoveTicker = (ticker) => {
+    setSelectedStocks((prev) => prev.filter((s) => s !== ticker));
   };
 
   const handleSave = async () => {
@@ -49,6 +64,7 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks, onUpdate }) => {
       });
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem('interestStocks', JSON.stringify(selectedStocks));
         console.log('관심 종목 업데이트 성공:', data);
         onClose();
         if (onUpdate) {
@@ -92,6 +108,18 @@ const InterestStocksModal = ({ isOpen, onClose, currentStocks, onUpdate }) => {
             </button>
           </div>
         </div>
+        {selectedStocks.length > 0 && (
+          <div style={styles.selectedStocksContainer}>
+            {selectedStocks.map((ticker) => (
+              <div key={ticker} style={styles.selectedStockItem}>
+                <span>{ticker}</span>
+                <button style={styles.removeButton} onClick={() => handleRemoveTicker(ticker)}>
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         <div style={styles.stockListContainer}>
           <ul style={styles.stockList}>
             {filteredStocks.map((stock) => (
@@ -131,9 +159,8 @@ const styles = {
     backgroundColor: 'white',
     padding: '20px',
     borderRadius: '8px',
-    width: '90%',
-    maxWidth: '600px',
-    maxHeight: '80%', // overall modal max height
+    width: '600px',
+    height: '500px',
   },
   title: {
     marginTop: 0,
@@ -177,11 +204,31 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
   },
+  selectedStocksContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginBottom: '10px',
+  },
+  selectedStockItem: {
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#f1f1f1',
+    borderRadius: '4px',
+    padding: '5px 5px 5px 10px',
+    marginRight: '5px',
+    marginBottom: '5px',
+  },
+  removeButton: {
+    background: 'transparent',
+    border: 'none',
+    fontSize: '16px',
+    cursor: 'pointer',
+    color: '#888',
+  },
   stockListContainer: {
     flex: 1,
-    overflowY: 'auto', // only this container will scroll
-    marginTop: '20px',
-    borderTop: '1px solid #eee', // optional, for visual separation
+    overflowY: 'auto',
+    borderTop: '1px solid #eee',
     paddingTop: '10px',
   },
   stockList: {

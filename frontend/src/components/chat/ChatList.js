@@ -3,7 +3,6 @@ import axios from 'axios';
 import plus_button from '../../assets/asset/chatIcons/plus_button.png';
 import toggle_arrow_right from '../../assets/asset/chatIcons/toggle_arrow_right.png';
 import toggle_arrow_left from '../../assets/asset/chatIcons/toggle_arrow_left.png';
-import delete_button from '../../assets/asset/chatIcons/delete_button.png';
 
 const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, onChatRoomDeleted }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -98,12 +97,9 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
                 ) : (
                   <p style={styles.inactiveMessage}>진행한 채팅 내용이 없습니다.</p>
                 )}
-                <img
-                  src={delete_button}
-                  alt="Delete Button"
-                  onClick={(e) => handleDeleteRoom(room, e)}
-                  style={styles.deleteButton}
-                />
+                <button style={styles.removeButton} onClick={(e) => handleDeleteRoom(room, e)}>
+                  ✕
+                </button>
               </li>
             ))}
           </ul>
@@ -160,17 +156,18 @@ const styles = {
     margin: 0,
   },
   newChatButton: {
-    width: '25px',
-    height: '25px',
+    width: '30px',
+    height: '30px',
     cursor: 'pointer',
     marginRight: '10px',
   },
   list: {
     listStyleType: 'none',
     padding: 0,
+    marginTop: '30px',
   },
   listItem: {
-    padding: '10px',
+    // padding: '10px',
     borderBottom: '1px solid #eee',
     position: 'relative',
     cursor: 'pointer',
@@ -185,6 +182,7 @@ const styles = {
     margin: 0,
   },
   inactiveMessage: {
+    marginLeft: '10px',
     color: '#888',
     fontStyle: 'italic',
   },
@@ -193,11 +191,16 @@ const styles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  deleteButton: {
-    width: '20px',
-    height: '20px',
+  removeButton: {
+    position: 'absolute',
+    right: '10px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    background: 'transparent',
+    border: 'none',
+    fontSize: '16px',
     cursor: 'pointer',
-    marginRight: '10px',
+    color: '#888',
   },
 };
 

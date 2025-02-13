@@ -5,12 +5,36 @@ import axios from 'axios';
 import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
 
 const initialIndices = [
-  { id: "^VIX", name: "VIX" },
-  { id: "GC=F", name: "금 선물" },
-  { id: "^DJI", name: "다우존스" },
-  { id: "^IXIC", name: "나스닥" },
-  { id: "^GSPC", name: "S&P 500" },
-  { id: "^RUT", name: "러셀 2000" }
+  { 
+    id: "^VIX", 
+    name: "VIX", 
+    description: "VIX는 30일간 예상 S&P500 변동성을 나타내며, 시장의 불안감(공포 지수)으로 자주 불립니다." 
+  },
+  { 
+    id: "GC=F", 
+    name: "금 선물", 
+    description: "금 선물은 미래 금 가격에 대한 변동성을 추적하는 파생상품입니다." 
+  },
+  { 
+    id: "^DJI", 
+    name: "다우존스", 
+    description: "다우존스 산업평균지수는 미국의 30대 대형 우량기업 주가를 기반으로 계산되는 가격 가중치 지수입니다." 
+  },
+  { 
+    id: "^IXIC", 
+    name: "나스닥", 
+    description: "나스닥 지수는 주로 기술주 중심의 미국 증시 전반의 성과를 측정합니다." 
+  },
+  { 
+    id: "^GSPC", 
+    name: "S&P 500", 
+    description: "S&P 500은 미국 상장 대기업 500개의 시가총액을 기반으로 한 주가 지수입니다." 
+  },
+  { 
+    id: "^RUT", 
+    name: "러셀 2000", 
+    description: "러셀 2000은 미국 소형주 2000개의 성과를 측정하는 지수로, 경제 전반의 경기 흐름을 반영합니다." 
+  }
 ];
 
 const AuthenticatedMainPage = () => {
@@ -148,7 +172,7 @@ const AuthenticatedMainPage = () => {
         <div style={styles.layout}>
           <div style={styles.sidebar}>
             <div style={styles.section}>
-              <h3>이번달 주요 일정</h3>
+              <h3>이번 달 주요 일정</h3>
               <ul>
                 <li>12.24 미국 소비자 심리 지수 발표</li>
                 <li>12.26 미국 신규 실업수당 청구건수</li>
@@ -196,7 +220,7 @@ const AuthenticatedMainPage = () => {
                   </div>
                 ))
               ) : (
-                <p>데이터를 불러올 수 없습니다.</p>
+                <p>관심 주식을 추가해주세요!</p>
               )}
             </div>
           </div>
@@ -205,6 +229,12 @@ const AuthenticatedMainPage = () => {
             <div style={styles.indicesContainer}>
               {indices.map((index, idx) => (
                 <div key={idx} style={styles.indexCard}>
+                  <span 
+                    title={index.description} 
+                    style={styles.tooltip}
+                  >
+                    ?
+                  </span>
                   <h3 style={styles.indexName}>{index.name}</h3>
                   {isLoadingIndices ? (
                     <>
@@ -284,7 +314,7 @@ const styles = {
     borderRadius: '15px',
     margin: '10px',
     width: '100%',
-    maxWidth: '500px',
+    maxWidth: '600px',
   },
   inputWrapper: {
     flex: 1,
@@ -326,12 +356,12 @@ const styles = {
   },
   indicesContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     flexWrap: 'wrap',
     gap: '30px',
   },
   indexCard: {
-    padding: '20px',
+    padding: '10px',
     border: '1px solid #ddd',
     borderRadius: '10px',
     textAlign: 'center',
@@ -339,6 +369,7 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   indexName: {
+    flex: '1',
     fontSize: '20px',
     fontWeight: 'bold',
   },
@@ -362,7 +393,7 @@ const styles = {
     borderBottom: '1px solid #ddd',
   },
   mainContent: {
-    flex: '0 0 70%',
+    flex: '0 0 68%',
   },
   loadingText: {
     color: '#888',
@@ -400,6 +431,19 @@ const styles = {
   stockVolume: {
     fontSize: '13px',
     color: 'gray',
+  },
+  indicesRow: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  tooltip: {
+    marginLeft: '90%',
+    color: '#555',
+    cursor: 'pointer',
+    border: '1px solid #ccc',
+    borderRadius: '50%',
+    padding: '0 5px',
+    fontSize: '12px',
   },
 };
 

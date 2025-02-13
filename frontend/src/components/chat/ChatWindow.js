@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
+import TickerToggle from './TickerToggle';
 
 const ChatWindow = ({ roomId, onUpdateRoom }) => {
   const [input, setInput] = useState('');
@@ -59,7 +60,6 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
 
       setMessages((prev) => [...prev, botMessage]);
 
-      // 첫 메시지인 경우 ChatList 업데이트
       if (messages.length === 0) {
         onUpdateRoom(roomId, input);
       }
@@ -73,6 +73,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
 
   return (
     <div style={styles.container}>
+      <TickerToggle />  
       <div style={styles.messagesContainer}>
         {error && <div style={styles.error}>{error}</div>}
         {messages.length === 0 ? (
@@ -97,11 +98,16 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
       <div style={styles.inputContainer}>
         <form onSubmit={handleSubmit} style={styles.form}>
             <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="메시지를 입력하세요..."
-            style={styles.input}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onFocus={(e) => (e.target.placeholder = "")}
+              onBlur={(e) =>
+                (e.target.placeholder =
+                  "종목, 주가, 뉴스, 지표 등 다양한 정보를 물어보세요!")
+              }
+              placeholder="종목, 주가, 뉴스, 지표 등 다양한 정보를 물어보세요!"
+              style={styles.input}
             />
         </form>
         <img
@@ -158,7 +164,7 @@ const styles = {
     alignItems: 'center',
     border: '1px solid #ddd',
     borderRadius: '15px',
-    margin: '10px',
+    margin: '10px, 0',
   },
   form: {
     flex: 1,
