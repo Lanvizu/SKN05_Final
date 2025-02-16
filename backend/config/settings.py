@@ -169,8 +169,13 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
+
+NAVER_CLIENT_ID = os.environ.get('NAVER_CLIENT_ID')
+NAVER_CLIENT_SECRET = os.environ.get('NAVER_CLIENT_SECRET')
+NAVER_REDIRECT_URI = os.environ.get('NAVER_REDIRECT_URI')
+
 NGROK_URL = os.environ.get('NGROK_URL')
-CURRENTS_API_KEY = os.environ.get('NGROK_URL')
+CURRENTS_API_KEY = os.environ.get('CURRENTS_API_KEY')
 
 CORS_ALLOW_HEADERS = [
     "Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin",
