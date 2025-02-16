@@ -56,7 +56,7 @@ const RegisterPage = () => {
       {isSubmitting && <LoadingModal />}
       <h2 style={styles.title}>회원가입</h2>
       <p style={styles.sub_title}>
-        서비스를 이용하기 위해 회원가입 후 이메일 인증을 진행해주세요.
+        회원가입 후 이메일 인증을 진행해주세요.
       </p>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input

@@ -204,7 +204,15 @@ const fetchNews = useCallback(async () => {
               </div>
             </div>
             <div style={styles.section}>
-              <h3 style={styles.interestTitle}>관심 종목</h3>
+              <div style={styles.interestContainer}>
+                <h3 style={styles.interestTitle}>관심 종목</h3>
+                <span 
+                    onClick={() => navigate('/mypage')} 
+                    style={styles.myPageButton}
+                >
+                  편집
+                </span>
+              </div>
               {isLoadingStocks ? (
                 <p>로딩 중...</p>
               ) : stocks.length > 0 ? (
@@ -356,6 +364,18 @@ const styles = {
   schedule: {
     marginTop: '10px'
   },
+  interestContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '15px',
+  },
+  myPageButton:{
+    marginLeft: '10px',
+    fontSize: '12px',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
   inputWrapper: {
     flex: 1,
     marginRight: '10px',
@@ -439,7 +459,7 @@ const styles = {
     cursor: "pointer",
     border: "none",
     borderRadius: "50%",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "white",
     color: "#333",
     transition: "all 0.3s ease",
   },
@@ -463,7 +483,6 @@ const styles = {
     fontStyle: 'italic'
   },
   interestTitle: {
-    marginBottom: '15px',
   },
   stockCard: {
     border: '1px solid #ddd',

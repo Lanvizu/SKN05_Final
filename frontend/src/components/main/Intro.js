@@ -27,9 +27,9 @@ const MainPage = () => {
       <NavigationLinks />
       <div style={styles.content}>
         <div className="intro_textwrap">
-              <h1>주식의 모든것<br />퀀톡에게 쉽고 간편하게</h1>
+              <h1>주식의 모든 것<br />퀀톡에게 쉽고 간편하게</h1>
         </div>
-        <div className="intro_mobile_wrap">
+        {/* <div className="intro_mobile_wrap">
           <div className="store_button" onClick={handleLoginRedirect}>
             <img src={require('../../assets/asset/icons_timeline/applekorea.png')} alt="apple icon" />
             <span>App Store</span>
@@ -38,7 +38,7 @@ const MainPage = () => {
             <img src={require('../../assets/asset/icons_timeline/googleplay.png')} alt="googleplay icon" />
             <span>Play Store</span>
           </div>
-        </div>
+        </div> */}
         <div style={styles.inputContainer}>
           <div style={styles.form}>
             <input
