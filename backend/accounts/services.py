@@ -13,6 +13,7 @@ from .models import CustomUser
 def user_does_not_exist(user: CustomUser, created: bool, ptf: str, uid: str) -> Response:
     platform = {
         "google": "google",
+        "naver": "naver",
     }
     try_login_platform: str = platform.get(ptf)
     if created:

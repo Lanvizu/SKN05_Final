@@ -1,4 +1,4 @@
-import requests
+import requests, secrets
 from typing import Dict, Any
 
 from allauth.socialaccount.models import SocialAccount
@@ -126,6 +126,65 @@ class GoogleLogin(BaseSocialLoginView):
 
     def simple_registration(self, email):
         return self.user.objects.get_or_create(email=email)
+    
+class NaverLoginRequest(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        state = secrets.token_urlsafe(16)
+        request.session['naver_oauth_state'] = state
+        naver_auth_url = (
+            f"https://nid.naver.com/oauth2.0/authorize?"
+            f"response_type=code&"
+            f"client_id={settings.NAVER_CLIENT_ID}&"
+            f"redirect_uri={settings.NAVER_REDIRECT_URI}&"
+            f"state={state}"
+        )
+        return Response({"authorization_url": naver_auth_url})
+
+    
+class NaverLogin(BaseSocialLoginView):
+    platform = "naver"
+
+    def get_access_token(self, request: Request) -> str:
+        code = request.data.get("code")
+        state = request.data.get("state")
+        client_id = settings.NAVER_CLIENT_ID
+        client_secret = settings.NAVER_CLIENT_SECRET
+        redirect_uri = settings.NAVER_REDIRECT_URI
+
+        token_req = requests.post(
+            f"https://nid.naver.com/oauth2.0/token?"
+            f"client_id={client_id}&"
+            f"client_secret={client_secret}&"
+            f"code={code}&"
+            f"redirect_uri={redirect_uri}&"
+            f"grant_type=authorization_code&"
+            f"state={state}"
+        )
+        token_req_json = token_req.json()
+        access_token = token_req_json.get("access_token")
+        return access_token
+
+    def post(self, request: Request):
+        token = self.get_access_token(request)
+        if hasattr(request.data, "_mutable"):
+            request.data._mutable = True
+        request.data["access_token"] = token
+        return super().post(request)
+    
+    def request_user_profile(self, access_token: str) -> Request:
+        headers = {"Authorization": f"Bearer {access_token}"}
+        return requests.get("https://openapi.naver.com/v1/nid/me", headers=headers)
+
+    def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
+        response_data = user_info_response.get("response", {})
+        email = response_data.get("email")
+        user_id = response_data.get("id")
+        return email, {"user_id": user_id}
+
+    def simple_registration(self, email):
+        return self.user.objects.get_or_create(email=email)
  
 class CustomLoginView(LoginView):
     def get_response(self):
@@ -135,7 +194,6 @@ class CustomLoginView(LoginView):
             access_token = response.data.get('access')
 
             if access_token:
-                # Set Access Token in HttpOnly cookie
                 response = services.set_jwt_cookies(response, self.user)
                 response.data.pop('access', None)
                 response.data.pop('refresh', None)
