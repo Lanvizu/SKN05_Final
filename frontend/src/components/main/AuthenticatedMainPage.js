@@ -44,8 +44,10 @@ const AuthenticatedMainPage = () => {
   const navigate = useNavigate();
   const [indices, setIndices] = useState(initialIndices);
   const [stocks, setStocks] = useState([]);
+  const [news, setNews] = useState([]);
   const [isLoadingIndices, setIsLoadingIndices] = useState(true);
   const [isLoadingStocks, setIsLoadingStocks] = useState(true);
+  const [isLoadingNews, setIsLoadingNews] = useState(true);
 
   const fetchIndices = useCallback(async () => {
     try {
@@ -89,13 +91,30 @@ const AuthenticatedMainPage = () => {
       setIsLoadingStocks(false);
     }
   }, [BASE_URL]);
+
+const fetchNews = useCallback(async () => {
+  setIsLoadingNews(true);
+  try {
+    const response = await axios.get(`${BASE_URL}/api/news/`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      setNews(response.data);
+    } else {
+      console.error("뉴스 데이터를 가져오지 못했습니다.");
+    }
+  } catch (error) {
+    console.error("뉴스 API 요청 중 오류 발생:", error);
+  } finally {
+    setIsLoadingNews(false);
+  }
+  }, [BASE_URL]);
   
   useEffect(() => {
     fetchIndices();
     fetchStocks();
-  }, [fetchIndices, fetchStocks]);
-  
-
+    fetchNews();
+  }, [fetchIndices, fetchStocks, fetchNews]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -175,11 +194,14 @@ const AuthenticatedMainPage = () => {
           <div style={styles.sidebar}>
             <div style={styles.section}>
               <h3>이번 달 주요 일정</h3>
-              <ul>
-                <li>12.24 미국 소비자 심리 지수 발표</li>
-                <li>12.26 미국 신규 실업수당 청구건수</li>
-                <li>12.29 미국 PCE(물가지수) 발표</li>
-              </ul>
+              <div style={styles.scheduleList}>
+                <div style={styles.schedule}>02.02</div>
+                <div style={styles.schedule}>비농업 고용지수 발표</div>
+                <div style={styles.schedule}>02.14</div>
+                <div style={styles.schedule}>소비자물가지수 발표</div>
+                <div style={styles.schedule}>02.28</div>
+                <div style={styles.schedule}>4분기 GDP 수정치 발표</div>
+              </div>
             </div>
             <div style={styles.section}>
               <h3 style={styles.interestTitle}>관심 종목</h3>
@@ -264,18 +286,26 @@ const AuthenticatedMainPage = () => {
                 </div>
               ))}
             </div>
+            <div style={styles.newsContainer}> 
+              <div style={styles.headerContainer}> 
+                <h3 style={styles.newsTitle}>주요 뉴스</h3>
+                <button 
+                  style={styles.refreshButton} 
+                  onMouseEnter={(e) => e.target.style.backgroundColor = styles.refreshButtonHover.backgroundColor} 
+                  onMouseLeave={(e) => e.target.style.backgroundColor = styles.refreshButton.backgroundColor} 
+                  onClick={(e) => fetchNews(e)}
+                >
+                  ↻
+                </button>
+              </div> 
+              {isLoadingNews ? ( <p>뉴스 로딩중...</p> ) : news.length > 0 ? ( news.map((newsItem, index) => ( 
+                <div key={index} style={styles.newsCard}> 
+                  <p>{newsItem.title}</p> 
+                  <span style={{fontSize: '14px',}}>{newsItem.published}</span> 
+                </div> )) ) : ( 
+                  <p>뉴스 데이터가 없습니다.</p> )} 
+              </div>
 
-            <div style={styles.newsContainer}>
-              <h3>주요 뉴스</h3>
-              <div style={styles.newsCard}>
-                <p>코스닥, 외인 매도에 집중 0.4% 하락</p>
-                <span>25.01.09 이데일리</span>
-              </div>
-              <div style={styles.newsCard}>
-                <p>올 마지막 공모주 파인메딕스 129% 급등</p>
-                <span>25.01.09 이데일리</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -319,6 +349,12 @@ const styles = {
     margin: '10px',
     width: '100%',
     maxWidth: '600px',
+  },
+  scheduleList: {
+    marginTop: '10px'
+  },
+  schedule: {
+    marginTop: '10px'
   },
   inputWrapper: {
     flex: 1,
@@ -390,6 +426,28 @@ const styles = {
     color: 'blue',
     fontSize: '16px',
   },
+  newsTitle:{
+    marginRight: "10px",
+  },
+  headerContainer: {
+    display: "flex",
+    alignItems: "center",
+    // justifyContent: "space-between",
+  },
+  refreshButton: {
+    padding: "8px",
+    cursor: "pointer",
+    border: "none",
+    borderRadius: "50%",
+    backgroundColor: "#f0f0f0",
+    color: "#333",
+    transition: "all 0.3s ease",
+  },
+  refreshButtonHover: {
+    backgroundColor: "#e0e0e0",
+    transform: "scale(1.1)",
+  },
+  
   newsContainer: {
     marginTop: '50px',
   },

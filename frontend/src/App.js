@@ -12,6 +12,7 @@ import ChatPage from './components/chat/ChatPage';
 import ProfileEditPage from './components/ProfileEditPage';
 import AuthenticatedMainPage from './components/main/AuthenticatedMainPage';
 import GoogleCallback from './components/GoogleCallback';
+import NaverCallback from './components/NaverCallback';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -79,6 +80,7 @@ const App = () => {
             }
           />
           <Route path="/auth/google/callback" element={<GoogleCallback />} />
+          <Route path="/auth/naver/callback" element={<NaverCallback />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot" element={<ForgotPage />} />
           <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
