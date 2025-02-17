@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 import plus_button from '../../assets/asset/chatIcons/plus_button.png';
 import toggle_arrow_right from '../../assets/asset/chatIcons/toggle_arrow_right.png';
 import toggle_arrow_left from '../../assets/asset/chatIcons/toggle_arrow_left.png';
@@ -18,9 +19,7 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
         `${BASE_URL}/api/chat/room/create/`,
         {},
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         }
       );
@@ -40,19 +39,13 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
   const handleDeleteRoom = async (room, e) => {
     e.stopPropagation();
     const confirmDelete = window.confirm('정말 해당 채팅방을 삭제하시겠습니까?');
-    if (!confirmDelete) {
-      return;
-    }
+    if (!confirmDelete) return;
     try {
       await axios.delete(`${BASE_URL}/api/chat/room/${room.id}/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       });
-      if (onChatRoomDeleted) {
-        onChatRoomDeleted(room);
-      }
+      if (onChatRoomDeleted) onChatRoomDeleted(room);
     } catch (error) {
       console.error('Error deleting chat room:', error);
       alert('채팅방 삭제에 실패했습니다.');
@@ -62,73 +55,92 @@ const ChatList = ({ chatRooms, onSelectRoom, selectedRoom, onChatRoomCreated, on
   const recentChatRooms = chatRooms.slice(0, 8);
 
   return (
-    <div style={isOpen ? styles.container : styles.closedContainer}>
-      {isOpen ? (
-        <>
-          <div style={styles.header}>
+    <motion.div
+      style={styles.container}
+      animate={{ width: isOpen ? 300 : 50 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    >
+      <AnimatePresence exitBeforeEnter>
+        {isOpen ? (
+          <motion.div
+            key="openContent"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={styles.textWrapper}
+          >
+            <div style={styles.header}>
+              <img
+                src={toggle_arrow_left}
+                alt="Toggle Arrow Left"
+                onClick={toggleSidebar}
+                style={styles.toggleButton}
+              />
+              <h2 style={styles.title}>채팅 목록</h2>
+              <img
+                src={plus_button}
+                alt="Plus Button"
+                onClick={handleCreateNewChat}
+                style={styles.newChatButton}
+              />
+            </div>
+            <ul style={styles.list}>
+              {recentChatRooms.map((room) => (
+                <li
+                  key={room.id}
+                  style={{
+                    ...styles.listItem,
+                    ...(selectedRoom && selectedRoom.id === room.id ? styles.selectedItem : {}),
+                  }}
+                  onClick={() => onSelectRoom(room)}
+                >
+                  {room.first_question ? (
+                    <p style={{ ...styles.firstQuestion, ...styles.truncate }}>{room.first_question}</p>
+                  ) : (
+                    <p style={styles.inactiveMessage}>진행한 채팅 내용이 없습니다.</p>
+                  )}
+                  <button style={styles.removeButton} onClick={(e) => handleDeleteRoom(room, e)}>
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="closedContent"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={styles.closedHeader}
+          >
             <img
-              src={toggle_arrow_left}
-              alt="Toggle Arrow Right"
-              onClick={toggleSidebar}
-              style={styles.toggleButton}
-            />
-            <h2 style={styles.title}>채팅 목록</h2>
-            <img
-              src={plus_button}
-              alt="Plus Button"
-              onClick={handleCreateNewChat}
-              style={styles.newChatButton}
-            />
-          </div>
-          <ul style={styles.list}>
-            {recentChatRooms.map((room) => (
-              <li
-                key={room.id}
-                style={{
-                  ...styles.listItem,
-                  ...(selectedRoom && selectedRoom.id === room.id ? styles.selectedItem : {}),
-                }}
-                onClick={() => onSelectRoom(room)}
-              >
-                {room.first_question ? (
-                  <p style={{ ...styles.firstQuestion, ...styles.truncate }}>
-                    {room.first_question}
-                  </p>
-                ) : (
-                  <p style={styles.inactiveMessage}>진행한 채팅 내용이 없습니다.</p>
-                )}
-                <button style={styles.removeButton} onClick={(e) => handleDeleteRoom(room, e)}>
-                  ✕
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <div style={styles.closedHeader}>
-          <img
               src={toggle_arrow_right}
               alt="Toggle Arrow Right"
               onClick={toggleSidebar}
               style={styles.toggleButtonClosed}
             />
-        </div>
-      )}
-    </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
 const styles = {
   container: {
-    width: '300px',
+    position: 'relative',
     borderRight: '1px solid #ccc',
     padding: '10px',
-    overflowY: 'auto',
+    overflow: 'hidden',
   },
-  closedContainer: {
-    width: '50px',
-    borderRight: '1px solid #ccc',
-    padding: '10px',
+  textWrapper: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 300,
   },
   header: {
     display: 'flex',

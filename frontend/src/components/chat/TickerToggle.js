@@ -107,8 +107,8 @@ const TickerToggle = ({ onSelect }) => {
 const styles = {
   container: {
     position: 'relative',
-    width: '100%',
-    marginBottom: '10px',
+    width: '60%',
+    marginRight: '5px',
   },
   inputWrapper: {
     position: 'relative',
