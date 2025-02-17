@@ -1,6 +1,5 @@
 from datetime import timedelta
 from pathlib import Path
-import sys
 import os
 from .utils import Initialize_env_variables
 from dotenv import load_dotenv
@@ -95,6 +94,9 @@ BASE_DNS_ADDRESS = os.environ.get('BASE_DNS_ADDRESS')
 #         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
 #         'HOST': '127.0.0.1',
 #         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         },
 #     }
 # }
 # CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
@@ -108,6 +110,9 @@ DATABASES = {
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': 'db',
         'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 CORS_ALLOWED_ORIGINS = [FRONTEND_URL, BASE_DNS_ADDRESS]
