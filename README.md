@@ -140,3 +140,20 @@ docker-compose down --volumes && docker-compose up --build
 최소한의 설정 변경 후 Jenkins를 통한 CI/CD 관리 구현
 
 </details>
+
+<details>
+<summary>gif</summary>
+  
+  ## 로그인
+  
+  <p align="center">
+    <img src = "https://github.com/user-attachments/assets/69a42fcf-3ebe-4afe-b397-88d5be0c8db0">
+  </p>
+
+  ## 기업 분석
+
+  <p align="center">
+    <img src = "https://github.com/user-attachments/assets/c6299c5b-7bad-436f-9b18-b7bd9b1a410c">
+  </p>
+  
+</details>
