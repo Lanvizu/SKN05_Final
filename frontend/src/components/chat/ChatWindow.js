@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import send_arrow from '../../assets/asset/chatIcons/send_arrow.png';
 import TickerToggle from './TickerToggle';
+import Loading from '../../LoadingModal';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkEmoji from "remark-emoji";
@@ -13,6 +14,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
   const [error, setError] = useState(null);
   const [selectedTicker, setSelectedTicker] = useState('');
   const messagesEndRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const fetchMessages = useCallback(async () => {
@@ -46,6 +48,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
+    setLoading(true);
     try {
       const userMessage = { content: input, is_user: true };
       setMessages((prev) => [...prev, userMessage]);
@@ -72,9 +75,10 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
     } catch (err) {
       console.error('Error sending message:', err);
       setMessages((prev) => [...prev, { content: 'Error: Unable to get response', is_user: false }]);
+    } finally {
+      setLoading(false);
+      setInput('');
     }
-
-    setInput('');
   };
 
   const handleCompanyAnalysis = async () => {
@@ -82,6 +86,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
       alert('티커를 선택해 주세요.');
       return;
     }
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BASE_URL}/api/chat/room/${roomId}/analyze-company/`,
@@ -99,6 +104,8 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
         ...prev,
         { content: '기업 분석 에러: ' + err.message, is_user: false },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,6 +114,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
       alert('티커를 선택해 주세요.');
       return;
     }
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BASE_URL}/api/chat/room/${roomId}/analyze-detail/`,
@@ -124,6 +132,8 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
         ...prev,
         { content: '상세 분석 에러: ' + err.message, is_user: false },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,6 +142,7 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
       alert('티커를 선택해 주세요.');
       return;
     }
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BASE_URL}/api/chat/room/${roomId}/chart/`,
@@ -151,10 +162,13 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
     } catch (err) {
       console.error('차트 요청 오류:', err);
       alert('차트 요청 오류: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleNewsView = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BASE_URL}/api/chat/room/${roomId}/call-news/`,
@@ -174,10 +188,13 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
         ...prev,
         { content: '뉴스 보기 에러: ' + err.message, is_user: false, type: 'news' },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleNewsMoreCommand = async () => {
+    setLoading(true);
     try {
       const text = '뉴스 더보기';
       const userMessage = { content: text, is_user: true };
@@ -201,25 +218,39 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
         ...prev,
         { content: 'Error: 뉴스 더보기 전송 실패', is_user: false }
       ]);
+    } finally {
+      setLoading(false);
     }
   };
   
   const handleNewsTitleClick = async (index) => {
-    const text = `뉴스 분석 ${index + 1}`;
-    const userMessage = { content: text, is_user: true };
-    setMessages((prev) => [...prev, userMessage]);
-    const payload = { input: text };
+    setLoading(true);
+    try{
+      const text = `뉴스 분석 ${index + 1}`;
+      const userMessage = { content: text, is_user: true };
+      setMessages((prev) => [...prev, userMessage]);
+      const payload = { input: text };
 
-    const response = await axios.post(
-      `${BASE_URL}/api/chat/room/${roomId}/`,
-      payload,
-      {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      }
-    );
-    const botMessage = { content: response.data.message, is_user: false };
-    setMessages((prev) => [...prev, botMessage]);
+      const response = await axios.post(
+        `${BASE_URL}/api/chat/room/${roomId}/`,
+        payload,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      );
+      const botMessage = { content: response.data.message, is_user: false };
+      setMessages((prev) => [...prev, botMessage]);
+
+    }catch (err) {
+      console.error('뉴스 분석 전송 에러:', err);
+      setMessages((prev) => [
+        ...prev,
+        { content: 'Error: 뉴스 분석 전송 실패', is_user: false }
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -312,7 +343,11 @@ const ChatWindow = ({ roomId, onUpdateRoom }) => {
                   </span>
                 </div> 
               </> )} 
-            </div> )) )} 
+            </div> )) 
+          )}
+          {loading && (
+            <Loading />
+          )}
           <div ref={messagesEndRef} /> 
           </div>
       <div style={styles.inputContainer}>

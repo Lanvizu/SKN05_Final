@@ -195,12 +195,14 @@ const fetchNews = useCallback(async () => {
             <div style={styles.section}>
               <h3>이번 달 주요 일정</h3>
               <div style={styles.scheduleList}>
-                <div style={styles.schedule}>02.02</div>
-                <div style={styles.schedule}>비농업 고용지수 발표</div>
-                <div style={styles.schedule}>02.14</div>
-                <div style={styles.schedule}>소비자물가지수 발표</div>
-                <div style={styles.schedule}>02.28</div>
-                <div style={styles.schedule}>4분기 GDP 수정치 발표</div>
+                <div style={styles.schedule}>02.17</div>
+                <div style={styles.schedule}>미국 증시 휴장 (워싱턴 기념일)</div>
+                <div style={styles.schedule}>02.20</div>
+                <div style={styles.schedule}>미국 FOMC 의사록 공개</div>
+                <div style={styles.schedule}>02.21</div>
+                <div style={styles.schedule}>2월 S&P 글로벌 PMI 발표</div>
+                <div style={styles.schedule}>02.27</div>
+                <div style={styles.schedule}>엔비디아 실적 발표</div>
               </div>
             </div>
             <div style={styles.section}>
