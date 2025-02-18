@@ -43,17 +43,57 @@ git clone https://github.com/Lanvizu/SKN05_Final.git
 ```
 
 ### AWS 빌드 시 파일 경로 설정 변경
-- `backend/.env` 파일 생성: BASE_URL, GOOGLE_REDIRECT_URI, BASE_FRONTEND_URL 수정
+- `backend/.env` 파일 생성: IPV4_ADDRESS, DNS_ADDRESS, NGROK_URL 수정
+  <details>
+  <summary>.env 파일 예시</summary>
+    
+    ```
+    IPV4_ADDRESS=''
+    DNS_ADDRESS=''
+    
+    BACKEND_PORT=8000
+    FRONTEND_PORT=3000
+    
+    BASE_URL=http://${IPV4_ADDRESS}:${BACKEND_PORT}/
+    BASE_FRONTEND_URL=http://${IPV4_ADDRESS}:${FRONTEND_PORT}
+    BASE_DNS_ADDRESS=http://${DNS_ADDRESS}:${FRONTEND_PORT}
+    
+    NGROK_URL=''
+    CURRENTS_API_KEY=''
+    
+    GOOGLE_CLIENT_ID=''
+    GOOGLE_CLIENT_SECRET=''
+    GOOGLE_TOKEN_API=https://oauth2.googleapis.com/token
+    GOOGLE_REDIRECT_URI=http://${DNS_ADDRESS}:${FRONTEND_PORT}/auth/google/callback
+    
+    NAVER_CLIENT_ID=''
+    NAVER_CLIENT_SECRET=''
+    NAVER_REDIRECT_URI=http://${DNS_ADDRESS}:${FRONTEND_PORT}/auth/naver/callback
+    
+    GOOGLE_HOST_PASSWORD=''
+    SECRET_KEY=''
+    
+    MYSQL_ROOT_PASSWORD=''
+    MYSQL_DATABASE=skn0502
+    MYSQL_USER=user
+    MYSQL_PASSWORD=''
+    ```
+  </details>
+    
 - `web/project.conf` 파일 변경: server_name 수정
 - `frontend/.env` 파일 생성: REACT_APP_BASE_URL, REACT_APP_DNS_ADDRESS, REACT_APP_IP_ADDRESS 설정
+  <details>
+  <summary>.env 파일 예시</summary>
+    
+    ```
+    REACT_APP_BASE_URL=http://'':8000
+    REACT_APP_DNS_ADDRESS=''
+    REACT_APP_IP_ADDRESS=''
+    ```
+  </details>
 - `frontend/package.json` 파일 변경: proxy 수정
 
 ## 환경 설정
-
-### 시간대 설정
-```bash
-sudo timedatectl set-timezone 'Asia/Seoul'
-```
 
 ### Docker 설치
 ```bash
