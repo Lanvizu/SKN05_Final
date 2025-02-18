@@ -215,8 +215,3 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# runpod 설정
-# RUNPOD_API_KEY = os.environ.get('RUNPOD_API_KEY')
-# RUNPOD_ENDPOINT_ID = os.getenv('RUNPOD_ENDPOINT_ID')
-# OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
