@@ -1,12 +1,36 @@
-# SKN05_Final
+<img src="https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/python-3776AB?style=flat&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/django-092E20?style=flat&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white"> ![Nginx](https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white)
+![Gunicorn](https://img.shields.io/badge/gunicorn-444444?style=flat&logo=gunicorn&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009485?style=flat&logo=fastapi&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/Uvicorn-2FBF71?style=flat&logo=uvicorn&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-FF7A25?style=flat&logo=huggingface&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white)
+
+
+
+# 금융 정보 분석 및 추천 서비스: 퀀톡
+
+## 프로젝트 개요
+
+개인 투자자와 모바일 기반 사용자의 증가와 함께 금융 챗봇 시장은 연평균 24% 이상의 성장세를 보이고 있습니다.
+
+이러한 흐름 속에서 **퀀톡**은 다양한 금융 정보 분석과 추천 서비스를 통해 사용자들에게 맞춤형 투자 솔루션을 제공하며, 급변하는 디지털 금융 환경에 최적화된 서비스를 목표로 합니다.
+
+ ## 시연 영상 <a href="https://youtu.be/V82EvzZ0SQE">( Youtube )</a>
+
+  <p>
+    <img src = "https://github.com/user-attachments/assets/9bd11161-0cde-47a8-88d0-7e96c31924f4">
+  </p>
+ 
 
 <details>
-<summary>빌드 정리 접기/펼치기</summary>
+<summary><h2>빌드 방법</h2></summary>
 
 ## AWS EC2 설정
 
 ### 초기 설정
-- Ubuntu 선택
+- Ubuntu 서버 선택
 - 키페어 설정
 - 보안 그룹 설정
 - 스토리지 구성 (30GB)
@@ -142,7 +166,13 @@ docker-compose down --volumes && docker-compose up --build
 </details>
 
 <details>
-<summary>gif</summary>
+<summary><h2>👀 사용자 경험 미리보기</h2></summary>
+
+  ## 회원가입 (이메일 인증)
+  
+  <p align="center">
+    <img src = "https://github.com/user-attachments/assets/18f23b6e-94bd-4ef8-85dd-4c7bfb442cbe">
+  </p>
   
   ## 로그인
   
@@ -150,10 +180,50 @@ docker-compose down --volumes && docker-compose up --build
     <img src = "https://github.com/user-attachments/assets/69a42fcf-3ebe-4afe-b397-88d5be0c8db0">
   </p>
 
+  ## 관심 주식 설정
+
+  <p align="center">
+    <img src = "https://github.com/user-attachments/assets/40101436-7911-4a90-ab8f-5ac79fa1a223">
+  </p>
+  
+
   ## 기업 분석
 
   <p align="center">
     <img src = "https://github.com/user-attachments/assets/c6299c5b-7bad-436f-9b18-b7bd9b1a410c">
   </p>
+
+  ## 뉴스 분석
+
+  <p align="center">
+    <img src = "https://github.com/user-attachments/assets/331f0311-12c7-4cfc-8760-34a368b9b0de">
+  </p>
+  
+   ## 차트 분석
+
+  <p align="center">
+    <img src = "https://github.com/user-attachments/assets/5eed10fb-d4fb-4f87-8c43-b76a42300a8f">
+  </p>
   
 </details>
+
+
+<details>
+<summary><h2>프로젝트 환경</h2></summary>
+
+ <h2>ERD</h2>
+ <p align="center">
+   <img src = "https://github.com/user-attachments/assets/775d1321-2cf2-43a8-9d08-ee7beaa5a867">
+ </p>
+
+ <h2>시스템 아키텍처</h2>
+ <p align="center">
+   <img src = "https://github.com/user-attachments/assets/e507d410-bc1a-4a8d-a2ad-394fab1246b5">
+ </p>
+
+ 
+
+ 
+</details>
+
+**개발기간**: 2024.12.20 - 2025.02.19
