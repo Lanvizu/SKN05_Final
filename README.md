@@ -30,7 +30,165 @@
 
 <h2>⚙️ 빌드 방법</h2>
 <details>
-  <summary><h3>AWS 빌드 설정</h3></summary>
+<summary><h3>로컬 빌드 설정</h3></summary>
+
+  ### **1. GitHub 클론**
+  
+  ```bash
+  git clone https://github.com/Lanvizu/SKN05_Final.git
+  ```
+  
+  ### **2. 가상환경 설정 (CMD 사용)**
+  
+  1. 터미널 실행 후 `backend` 디렉토리로 이동:
+  ```bash
+  cd backend
+  ```
+  
+  2. 가상환경 생성:
+  ```bash
+  python -m venv myvenv
+  ```
+  
+  3. 가상환경 활성화:
+     - Windows:
+       ```bash
+       cd myvenv/Scripts
+       activate
+       ```
+     - Mac:
+       ```bash
+       source myvenv/bin/activate
+       ```
+  
+  4. `backend` 디렉토리로 복귀:
+  ```bash
+  cd ../..
+  ```
+  
+  5. 필요한 패키지 설치:
+  ```bash
+  pip install -r requirements.txt
+  ```
+  
+  ---
+  
+  ### **3. 데이터베이스 설정**
+  
+  1. MySQL 설치 후 Workbench 실행.
+  2. 아래 명령어로 데이터베이스 생성:
+  ```sql
+  CREATE DATABASE skn0502 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+  ```
+  
+  ---
+  
+  ### **4. `.env` 파일 생성 (Backend)**
+  
+  - `SKN05_Final` 폴더 내 `.env` 파일 생성:
+  
+  <details>
+  <summary>.env 파일 예시</summary>
+        
+        ```
+        IPV4_ADDRESS=''
+        DNS_ADDRESS=''
+        
+        BACKEND_PORT=8000
+        FRONTEND_PORT=3000
+        
+        BASE_URL=http://${IPV4_ADDRESS}:${BACKEND_PORT}/
+        BASE_FRONTEND_URL=http://${IPV4_ADDRESS}:${FRONTEND_PORT}
+        BASE_DNS_ADDRESS=http://${DNS_ADDRESS}:${FRONTEND_PORT}
+        
+        NGROK_URL=''
+        CURRENTS_API_KEY=''
+        
+        GOOGLE_CLIENT_ID=''
+        GOOGLE_CLIENT_SECRET=''
+        GOOGLE_TOKEN_API=https://oauth2.googleapis.com/token
+        GOOGLE_REDIRECT_URI=http://${DNS_ADDRESS}:${FRONTEND_PORT}/auth/google/callback
+        
+        NAVER_CLIENT_ID=''
+        NAVER_CLIENT_SECRET=''
+        NAVER_REDIRECT_URI=http://${DNS_ADDRESS}:${FRONTEND_PORT}/auth/naver/callback
+        
+        GOOGLE_HOST_PASSWORD=''
+        SECRET_KEY=''
+        
+        MYSQL_ROOT_PASSWORD=''
+        MYSQL_DATABASE=skn0502
+        MYSQL_USER=user
+        MYSQL_PASSWORD=''
+        ```
+  </details>
+  
+  **로컬 환경**에서는 IP 주소를 모두 `localhost`로 변경.
+  
+  ---
+  
+  ### **5. `.env` 파일 생성 (Frontend)**
+  
+  - `/frontend` 디렉토리에 `.env` 파일 생성 후 아래 내용 추가:
+  
+  <details>
+  <summary>.env 파일 예시</summary>
+        
+        ```
+        REACT_APP_BASE_URL=http://'':8000
+        REACT_APP_DNS_ADDRESS=''
+        REACT_APP_IP_ADDRESS=''
+        ```
+  </details>
+  
+  ---
+  
+  ### **6. 데이터베이스 연동**
+  
+  1. `backend/config/settings.py` 파일에서 `DATABASES` 설정을 로컬 또는 Docker 환경에 맞게 수정.
+     - 사용하지 않는 설정은 주석 처리.
+  
+  2. 마이그레이션 실행:
+  ```bash
+  python manage.py makemigrations
+  python manage.py migrate
+  python manage.py loaddata stocks/fixtures/sp500.json
+  ```
+  
+  ---
+  
+  ### **7. 로컬 환경 실행**
+  
+  #### Backend 실행:
+  1. `backend` 디렉토리에서 서버 실행:
+  ```bash
+  python manage.py runserver
+  ```
+  
+  #### Frontend 실행:
+  1. 새로운 CMD 창에서 `frontend` 디렉토리로 이동:
+  ```bash
+  cd frontend
+  ```
+  2. Yarn 설치 및 실행:
+     - Windows:
+       ```bash
+       npm install -g yarn
+       yarn install
+       yarn start
+       ```
+     - Mac:
+       ```bash
+       brew install yarn --ignore-dependencies
+       yarn install
+       yarn start
+       ```
+     
+</details>
+
+
+<details>
+<summary><h3>AWS 빌드 설정</h3></summary>
  
  ### AWS EC2
   - Ubuntu 서버
