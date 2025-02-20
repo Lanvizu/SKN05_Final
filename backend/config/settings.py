@@ -75,8 +75,8 @@ REST_AUTH = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
@@ -86,36 +86,46 @@ FRONTEND_URL = os.environ.get('BASE_FRONTEND_URL')
 BASE_DNS_ADDRESS = os.environ.get('BASE_DNS_ADDRESS')
 
 # 로컬 테스트용
-# DATABASES = {
-#     'default' : {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'skn0502',
-#         'USER': 'root',
-#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#         },
-#     }
-# }
-# CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
-
-# Docker 환경
 DATABASES = {
-    'default': {
+    'default' : {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
+        'NAME': 'skn0502',
+        'USER': 'root',
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': 'db',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
     }
 }
-CORS_ALLOWED_ORIGINS = [FRONTEND_URL, BASE_DNS_ADDRESS]
+CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
+
+# Docker 환경
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('MYSQL_DATABASE'),
+#         'USER': os.environ.get('MYSQL_USER'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+#         'HOST': 'db',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
+# CORS_ALLOWED_ORIGINS = [FRONTEND_URL, BASE_DNS_ADDRESS]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 TEMPLATES = [
     {
@@ -214,4 +224,4 @@ PASSWORD_RESET_TIMEOUT = 3600
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
