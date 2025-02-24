@@ -370,11 +370,3 @@
    <img src = "https://github.com/user-attachments/assets/5eed10fb-d4fb-4f87-8c43-b76a42300a8f">
   </p>
 </details>
-
------
-
-<details>
-<summary></summary>
-
-https://velog.io/@lanvizu/posts
-</details>
