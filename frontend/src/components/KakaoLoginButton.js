@@ -1,69 +1,63 @@
 import React from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../AuthContext';
 import kakaoIcon from '../assets/kakao_icon.png';
+import axios from 'axios';
 
-const GoogleLoginButton = () => {
-  // const navigate = useNavigate();
-  // const { login } = useAuth();
-
-  const handleGoogleLogin = async () => {
-    const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    const REDIRECT_URI = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-    const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=email profile`;
-
+const KakaoLoginButton = () => {
+  const handleKakaoLogin = async () => {
     try {
-      window.location.href = GOOGLE_AUTH_URL;
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/accounts/kakao/login-request/`
+      );
+      window.location.href = response.data.authorization_url;
     } catch (error) {
-      console.error('구글 로그인 중 오류 발생:', error);
-      alert('구글 로그인에 실패했습니다.');
+      console.error('네이버 로그인 초기화 실패:', error);
     }
   };
 
   return (
     <button 
-      onClick={handleGoogleLogin}
-      style={styles.googleButton}
+      onClick={handleKakaoLogin}
+      style={styles.kakaoButton}
     >
       <div style={styles.buttonContent}>
         <img 
           src={kakaoIcon} 
-          alt="Google" 
-          style={styles.googleIcon} 
+          alt="Kakao" 
+          style={styles.kakaoIcon} 
         />
-        <span style={styles.buttonText}>Continue with Google</span>
+        <span style={styles.buttonText}>Continue with Kakao</span>
       </div>
     </button>
   );
 };
 
 const styles = {
-    googleButton: {
-        width: '100%',
-        padding: '10px',
-        border: '1px solid #dadce0',
-        borderRadius: '4px',
-        backgroundColor: '#fff',
-        cursor: 'pointer',
-        marginTop: '10px'
-    },
-    buttonContent: {
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative'
-    },
-    googleIcon: {
-        width: '18px',
-        height: '18px',
-        position: 'absolute',
-    },
-    buttonText: {
-        color: '#3c4043',
-        fontSize: '14px',
-        fontWeight: '500',
-        flex: 1,
-        textAlign: 'center'
-    }
+  kakaoButton: {
+    width: '100%',
+    padding: '10px',
+    border: '1px solid #dadce0',
+    borderRadius: '4px',
+    backgroundColor: '#fff',
+    cursor: 'pointer',
+    marginTop: '10px'
+  },
+  buttonContent: {
+    display: 'flex',
+    alignItems: 'center',
+    position: 'relative'
+  },
+  kakaoIcon: {
+    width: '18px',
+    height: '18px',
+    position: 'absolute'
+  },
+  buttonText: {
+    color: '#3c4043',
+    fontSize: '14px',
+    fontWeight: '500',
+    flex: 1,
+    textAlign: 'center'
+  }
 };
 
-export default GoogleLoginButton;
+export default KakaoLoginButton;
