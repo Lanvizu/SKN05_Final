@@ -1,6 +1,4 @@
-# accounts/redis_service.py
 from django_redis import get_redis_connection
-from django.conf import settings
 
 def store_refresh_token(user_id, refresh_token, expiration_seconds):
     redis_conn = get_redis_connection("default")

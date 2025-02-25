@@ -12,6 +12,9 @@ urlpatterns = [
     path('google/callback/', views.GoogleLogin.as_view(), name='google-callback'),
     path('naver/login-request/', views.NaverLoginRequest.as_view(), name='naver-login-request'),
     path('naver/callback/', views.NaverLogin.as_view(), name='naver-callback'),
+    path('kakao/login-request/', views.KakaoLoginRequest.as_view(), name='kakao-login-request'),
+    path('kakao/callback/', views.KakaoLogin.as_view(), name='kakao-callback'),
+
     path('password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset'),
     path('password-reset-confirm/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('mypage/', views.MyPageView.as_view(), name='mypage'),

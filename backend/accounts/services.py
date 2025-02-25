@@ -15,6 +15,7 @@ def user_does_not_exist(user: CustomUser, created: bool, ptf: str, uid: str) -> 
     platform = {
         "google": "google",
         "naver": "naver",
+        "kakao": "kakao",
     }
     try_login_platform: str = platform.get(ptf)
     if created:

@@ -1,26 +1,23 @@
 import requests, secrets
 from typing import Dict, Any
 
-from allauth.socialaccount.models import SocialAccount
-from django.contrib.auth import get_user_model
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.request import Request
-
 from . import services, redis_service
 from .models import CustomUser
 from config import settings
 
-from .serializers import UserProfileSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer, InterestTickerSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from allauth.socialaccount.models import SocialAccount
+from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.request import Request
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+
+from .serializers import UserProfileSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer, InterestTickerSerializer
 from dj_rest_auth.views import LoginView
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
@@ -42,11 +39,9 @@ class BaseSocialLoginView(APIView):
             return Response({"error": "Invalid access token"}, status=status.HTTP_400_BAD_REQUEST)
 
         user_key, registration_params = self.get_account_user_primary_key(user_profile_response)
-
         try:
             user: CustomUser = self.user.objects.get(email=user_key)
             social_user: SocialAccount = SocialAccount.objects.get(user=user)
-
             if social_user.provider != self.platform:
                 return Response({"error": "No matching social type"}, status=status.HTTP_400_BAD_REQUEST)
             if social_user:
@@ -89,7 +84,7 @@ class GoogleLogin(BaseSocialLoginView):
 
     def get_access_token(self, request: Request) -> str:
         code = request.data.get("code")
-        state = "random"
+        state = secrets.token_urlsafe(16)
         client_id = settings.GOOGLE_CLIENT_ID
         client_secret = settings.GOOGLE_CLIENT_SECRET
         redirect_uri = settings.GOOGLE_REDIRECT_URI
@@ -182,6 +177,61 @@ class NaverLogin(BaseSocialLoginView):
 
     def simple_registration(self, email):
         return self.user.objects.get_or_create(email=email)
+    
+class KakaoLoginRequest(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        state = secrets.token_urlsafe(16)
+        request.session['kakao_oauth_state'] = state
+        kakao_auth_url = (
+            f"https://kauth.kakao.com/oauth/authorize?"
+            f"client_id={settings.KAKAO_RESTAPI_KEY}&"
+            f"redirect_uri={settings.KAKAO_REDIRECT_URI}&"
+            f"response_type=code&"
+            f"state={state}"
+        )
+        return Response({"authorization_url": kakao_auth_url})
+    
+class KakaoLogin(BaseSocialLoginView):
+    platform = "kakao"
+
+    def get_access_token(self, request: Request) -> str:
+        code = request.data.get("code")
+        state = request.data.get("state")
+        client_id = settings.KAKAO_RESTAPI_KEY
+        redirect_uri = settings.KAKAO_REDIRECT_URI
+
+        token_req = requests.post(
+            f"https://kauth.kakao.com/oauth/token?"
+            f"grant_type=authorization_code&"
+            f"client_id={client_id}&"
+            f"redirect_uri={redirect_uri}&"
+            f"code={code}&"
+            f"state={state}"
+        )
+        token_req_json = token_req.json()
+        access_token = token_req_json.get("access_token")
+        return access_token
+    
+    def post(self, request: Request):
+        token = self.get_access_token(request)
+        if hasattr(request.data, "_mutable"):
+            request.data._mutable = True
+        request.data["access_token"] = token
+        return super().post(request)
+    
+    def request_user_profile(self, access_token: str) -> Request:
+        headers = {"Authorization": f"Bearer {access_token}"}
+        return requests.get("https://kapi.kakao.com/v2/user/me", headers=headers)
+    
+    def get_account_user_primary_key(self, user_info_response: Dict[str, Any]):
+        user_id = user_info_response.get("id")
+        email = user_info_response.get("kakao_account", {}).get("email")
+        return email, {"user_id": user_id}
+    
+    def simple_registration(self, email):
+        return self.user.objects.get_or_create(email=email) 
     
 class CustomLoginView(LoginView):
     def get_response(self):
