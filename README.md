@@ -1,17 +1,20 @@
-<img src="https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=black"> ![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white) <img src="https://img.shields.io/badge/python-3776AB?style=flat&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white"> ![Nginx](https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white) <img src="https://img.shields.io/badge/django-092E20?style=flat&logo=django&logoColor=white"> ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white) ![Gunicorn](https://img.shields.io/badge/gunicorn-444444?style=flat&logo=gunicorn&logoColor=white)
-
 ![Redis](https://img.shields.io/badge/Redis-FF4438?style=flat&logo=redis&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FF7A25?style=flat&logo=huggingface&logoColor=white)
+<img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat&logo=amazonec2&logoColor=white"/>
 ![Uvicorn](https://img.shields.io/badge/Uvicorn-2FBF71?style=flat&logo=uvicorn&logoColor=white)
+![Nginx](https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009485?style=flat&logo=fastapi&logoColor=white)
+<img src="https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=black">
+![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white)
+<img src="https://img.shields.io/badge/python-3776AB?style=flat&logo=python&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white">
+![Gunicorn](https://img.shields.io/badge/gunicorn-444444?style=flat&logo=gunicorn&logoColor=white)
+<img src="https://img.shields.io/badge/django-092E20?style=flat&logo=django&logoColor=white"> 
 
 # 퀀톡: 금융 정보 분석 및 추천 서비스
 
 ##### <a href="https://github.com/SKNETWORKS-FAMILY-AICAMP/SKN05-FINAL-2TEAM" fontsize > SK 네트웍스 Family AI 캠프 5기 중 진행한 프로젝트입니다.
-
-<br>
-
 
 ## 💡 프로젝트 개요
 
