@@ -367,3 +367,43 @@ class InterestTickerView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+
+class DeleteAccountView(APIView):
+    authentication_classes = [CookieJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            access_token = request.COOKIES.get(settings.REST_AUTH['JWT_AUTH_COOKIE'])
+            if not access_token:
+                return Response({'error': 'No token found'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            token = AccessToken(access_token)
+            user_id = token.payload.get('user_id')
+            
+            user = request.user
+            if not user.is_active:
+                return Response({"msg": "이미 탈퇴된 계정입니다."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            user.is_active = 0
+            user.save()
+
+            outstanding_tokens = OutstandingToken.objects.filter(user_id=user_id)
+            for outstanding_token in outstanding_tokens:
+                try:
+                    RefreshToken(outstanding_token.token).blacklist()
+                except TokenError:
+                    continue
+
+            redis_service.delete_refresh_token(user_id)
+            
+            response = Response({"detail": "계정이 성공적으로 탈퇴(비활성화)되었습니다."}, status=status.HTTP_200_OK)
+
+            response.delete_cookie(settings.REST_AUTH.get('JWT_AUTH_COOKIE'), path='/')
+            response.delete_cookie(settings.REST_AUTH.get('JWT_AUTH_REFRESH_COOKIE'), path='/')
+            return response
+
+        except TokenError:
+            return Response({"error": "유효하지 않은 토큰입니다."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
