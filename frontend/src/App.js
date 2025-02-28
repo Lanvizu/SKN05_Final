@@ -9,7 +9,7 @@ import MyPage from './components/MyPage';
 import ResetPassword from './components/ResetPassword';
 import VerifyEmail from './components/VerifyEmail';
 import ChatPage from './components/chat/ChatPage';
-import ProfileEditPage from './components/ProfileEditPage';
+import ChangePasswordPage from './components/ChangePasswordPage';
 import AuthenticatedMainPage from './components/main/AuthenticatedMainPage';
 import GoogleCallback from './components/GoogleCallback';
 import NaverCallback from './components/NaverCallback';
@@ -73,10 +73,10 @@ const App = () => {
             }
           />
           <Route
-            path="/edit-profile"
+            path="/mypage/change-password"
             element={
               <ProtectedRoute>
-                <ProfileEditPage />
+                <ChangePasswordPage />
               </ProtectedRoute>
             }
           />
