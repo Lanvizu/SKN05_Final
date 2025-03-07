@@ -333,44 +333,32 @@
 
 <h2>👀 기능 미리보기</h2>
 
-<details>
-<summary><h3>회원가입 (이메일 인증)</h3></summary>
- <p>
+<h3>🍳 회원가입 (이메일 인증)</h3>
+ <p align="center">
    <img src = "https://github.com/user-attachments/assets/18f23b6e-94bd-4ef8-85dd-4c7bfb442cbe">
  </p>
-</details>
 
-<details>
-<summary><h3>소셜 로그인</h3></summary>
- <p>
+<h3>🍳 소셜 로그인</h3>
+ <p align="center">
    <img src = "https://github.com/user-attachments/assets/69a42fcf-3ebe-4afe-b397-88d5be0c8db0">
  </p>
-</details>
  
-<details>
-<summary><h3>관심 주식 설정</h3></summary>
-  <p>
-   <img src = "https://github.com/user-attachments/assets/40101436-7911-4a90-ab8f-5ac79fa1a223">
- </p>
-</details>
+<h3>🍳 관심 주식 설정</h3>
+<p align="center">
+ <img src = "https://github.com/user-attachments/assets/40101436-7911-4a90-ab8f-5ac79fa1a223">
+</p>
 
-<details>
-<summary><h3>기업 분석</h3></summary>
-  <p>
-   <img src = "https://github.com/user-attachments/assets/c6299c5b-7bad-436f-9b18-b7bd9b1a410c">
- </p>
-</details>
+<h3>🍳 기업 분석</h3>
+<p align="center">
+ <img src = "https://github.com/user-attachments/assets/c6299c5b-7bad-436f-9b18-b7bd9b1a410c">
+</p>
 
-<details>
-<summary><h3>뉴스 분석</h3></summary>
-  <p>
-   <img src = "https://github.com/user-attachments/assets/331f0311-12c7-4cfc-8760-34a368b9b0de">
-  </p>
-</details>
+<h3>🍳 뉴스 분석</h3>
+<p align="center">
+ <img src = "https://github.com/user-attachments/assets/331f0311-12c7-4cfc-8760-34a368b9b0de">
+</p>
   
-<details>
-<summary><h3>차트 분석</h3></summary>
-  <p>
-   <img src = "https://github.com/user-attachments/assets/5eed10fb-d4fb-4f87-8c43-b76a42300a8f">
-  </p>
-</details>
+<h3>🍳 차트 분석</h3>
+<p align="center">
+ <img src = "https://github.com/user-attachments/assets/5eed10fb-d4fb-4f87-8c43-b76a42300a8f">
+</p>
